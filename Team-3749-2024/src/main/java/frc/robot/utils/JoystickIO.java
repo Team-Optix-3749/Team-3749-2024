@@ -18,7 +18,6 @@ import frc.robot.Robot;
 import frc.robot.commands.swerve.MoveToPose;
 import frc.robot.commands.swerve.Teleop;
 import frc.robot.commands.swerve.TeleopJoystickRelative;
-import frc.robot.subsystems.swerve.Swerve;
 
 /**
  * Util class for button bindings
@@ -31,12 +30,9 @@ public class JoystickIO {
   private Xbox pilot;
   private Xbox operator;
 
-  private Swerve swerve;
-
   public JoystickIO(Xbox pilot, Xbox operator) {
     this.pilot = pilot;
     this.operator = operator;
-    this.swerve = Robot.swerve;
   }
 
   public static boolean didJoysticksChange() {
@@ -116,13 +112,5 @@ public class JoystickIO {
   /**
    * Sets the default commands
    */
-  public void setDefaultCommands() {
-    swerve.setDefaultCommand(new TeleopJoystickRelative(
-
-        () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
-        () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
-        () -> -pilot.getRightX(),
-        () -> -pilot.getRightY())); // Clockwise positive by default, so we invert
-    // here
-  }
+  public void setDefaultCommands() {}
 }

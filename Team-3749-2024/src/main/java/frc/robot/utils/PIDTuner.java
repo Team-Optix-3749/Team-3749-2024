@@ -51,10 +51,7 @@ public class PIDTuner {
     Trigger newTrig = new Trigger(() -> shouldRun);
 
     newTrig.onTrue(command);
-    command.andThen(() -> {
-      Robot.swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    });
-
+    
     // Robot.swerve.resetOdometry(new Pose2d(new Translation2d(0, 0), new
     // Rotation2d(0)));
 
