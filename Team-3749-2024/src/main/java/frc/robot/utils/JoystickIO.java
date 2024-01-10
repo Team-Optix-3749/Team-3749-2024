@@ -15,9 +15,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.Teleop;
-import frc.robot.commands.swerve.TeleopJoystickRelative;
 
 /**
  * Util class for button bindings
@@ -89,7 +86,6 @@ public class JoystickIO {
   }
 
   public void simBindings() {
-    pilot.aWhileHeld(new MoveToPose(new Pose2d(5, 5, new Rotation2d())));
 
   }
 

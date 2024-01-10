@@ -22,4 +22,29 @@ public class Constants {
     public static final int elevatorMotorTwoID = 2;
   }
 
+  public static final class Sim {
+    public static final double loopPeriodSec = 0.02;
+
+    public static final class PIDValues {
+      // will eventally be easier to change values from here than poke around through
+      // files
+      public static double kP_teleopTurn = 1.3;
+      public static double kD_teleopTurn = 0.0;
+
+      public static double kP_MiscDrive = 0.42;
+      public static double kD_MiscDrive = 0.02;
+      public static double kP_MiscTurn = 0.15;
+      public static double kD_MiscTurn = 0.003;
+
+      public static double kP_TurnToAngle = 0.15;
+      public static double kD_TurnToAngle = 0.008;
+
+      public static double kP_PathPlannerDrive = 9;
+      public static double kD_PathPlannerDrive = 0.01;
+
+      public static double kP_PathPlannerTurn = 4.2;
+      public static double kD_PathPlannerTurn = 0.0;
+    }
+  }
+
 }

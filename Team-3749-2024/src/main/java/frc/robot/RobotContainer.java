@@ -11,9 +11,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.swerve.FollowPath;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.TurnToAngle;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 
@@ -49,9 +46,7 @@ public class RobotContainer {
     // Command command = new TurnToAngle(new Rotation2d(Math.PI / 2));
     String[] strList = { "CirclePath", "SquigglyPath" };
 
-    Command command = FollowPath.followPathSequential(strList);
-
     // Command command = FollowPath.followPath("CirclePath").andThen(FollowPath.followPath("SquigglyPath"));
-    return command;
+    return null;
   }
 }
