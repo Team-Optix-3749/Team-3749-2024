@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -17,6 +18,8 @@ public class Elevator extends SubsystemBase {
       MotorType.kBrushless);
     private final RelativeEncoder motorOneEncoder = motorOne.getEncoder();
     private final RelativeEncoder motorTwoEncoder = motorTwo.getEncoder();
+
+    private final PIDController elevatorController = new PIDController(0.55, 0, 0);
 
     // Constructor
     public Elevator(){
@@ -40,7 +43,18 @@ public class Elevator extends SubsystemBase {
     public void setVoltage(double volts) {
         motorOne.setVoltage(volts);
         motorTwo.setVoltage(volts);
-  }
+    }
+
+    public void runElevator() {
+      double voltage = 0;
+
+      // Run calculations for necessary voltage with PID Controller
+
+      setVoltage(voltage);
+
+    }
+
+
 
     // runs every 0.02 sec
     @Override
