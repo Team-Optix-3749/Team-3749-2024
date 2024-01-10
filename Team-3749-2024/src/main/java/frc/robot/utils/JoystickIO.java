@@ -2,8 +2,6 @@ package frc.robot.utils;
 
 import java.util.Map;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -12,9 +10,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.subsystems.swerve.Swerve;
 
 /**
  * Util class for button bindings
@@ -22,91 +21,92 @@ import frc.robot.Robot;
  * @author Rohin Sood
  */
 public class JoystickIO {
-  private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
+    private static String[] lastJoystickNames = new String[] { "", "", "", "", "", "" };
 
-  private Xbox pilot;
-  private Xbox operator;
+    private Xbox pilot;
+    private Xbox operator;
 
-  public JoystickIO(Xbox pilot, Xbox operator) {
-    this.pilot = pilot;
-    this.operator = operator;
-  }
+    private Swerve swerve;
 
-  public static boolean didJoysticksChange() {
-    boolean joysticksChanged = false;
-    for (int port = 0; port < DriverStation.kJoystickPorts; port++) {
-      String name = DriverStation.getJoystickName(port);
-      if (!name.equals(lastJoystickNames[port])) {
-        joysticksChanged = true;
-        lastJoystickNames[port] = name;
-      }
+    public JoystickIO(Xbox pilot, Xbox operator) {
+        this.pilot = pilot;
+        this.operator = operator;
+        this.swerve = Robot.swerve;
     }
-    return joysticksChanged;
-  }
 
-  /**
-   * Calls binding methods according to the joysticks connected
-   */
-  public void getButtonBindings() {
-    System.out.println(DriverStation.isJoystickConnected(0));
+    public static boolean didJoysticksChange() {
+        boolean joysticksChanged = false;
+        for (int port = 0; port < DriverStation.kJoystickPorts; port++) {
+            String name = DriverStation.getJoystickName(port);
+            if (!name.equals(lastJoystickNames[port])) {
+                joysticksChanged = true;
+                lastJoystickNames[port] = name;
+            }
+        }
+        return joysticksChanged;
+    }
 
-    if (DriverStation.isJoystickConnected(1)) {
-      // if both xbox controllers are connected
-      pilotAndOperatorBindings();
+    /**
+     * Calls binding methods according to the joysticks connected
+     */
+    public void getButtonBindings() {
 
-    } else if (DriverStation.isJoystickConnected(0)) {
-      // if only one xbox controller is connected
-      pilotBindings();
+        if (DriverStation.isJoystickConnected(1)) {
+            // if both xbox controllers are connected
+            pilotAndOperatorBindings();
 
-    } else if (Robot.isSimulation()) {
-      // will show not connected if on sim
-      simBindings();
+        } else if (DriverStation.isJoystickConnected(0)) {
+            // if only one xbox controller is connected
+            pilotBindings();
 
-    } else {
-      // if no joysticks are connected (ShuffleBoard buttons)
-      noJoystickBindings();
+        } else {
+            // if no joysticks are connected (ShuffleBoard buttons)
+            noJoystickBindings();
+        }
+
+        setDefaultCommands();
+    }
+
+    /**
+     * If both controllers are plugged in (pi and op)
+     */
+    public void pilotAndOperatorBindings() {
+
 
     }
-    setDefaultCommands();
-  }
 
-  /**
-   * If both controllers are plugged in (pi and op)
-   */
-  public void pilotAndOperatorBindings() {
+    /**
+     * If only one controller is plugged in (pi)
+     */
+    public void pilotBindings() {
+        
+    }
 
-  }
+    /**
+     * If NO joysticks are plugged in (Buttons for commands are runnable in the
+     * "Controls" tab in ShuffleBoard)
+     */
+    public void noJoystickBindings() {
+        ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
-  /**
-   * If only one controller is plugged in (pi)
-   */
-  public void pilotBindings() {
-    pilot.aWhileHeld(new PrintCommand("aaa"));
+        // Example
+        ShuffleboardLayout armCommands = controlsTab
+                .getLayout("Arm", BuiltInLayouts.kList)
+                .withSize(2, 2)
+                .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
 
-  }
 
-  public void simBindings() {
+    }
 
-  }
+    /**
+     * Sets the default commands
+     */
+    public void setDefaultCommands() {
+        swerve.setDefaultCommand(new SwerveTeleopCommand(
 
-  /**
-   * If NO joysticks are plugged in (Buttons for commands are runnable in the
-   * "Controls" tab in ShuffleBoard)
-   */
-  public void noJoystickBindings() {
-    // ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
+                () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
+                () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
+                () -> -pilot.getRightX())); // Clockwise positive by default, so we invert here
 
-    // // Example
-    // ShuffleboardLayout armCommands = controlsTab
-    // .getLayout("Arm", BuiltInLayouts.kList)
-    // .withSize(2, 2)
-    // .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for
-    // commands
-
-  }
-
-  /**
-   * Sets the default commands
-   */
-  public void setDefaultCommands() {}
+    }
 }
