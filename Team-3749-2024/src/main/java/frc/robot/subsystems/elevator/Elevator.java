@@ -1,7 +1,11 @@
 package frc.robot.subsystems.elevator;
+
+import java.util.function.DoubleSupplier;
+
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,18 +20,26 @@ public class Elevator extends SubsystemBase {
 
     private final PIDController elevatorController = new PIDController(0.55, 0, 0);
 
-    // Constructor
-    public Elevator(){
-        motorTwo.setInverted(true);
+    private final DoubleSupplier pivotAngDoubleSupplier;
 
+
+
+    // Constructor
+    public Elevator(DoubleSupplier pivotAngDoubleSupplier){
+        this.pivotAngDoubleSupplier = pivotAngDoubleSupplier;
+        
+        motorTwo.setInverted(true);
         // This is for gear ratio stuff
         // gear ratio * 1 / circumfrance rotarty bar * 1 / total length elevator
         // motorOneEncoder.setPositionConversionFactor(1/225);
-        // motorTwoEncoder.setPositionConversionFactor(1 / 225);
+        motorTwoEncoder.setPositionConversionFactor(1/225);
 
         // So it doesn't go too fast
         motorOne.setSmartCurrentLimit(40);
         motorTwo.setSmartCurrentLimit(40);
+
+        motorOne.setIdleMode(IdleMode.kCoast);
+        motorTwo.setIdleMode(IdleMode.kCoast);
     }
 
     public void stop() {
@@ -48,8 +60,6 @@ public class Elevator extends SubsystemBase {
       setVoltage(voltage);
 
     }
-
-
 
     // runs every 0.02 sec
     @Override
