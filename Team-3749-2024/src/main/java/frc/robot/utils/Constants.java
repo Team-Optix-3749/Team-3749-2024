@@ -23,6 +23,9 @@ public class Constants {
     public static final class Elevator {
         public static final int elevatorMotorOneID = 1; // TODO: change to correct ID
         public static final int elevatorMotorTwoID = 2; // TODO: change to correct ID
+
+        public static final double elevatorMaxHeight = 1; // TODO: change to correct height
+        public static final double elevatorMinHeight = 0; // TODO: change to correct height
     }
 
     public static final class ControllerConstants {
@@ -32,7 +35,6 @@ public class Constants {
 
     public static final class AutoConstants {
         public static final Map<String, Command> eventMap = new HashMap<>();
-
         public static final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     }

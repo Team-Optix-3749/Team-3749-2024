@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
 
     private final DoubleSupplier pivotAngDoubleSupplier;
 
-
+    private double elevatorPosition;
 
     // Constructor
     public Elevator(DoubleSupplier pivotAngDoubleSupplier){
@@ -43,11 +43,13 @@ public class Elevator extends SubsystemBase {
         motorTwo.setIdleMode(IdleMode.kCoast);
     }
 
+    // Stops the elevator motors
     public void stop() {
         motorOne.set(0);
         motorTwo.set(0);
       }
 
+    // Sets the voltage of the elevator motors
     public void setVoltage(double volts) {
         SmartDashboard.putNumber("Elevator Voltage", volts);
 
@@ -55,6 +57,7 @@ public class Elevator extends SubsystemBase {
         motorTwo.setVoltage(volts);
     }
 
+    // Runs the elevator
     public void runElevator() {
       double voltage = 0;
 
@@ -64,11 +67,38 @@ public class Elevator extends SubsystemBase {
 
     }
 
+    // Returns the position of the elevator in inches
+    // Average of the two encoders * 1/58 (the raw reading at max extension) * 42.5
+    // (the max extenstion in inches)
+    public double getElevatorPositionInches() {
+        return ((motorOneEncoder.getPosition() + motorTwoEncoder.getPosition()) / 2 * 1 / 58 * 42.5); // TODO: fix conversion values
+    }
+
+    // Generic position setter for now
+    // Possibly create setpoints?
+    // Sets desired elevator position
+    public void setElevatorPosition(double position) {
+        if (position > Constants.Elevator.elevatorMaxHeight) {
+            elevatorPosition = Constants.Elevator.elevatorMaxHeight;
+        } else if (position < Constants.Elevator.elevatorMinHeight) {
+            elevatorPosition = Constants.Elevator.elevatorMinHeight;
+        }
+
+        elevatorPosition = position;
+    }
+
+    // TODO: Add Feedforward
+    public double ffcalculate(double velocity){
+        return 0.0;
+    }
+
     // runs every 0.02 sec
+    // TODO: add code for periodic adjustment
     @Override
     public void periodic(){
     }
 
+    // TODO: Add Simulation
     @Override
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
