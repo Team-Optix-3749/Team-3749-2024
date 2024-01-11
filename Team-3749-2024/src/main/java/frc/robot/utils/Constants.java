@@ -16,7 +16,6 @@ public class Constants {
     
     public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
 
-
     public static final class Sim{
         public static final double loopPeriodSec = 0.02;
     }
