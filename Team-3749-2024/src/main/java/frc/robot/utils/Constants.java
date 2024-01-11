@@ -22,6 +22,10 @@ public class Constants {
     
     public static final RobotType ROBOT_TYPE = Robot.isReal() ? RobotType.REAL : RobotType.SIM;
 
+    public static final class Elevator {
+        public static final int elevatorMotorOneID = 1;
+        public static final int elevatorMotorTwoID = 2;
+    }
 
     public static final class Sim{
         public static final double loopPeriodSec = 0.02;
@@ -119,6 +123,5 @@ public class Constants {
         public static final double apriltag_cam_offset = 3.1;
 
     }
-
 
 }
