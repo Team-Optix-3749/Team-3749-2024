@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
 
     private final DoubleSupplier pivotAngDoubleSupplier;
 
-    private double elevatorPosition;
+    private double desiredElevatorPosition;
 
     // move these to constants / tune these
     // feed forward constants
@@ -69,11 +69,31 @@ public class Elevator extends SubsystemBase {
 
     // Runs the elevator
     public void runElevator() {
-      double voltage = 0;
-
-      // Run calculations for necessary voltage with PID Controller
-
-      setVoltage(voltage);
+        double voltage = 0;
+        if (Math.abs(desiredElevatorPosition - getElevatorPositionInches()) > 0.25) { // tune threshol (i think this is what this is) and add to constants
+          voltage = elevatorController.calculate(getElevatorPositionInches(),
+              desiredElevatorPosition);
+    
+            // tune voltage limit and add to constants
+            double maxVoltage = 6;
+            if (voltage > maxVoltage) {
+            voltage = maxVoltage;
+            }
+            if (voltage < -maxVoltage) {
+            voltage = -maxVoltage;
+            }
+        }
+    
+        // tune limits, and add to constants
+        if (getElevatorPositionInches() < 0.15 && voltage < 0) {
+          voltage = 0;
+        } else if (getElevatorPositionInches() > 42 && voltage > 0) {
+          voltage = 0;
+        }
+        voltage += ffcalculate(1);
+    
+        SmartDashboard.putNumber("Elevator Voltage", voltage);
+        setVoltage(voltage);
     }
 
     // Returns the position of the elevator in inches
@@ -88,12 +108,12 @@ public class Elevator extends SubsystemBase {
     // Sets desired elevator position
     public void setElevatorPosition(double position) {
         if (position > Constants.Elevator.elevatorMaxHeight) {
-            elevatorPosition = Constants.Elevator.elevatorMaxHeight;
+            desiredElevatorPosition = Constants.Elevator.elevatorMaxHeight;
         } else if (position < Constants.Elevator.elevatorMinHeight) {
-            elevatorPosition = Constants.Elevator.elevatorMinHeight;
+            desiredElevatorPosition = Constants.Elevator.elevatorMinHeight;
         }
 
-        elevatorPosition = position;
+        desiredElevatorPosition = position;
     }
 
     // TODO: Add Feedforward
