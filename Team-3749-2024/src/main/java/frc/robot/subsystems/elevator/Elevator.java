@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 public class Elevator extends SubsystemBase {
@@ -48,6 +49,8 @@ public class Elevator extends SubsystemBase {
       }
 
     public void setVoltage(double volts) {
+        SmartDashboard.putNumber("Elevator Voltage", volts);
+
         motorOne.setVoltage(volts);
         motorTwo.setVoltage(volts);
     }
@@ -65,5 +68,9 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic(){
     }
-    
+
+    @Override
+    public void simulationPeriodic() {
+        // This method will be called once per scheduler run during simulation
+    }
 }
