@@ -25,7 +25,6 @@ public class Elevator extends SubsystemBase {
 
     // change to setpoints
     private double desiredElevatorPosition;
-    private double desiredPivotAngle;
 
     // move these to constants / tune these
     // feed forward constants
@@ -149,7 +148,6 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Motor 2 Current", motorTwo.getOutputCurrent());
     
         SmartDashboard.putNumber("Elevator Position", getElevatorPositionInches());
-        SmartDashboard.putString("Elevator Setpoint", currentSetpoint.name());
     }
 
     // TODO: Add Simulation
