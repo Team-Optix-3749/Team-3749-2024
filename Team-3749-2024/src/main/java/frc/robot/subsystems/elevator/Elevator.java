@@ -25,6 +25,16 @@ public class Elevator extends SubsystemBase {
 
     private double elevatorPosition;
 
+    // move these to constants / tune these
+    // feed forward constants
+    private final double ks = 0.3;
+    private final double kg = 0.06;
+    // extension
+    private final double ke = -0.2;
+    // private final double cgOutLengthInches =
+    // pivot rotation
+    private final double kr = -.1;
+
     // Constructor
     public Elevator(DoubleSupplier pivotAngDoubleSupplier){
         this.pivotAngDoubleSupplier = pivotAngDoubleSupplier;
@@ -64,7 +74,6 @@ public class Elevator extends SubsystemBase {
       // Run calculations for necessary voltage with PID Controller
 
       setVoltage(voltage);
-
     }
 
     // Returns the position of the elevator in inches
@@ -89,7 +98,19 @@ public class Elevator extends SubsystemBase {
 
     // TODO: Add Feedforward
     public double ffcalculate(double velocity){
-        return 0.0;
+        double total = 0;
+        total += ks * Math.signum(velocity);
+        total += kg;
+        total += kr * Math.sin(pivotAngDoubleSupplier.getAsDouble() / 180 * Math.PI); // fix pivot kr in feedforward
+
+        // BS center of mass constant forcespring torque crap
+        if (getElevatorPositionInches() > 4 && getElevatorPositionInches() < 10) {
+        total += ke;
+        }
+        if (getElevatorPositionInches() > 10) {
+        total += ke / 2;
+        }
+        return total;
     }
 
     // runs every 0.02 sec
