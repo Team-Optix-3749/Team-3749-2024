@@ -19,7 +19,7 @@ public class Elevator extends SubsystemBase {
     private final PIDController elevatorController = new PIDController(0.55, 0, 0);
 
     // Constructor
-    public Elevator(){
+    public Elevator() {
         motorTwo.setInverted(true);
         // This is for gear ratio stuff
         // gear ratio * 1 / circumfrance rotarty bar * 1 / total length elevator
