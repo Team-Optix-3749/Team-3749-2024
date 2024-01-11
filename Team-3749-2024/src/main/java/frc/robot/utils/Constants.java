@@ -118,7 +118,17 @@ public class Constants {
         public static final double retro_cam_offset = 0.56;
         public static final double apriltag_cam_offset = 3.1;
 
+        public static enum Node {
+            CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
+
+            public double height_meters;
+
+            Node(double height_meters) {
+                this.height_meters = height_meters;
+            }
+        };
+
     }
 
-
+    
 }
