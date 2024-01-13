@@ -39,7 +39,7 @@ public class PhotonSim extends Command {
     @Override
     public void execute(){
         // Checking if Limelight has a target in the latest result
-        if (limelight.hasTarget(limelight.getLatestResult())){
+        if (limelight.getEstimatedGlobalPose(swerve.getPose()).isPresent()){
             // Logging information to SmartDashboard
             SmartDashboard.putNumber("AHHH", 0);
 
