@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.vision.Limelight;
 
 public class Robot extends TimedRobot {
 
   public static final Swerve swerve = new Swerve();
+  public static final Limelight limelight = (new Limelight());
 
 
   private Command m_autonomousCommand;
