@@ -1,0 +1,11 @@
+{
+  "baseName" : "NDI Webcam Video 4",
+  "uniqueName" : "NDI_Webcam_Video_4",
+  "nickname" : "NDI_Webcam_Video_4",
+  "FOV" : 70.0,
+  "path" : "\\\\?\\root#media#0001#{e5323777-f976-4f5b-9b55-b94699c46e44}\\vidsource3",
+  "cameraType" : "UsbCamera",
+  "currentPipelineIndex" : 0,
+  "calibrations" : [ ],
+  "streamIndex" : 4
+}
