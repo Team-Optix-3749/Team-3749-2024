@@ -23,7 +23,7 @@ public class PhotonSim extends Command {
     }
     @Override
     public void execute(){
-        if (limelight.hasTarget(limelight.getLatestResult())){
+        if (limelight.getEstimatedGlobalPose(swerve.getPose()).isPresent()){
             SmartDashboard.putNumber("AHHH", 0);
             estimatedPose2d = limelight.getEstimatedGlobalPose(swerve.getPose()).get().estimatedPose.toPose2d();
             SmartDashboard.putNumberArray("Limelight Odometry", new double[] { estimatedPose2d.getX(), estimatedPose2d.getY(), estimatedPose2d.getRotation().getDegrees() });
