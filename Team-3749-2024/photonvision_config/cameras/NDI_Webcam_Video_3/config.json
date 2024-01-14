@@ -1,0 +1,11 @@
+{
+  "baseName" : "NDI Webcam Video 3",
+  "uniqueName" : "NDI_Webcam_Video_3",
+  "nickname" : "NDI_Webcam_Video_3",
+  "FOV" : 70.0,
+  "path" : "\\\\?\\root#media#0001#{e5323777-f976-4f5b-9b55-b94699c46e44}\\vidsource2",
+  "cameraType" : "UsbCamera",
+  "currentPipelineIndex" : 0,
+  "calibrations" : [ ],
+  "streamIndex" : 3
+}
