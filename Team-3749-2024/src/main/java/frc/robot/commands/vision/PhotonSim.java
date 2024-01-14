@@ -13,7 +13,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 
-
+// https://docs.google.com/drawings/d/14wvoQdwZa72nxycyzGatSuS-62I1iBWHSTa2HcFA90o/edit
+//THIS IS THE CHECKERBOARD LINK
 
 // Command class for vision-based simulation using Limelight and SwerveDrive
 public class PhotonSim extends Command {

@@ -1,8 +1,8 @@
 {
-  "teamNumber" : 0,
+  "teamNumber" : 3749,
   "connectionType" : 0,
   "staticIp" : "",
-  "hostname" : "photonvision",
+  "hostname" : "Localhost",
   "runNTServer" : false,
   "shouldManage" : false,
   "networkManagerIface" : "Wired\\ connection\\ 1",
