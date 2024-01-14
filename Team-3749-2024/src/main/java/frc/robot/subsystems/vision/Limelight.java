@@ -38,7 +38,9 @@ import frc.robot.utils.Constants.VisionConstants.Node;
  * @author Rohin Sood
  */
 public class Limelight extends SubsystemBase {
-
+    //Position
+    public Pose2d estimatedPose2d = new Pose2d(0,0,new Rotation2d());
+    public boolean targeting = false;
     // PhotonCamera instance
     private final PhotonCamera camera = new PhotonCamera("limelight");
     private AprilTagFieldLayout aprilTagFieldLayout;
@@ -104,7 +106,9 @@ public class Limelight extends SubsystemBase {
     public PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
         return result.getBestTarget();
     }
-
+    public PhotonPoseEstimator getPoseEstimator(){
+        return photonPoseEstimator;
+    }
     // Method to get the yaw (rotation) of a tracked target
     public Rotation2d getYaw(PhotonTrackedTarget target) {
         return new Rotation2d(Math.toRadians(target.getYaw()));

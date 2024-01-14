@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.RobotType;
@@ -114,9 +115,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        // if (limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
-        //     swerveDrivePoseEstimator.addVisionMeasurement(limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).get().estimatedPose.toPose2d(), limelight.getTimeRunning());
-        // }
+        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
+            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2d, Robot.limelight.getTimeRunning());
+        }
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() });

@@ -19,42 +19,42 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 // Command class for vision-based simulation using Limelight and SwerveDrive
 public class PhotonSim extends Command {
 
-    // Reference to Limelight and Swerve subsystems
-    private Limelight limelight;
+    // Reference  Swerve subsystems
     private Swerve swerve;
-
-    // Pose2d to store the estimated global pose
-    Transform3d estimatedPose2d;
 
     // Constructor for PhotonSim command
     public PhotonSim(){
         // Initializing Limelight and Swerve subsystem references from Robot class
-        this.limelight = Robot.limelight;
         this.swerve = Robot.swerve;
 
         // Setting Limelight pipeline to AprilTag for pose estimation
-        limelight.setPipeline(Constants.VisionConstants.Pipelines.APRILTAG.index);
+        Robot.limelight.setPipeline(Constants.VisionConstants.Pipelines.APRILTAG.index);
     }
-
+    @Override
+    public void initialize(){
+        Robot.limelight.targeting = true;
+    }
     // Execute method called during command execution
     @Override
     public void execute(){
         // Checking if Limelight has a target in the latest result
-        if (limelight.getLatestResult().hasTargets()){
+        if (Robot.limelight.getLatestResult().getMultiTagResult().estimatedPose.isPresent){
             // Logging information to SmartDashboard
-            SmartDashboard.putNumber("AHHH", 0);
 
+            
             // Getting the estimated global pose using Limelight and SwerveDrive pose
             try{
-                // estimatedPose2d = limelight.getEstimatedGlobalPose(swerve.getPose()).get().estimatedPose.toPose2d();
-                estimatedPose2d = limelight.getBestTarget(limelight.getLatestResult()).getBestCameraToTarget();
+                Robot.limelight.estimatedPose2d = Robot.limelight.getEstimatedGlobalPose(swerve.getPose()).get().estimatedPose.toPose2d();
                 // Logging Limelight odometry information to SmartDashboard
-                SmartDashboard.putNumberArray("Limelight Odometry", new double[] { 0.35104432302 * estimatedPose2d.getX(), 0.35104432302 * estimatedPose2d.getY(), estimatedPose2d.getRotation().getY() });
-                
+                SmartDashboard.putNumberArray("Limelight Odometry", new double[] { Robot.limelight.estimatedPose2d.getX(), Robot.limelight.estimatedPose2d.getY(), Robot.limelight.estimatedPose2d.getRotation().getRadians() });
             }
             catch (Exception e){
 
             }
          }
+    }
+    @Override
+    public void end(boolean interrupted){
+        Robot.limelight.targeting = false;
     }
 }

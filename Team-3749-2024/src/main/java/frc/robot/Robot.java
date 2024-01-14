@@ -15,7 +15,6 @@ public class Robot extends TimedRobot {
   public static final Swerve swerve = new Swerve();
   public static final Limelight limelight = (new Limelight());
 
-
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
