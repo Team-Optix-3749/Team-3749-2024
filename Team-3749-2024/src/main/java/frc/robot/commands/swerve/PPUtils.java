@@ -1,45 +1,42 @@
 package frc.robot.commands.swerve;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.function.*;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.auto.*;
+import com.pathplanner.lib.path.*;
+import com.pathplanner.lib.util.*;
+import com.choreo.lib.*;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.proto.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.Sim.PIDValues;
 
 public class PPUtils {
   private static Swerve swerve = Robot.swerve;
-  static SendableChooser<Command> autoChooser;
-  static boolean isFirstPath = true;
   public static Consumer<Pose2d> pathTargetPose = pose -> swerve.logDesiredOdometry(pose);
+
+  static SendableChooser<Command> autoChooser;
+  static SendableChooser<Alliance> allianceChooser = new SendableChooser<>();
+  static boolean isFirstPath = true;
 
   public static void initPPUtils() {
     PathPlannerLogging.setLogTargetPoseCallback(pathTargetPose);
 
-    SendableChooser<Alliance> allianceChooser = new SendableChooser<>();
     allianceChooser.addOption("Blue Alliance", Alliance.Blue);
     allianceChooser.addOption("Red Alliance", Alliance.Red);
-    allianceChooser.setDefaultOption("Red Alliance", Alliance.Red);
+    allianceChooser.setDefaultOption("Blue Alliance", Alliance.Blue);
 
     AutoBuilder.configureHolonomic(
         swerve::getPose,
@@ -71,27 +68,41 @@ public class PPUtils {
     });
   }
 
-  // public static Command followPath(String pathName) {
-  // PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+  public static Command getFollowTrajectoryCommand(ChoreoTrajectory traj) {
+    return Choreo.choreoSwerveCommand(traj, swerve::getPose,
+        new PIDController(PIDValues.kP_PathPlannerDrive, 0,
+            PIDValues.kD_PathPlannerDrive),
+        new PIDController(PIDValues.kP_PathPlannerDrive, 0,
+            PIDValues.kD_PathPlannerDrive),
+        new PIDController(PIDValues.kP_PathPlannerTurn, 0,
+            PIDValues.kD_PathPlannerTurn),
+        swerve::setChassisSpeeds,
+        () -> {
+          Alliance robotAlliance = allianceChooser.getSelected();
+          robotAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : robotAlliance;
 
-  // return new SequentialCommandGroup(
-  // new InstantCommand(() -> {
-  // // Reset odometry for the first path you run during auto
-  // if (isFirstPath) {
-  // swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
-  // isFirstPath = !isFirstPath;
-  // }
-  // }),
-  // new FollowPathWithEvents(getHolonomicPathCommand(path), path,
-  // swerve::getPose));
-  // }
+          if (robotAlliance == Alliance.Red) {
+            return true;
+          } else {
+            return false;
+          }
+        }, swerve);
+  }
+
+  public static Command pathFindThenFollowPathCommand(String pathName) {
+    ChoreoTrajectory traj = Choreo.getTrajectory(pathName);
+
+    return new SequentialCommandGroup(
+        getPathFindToPoseCommand(traj.getInitialPose(), Constants.PathPlannerConstants.defaultPathConstraints),
+        getFollowTrajectoryCommand(traj));
+  }
 
   public static Command getAutoPath() {
     return autoChooser.getSelected();
   }
 
   public static Command getAutoPath(String autoPathName) {
-    
+
     return AutoBuilder.buildAuto(autoPathName);
   }
 
@@ -100,7 +111,6 @@ public class PPUtils {
   }
 
   public static Command getPathFindToPoseCommand(Pose2d targetPose, double endingVelocity) {
-
     return AutoBuilder.pathfindToPose(targetPose, Constants.PathPlannerConstants.defaultPathConstraints,
         endingVelocity);
   }
@@ -110,48 +120,4 @@ public class PPUtils {
 
     return AutoBuilder.pathfindToPose(targetPose, constraints, endingVelocity);
   }
-
-  /**
-   * PathFinds to path then follows path
-   */
-  public static Command getPathFindThenFollowPathCommand(String pathName, PathConstraints constraints) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-        path,
-        constraints, 0);
-    return pathfindingCommand;
-  }
-
-  // class Paths {
-  // public static Command getPathFindToPosesCommand(List<Pose2d> desiredPoses,
-  // PathConstraints constraints,
-  // GoalEndState endState) {
-  // Command command = new SequentialCommandGroup();
-
-  // PathPlannerPath path = new
-  // PathPlannerPath(PathPlannerPath.bezierFromPoses(desiredPoses), constraints,
-  // endState);
-
-  // getHolonomicPathCommand(path);
-
-  // return command;
-  // }
-  // }
 }
-
-/*
- * public static Command followPath(String pathName) {
- * PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
- * 
- * return new SequentialCommandGroup(
- * new InstantCommand(() -> {
- * // Reset odometry for the first path you run during auto
- * if (isFirstPath) {
- * swerve.resetOdometry(path.getPreviewStartingHolonomicPose());
- * isFirstPath = !isFirstPath;
- * }
- * }),
- * new FollowPathWithEvents(getHolonomicPathCommand(path), path,
- * swerve::getPose));
- * 
- */

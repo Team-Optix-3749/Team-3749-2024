@@ -141,7 +141,7 @@ public class Constants {
     );
 
     public static PathConstraints sim = new PathConstraints(
-        1.5,
+        Constants.DriveConstants.maxSpeedMetersPerSecond,
         Constants.DriveConstants.maxAccelerationMetersPerSecondSquared,
         Constants.DriveConstants.maxAngularSpeedRadiansPerSecond,
         Constants.DriveConstants.maxAngularAccelerationRadiansPerSecondSquared);

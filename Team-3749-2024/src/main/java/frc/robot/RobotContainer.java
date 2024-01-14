@@ -7,23 +7,17 @@ package frc.robot;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+import com.choreo.lib.ChoreoTrajectoryStateBuilder;
+import com.pathplanner.lib.auto.*;
+import com.pathplanner.lib.path.*;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.swerve.PPUtils;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.TurnToAngle;
-import frc.robot.utils.Constants;
 import frc.robot.utils.JoystickIO;
 import frc.robot.utils.Xbox;
 import frc.robot.utils.Constants.DriveConstants;
@@ -66,7 +60,12 @@ public class RobotContainer {
     // command = PPUtils.getPathFindThenFollowPathCommand("CirclePath",
     // Constants.PathPlannerConstants.defaultPathConstraints);
 
-    command = PPUtils.getAutoPath("Straight Line");
+    // command = PPUtils.pathFindThenFollowPathCommand("fullaround");
+    ChoreoTrajectory traj = Choreo.getTrajectory("fullaround");
+
+    Choreo
+
+    command = PPUtils.getFollowTrajectoryCommand(traj);
 
     return command;
   }
