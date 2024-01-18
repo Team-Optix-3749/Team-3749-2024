@@ -3,6 +3,8 @@ package frc.robot.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,6 +16,40 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class Constants {
+        /***
+     * 
+     * @param margin how close the values need to be to return true. Use a positive
+     *               number
+     * @param a      the first number
+     * @param b      the second number
+     * @return true if it is within the margin, false if not
+     */
+    public static boolean withinMargin(double margin, double a, double b) {
+        if (a + margin >= b && a - margin <= b) {
+            return true;
+        }
+        return false;
+    }
+
+    /***
+     * 
+     * @param margin how close the values need to be to return true. Use a positive
+     *               number
+     * @param a      the first translation
+     * @param b      the second translation
+     * @return true if it is within the margin, false if not
+     */
+    public static boolean withinMargin(double margin, Translation2d a, Translation2d b) {
+        // if X is within margin
+        if (a.getX() + margin >= b.getX() && a.getX() - margin <= b.getX()) {
+            // if Y is within margin
+            if (a.getY() + margin >= b.getY() && a.getY() - margin <= b.getY()) {
+
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static enum RobotType {
         REAL,
@@ -91,6 +127,16 @@ public class Constants {
     }
 
     public static class VisionConstants {
+        public static enum Node {
+            CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
+
+            public double height_meters;
+
+            Node(double height_meters) {
+                this.height_meters = height_meters;
+            }
+        };
+
         // See
         // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
         // page 208
@@ -105,18 +151,26 @@ public class Constants {
                 new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
 
         public static final Transform3d robot_to_cam = cam_to_robot.inverse();
+        public static final Transform3d sim_robot_to_cam = new Transform3d(1, 0, 0, new Rotation3d());
 
         public static final int reflective_tape_pipeline_index = 0;
         public static final int apriltag_pipeline_index = 1;
 
         public static final double camera_height = Units.inchesToMeters(20); // meters
+        public static final double sim_camera_height = 1;
         public static final double camera_yaw = 0;
         public static final double camera_pitch = 0;
         public static final double camera_roll = 0;
+        public static enum Pipelines {
+            APRILTAG(1),
+            CUBE(0);
+            
+            public int index;
 
-        // msg from Noah: I forget what these do
-        public static final double retro_cam_offset = 0.56;
-        public static final double apriltag_cam_offset = 3.1;
+            Pipelines(int index) {
+                this.index = index;
+            }
+        }
 
         public static enum Node {
             CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);

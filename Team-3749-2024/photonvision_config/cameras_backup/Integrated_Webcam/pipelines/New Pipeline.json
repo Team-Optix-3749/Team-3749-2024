@@ -1,0 +1,89 @@
+[ "ColoredShapePipelineSettings", {
+  "pipelineIndex" : 0,
+  "pipelineType" : "ColoredShape",
+  "inputImageRotationMode" : "DEG_0",
+  "pipelineNickname" : "New Pipeline",
+  "cameraAutoExposure" : true,
+  "cameraExposure" : 100.0,
+  "cameraBrightness" : 100,
+  "cameraGain" : -1,
+  "cameraRedGain" : -1,
+  "cameraBlueGain" : -1,
+  "cameraVideoModeIndex" : 0,
+  "streamingFrameDivisor" : "NONE",
+  "ledMode" : true,
+  "inputShouldShow" : true,
+  "outputShouldShow" : true,
+  "hsvHue" : {
+    "first" : 8,
+    "second" : 22
+  },
+  "hsvSaturation" : {
+    "first" : 209,
+    "second" : 255
+  },
+  "hsvValue" : {
+    "first" : 103,
+    "second" : 255
+  },
+  "hueInverted" : false,
+  "outputShouldDraw" : true,
+  "outputShowMultipleTargets" : true,
+  "contourArea" : {
+    "first" : 0.0,
+    "second" : 11.65
+  },
+  "contourRatio" : {
+    "first" : 0.0,
+    "second" : 20.0
+  },
+  "contourFullness" : {
+    "first" : 0.0,
+    "second" : 100.0
+  },
+  "contourSpecklePercentage" : 43,
+  "contourSortMode" : "Lowest",
+  "contourTargetOffsetPointEdge" : "Center",
+  "contourTargetOrientation" : "Portrait",
+  "offsetRobotOffsetMode" : "None",
+  "offsetSinglePoint" : {
+    "x" : 0.0,
+    "y" : 0.0
+  },
+  "offsetDualPointA" : {
+    "x" : 0.0,
+    "y" : 0.0
+  },
+  "offsetDualPointAArea" : 0.0,
+  "offsetDualPointB" : {
+    "x" : 0.0,
+    "y" : 0.0
+  },
+  "offsetDualPointBArea" : 0.0,
+  "contourGroupingMode" : "Single",
+  "contourIntersection" : "Up",
+  "solvePNPEnabled" : false,
+  "targetModel" : "k2022CircularCargoBall",
+  "cornerDetectionStrategy" : "APPROX_POLY_DP_AND_EXTREME_CORNERS",
+  "cornerDetectionUseConvexHulls" : true,
+  "cornerDetectionExactSideCount" : false,
+  "cornerDetectionSideCount" : 4,
+  "cornerDetectionAccuracyPercentage" : 66.0,
+  "contourShape" : "Circle",
+  "contourPerimeter" : {
+    "first" : 0.0,
+    "second" : 835.0
+  },
+  "accuracyPercentage" : 79.0,
+  "circleDetectThreshold" : 27,
+  "contourRadius" : {
+    "first" : 0,
+    "second" : 27
+  },
+  "minDist" : 20,
+  "maxCannyThresh" : 73,
+  "circleAccuracy" : 5,
+  "cameraCalibration" : null,
+  "erode" : true,
+  "dilate" : true
+} ]

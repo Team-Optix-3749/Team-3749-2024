@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.swerve;
 
+import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.math.ComputerVisionUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.GyroIO.GyroData;
 import frc.robot.subsystems.swerve.SwerveModuleIO.ModuleData;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.RobotType;
@@ -36,6 +40,7 @@ public class Swerve extends SubsystemBase {
 
     private GyroIO gyro;
     private GyroData gyroData;
+
     // equivilant to a odometer, but also intakes vision
     private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
@@ -90,8 +95,8 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getPose() {
 
-        Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();
-
+        Pose2d estimatedPose = swerveDrivePoseEstimator.getEstimatedPosition();    
+            
         return new Pose2d(estimatedPose.getTranslation(), getRotation2d());
     }
 
@@ -110,11 +115,12 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-
+        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
+            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2d, Robot.limelight.getTimeRunning());
+        }
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() });
-
     }
 
     public void stopModules() {
