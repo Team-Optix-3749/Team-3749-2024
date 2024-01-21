@@ -13,8 +13,8 @@ public class ArmSim implements ArmIO {
         150,
         4,
         .93, 
-        Units.degreesToRadians(-170),
-        Units.degreesToRadians(170),
+        Units.degreesToRadians(0),
+        Units.degreesToRadians(100),
         true,
         Units.degreesToRadians(0));
 

@@ -68,6 +68,7 @@ public class Arm extends SubsystemBase {
         }
         // setGoal(-Math.PI/2);
         // profiledFeedbackController.setGoal(Units.degreesToRadians(-90));
+        // setGoal()
     }
 
     public Rotation2d getRotation2d() {
@@ -130,6 +131,8 @@ public class Arm extends SubsystemBase {
         
         mechanismArm.setAngle(getRotation2d());
         SmartDashboard.putData("mech", mechanism);
+
+        
     }
 
 }
