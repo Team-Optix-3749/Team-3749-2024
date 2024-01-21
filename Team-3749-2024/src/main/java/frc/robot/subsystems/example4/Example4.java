@@ -1,4 +1,4 @@
-package frc.robot.subsystems.example3;
+package frc.robot.subsystems.example4;
 
 import java.util.function.DoubleSupplier;
 
@@ -8,17 +8,17 @@ import frc.robot.Robot;
 import frc.robot.subsystems.example.ExampleIO.ExampleData;
 import frc.robot.utils.CurrentBudgettedSubsystem;
 
-public class Example3 extends SubsystemBase implements CurrentBudgettedSubsystem {
+public class Example4 extends SubsystemBase implements CurrentBudgettedSubsystem {
 
     private ExampleData data = new ExampleData();
-    private ExampleIO exampleIO;
+    private Example4IO exampleIO;
     private double currentSum = 0;
     // private Exampl
 
     // Constructor
-    public Example3() {
+    public Example4() {
         if (Robot.isReal()) {
-            exampleIO = new ExampleSim();
+            exampleIO = new Example4Sim();
         }
     }
 
@@ -36,7 +36,7 @@ public class Example3 extends SubsystemBase implements CurrentBudgettedSubsystem
     public void reduceCurrentSum(DoubleSupplier currentReductionSupplier) {
         double currentReduction = currentReductionSupplier.getAsDouble();
         if (currentReduction>0){
-            System.out.println("shooter");
+            System.out.println("shintake");
 
             System.out.println(currentReduction);
         }    }

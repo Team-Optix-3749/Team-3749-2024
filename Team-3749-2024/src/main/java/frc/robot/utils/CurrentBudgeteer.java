@@ -18,14 +18,14 @@ public class CurrentBudgeteer extends SubsystemBase {
                 () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(0)));
 
         currentDatas[1] = new CurrentData(CurrentConstants.minIntakeCurrentAmps, 1,
-                () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(1)));
+                () -> Robot.example5.reduceCurrentSum(() -> getCurrentReduction(1)));
         currentDatas[2] = new CurrentData(CurrentConstants.minArmCurrentAmps * 2, 2,
-                () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(2)));
+                () -> Robot.example2.reduceCurrentSum(() -> getCurrentReduction(2)));
         currentDatas[3] = new CurrentData(CurrentConstants.minShintakeCurrentAmps, 3,
-                () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(3)));
+                () -> Robot.example4.reduceCurrentSum(() -> getCurrentReduction(3)));
         currentDatas[4] = new CurrentData(
                 (CurrentConstants.minDriveCurrentAmps + CurrentConstants.minTurningCurrentAmps) * 4, 4,
-                () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(4)));
+                () -> Robot.example.reduceCurrentSum(() -> currentReductions[4]));
 
     }
 
@@ -46,25 +46,26 @@ public class CurrentBudgeteer extends SubsystemBase {
 
     private double[] calcExcessCurrent() {
         double currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
-        double[] excessCurrent = { 0, 0, 0, 0, 0 };
+        double[] currentReductions = { 0, 0, 0, 0, 0 };
         int priotiyIndex = 4;
         while (currentOverun > 0) {
             double availibleCurrent = currentDatas[priotiyIndex].getCurrent()
                     - currentDatas[priotiyIndex].getMinimumCurrent();
             if (currentOverun > availibleCurrent) {
-                excessCurrent[priotiyIndex] = availibleCurrent;
+                currentReductions[priotiyIndex] = availibleCurrent;
                 currentOverun -= availibleCurrent;
             } else if (currentOverun < availibleCurrent) {
-                excessCurrent[priotiyIndex] = currentOverun;
+                currentReductions[priotiyIndex] = currentOverun;
                 currentOverun = 0;
             }
             priotiyIndex -= 1;
         }
-        return excessCurrent;
+        return currentReductions;
     }
 
     @Override
     public void periodic() {
+        
         // swerve
         updateSubsystemCurrent(4, Robot.example.getCurrentSum());
         // shintake
@@ -78,11 +79,11 @@ public class CurrentBudgeteer extends SubsystemBase {
 
         updateCurrentSum();
 
-        double[] excessCurrent = calcExcessCurrent();
-
+        currentReductions = calcExcessCurrent();
+    
         double indexByPrioirty = 4;
         for (CurrentData data : currentDatas) {
-
+            data.reduceCurrentSum();
         }
 
     }

@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.example.Example;
 import frc.robot.subsystems.example2.Example2;
 import frc.robot.subsystems.example3.Example3;
+import frc.robot.subsystems.example4.Example4;
+import frc.robot.subsystems.example5.Example5;
 import frc.robot.utils.CurrentBudgeteer;
 
 public class Robot extends TimedRobot {
@@ -19,6 +21,8 @@ public class Robot extends TimedRobot {
   public static Example example = new Example();
   public static Example2 example2 = new Example2();
   public static Example3 example3 = new Example3();
+  public static Example4 example4 = new Example4();
+  public static Example5 example5 = new Example5();
 
 
   private Command m_autonomousCommand;

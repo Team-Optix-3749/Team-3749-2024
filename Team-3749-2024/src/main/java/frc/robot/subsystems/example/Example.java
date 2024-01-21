@@ -11,7 +11,7 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
 
     private ExampleData data = new ExampleData();
     private ExampleIO exampleIO;
-    private double currentSum = 0;
+    private double currentSum = 240;
     // private Example
 
     // Constructor
@@ -33,8 +33,11 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
 
     @Override
     public void reduceCurrentSum(DoubleSupplier currentReductionSupplier) {
-        System.out.println("swerve");
-        System.out.println(currentReductionSupplier.getAsDouble());
-    }
+        double currentReduction = currentReductionSupplier.getAsDouble();
+        if (currentReduction>0){
+            System.out.println("swerve");
+
+            System.out.println(currentReduction);
+        }    }
 
 }
