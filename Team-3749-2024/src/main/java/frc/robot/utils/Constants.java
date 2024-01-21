@@ -38,16 +38,33 @@ public class Constants {
     }
   }
 
+  public static final class CurrentConstants {
+    // we need to experimentally find this for each battery
+    public static final double maxCurrentDrawAmps = 240;
+    // the current draw for each location of motor on the bot that is the minimum
+    // the current budgeteer is allowed to reduce it to
+    public static final double minDriveCurrentAmps = 20; // four
+    public static final double minTurningCurrentAmps = 5; // four
+    public static final double minArmCurrentAmps = 20; // two
+    public static final double minShintakeCurrentAmps = 20; // one
+    public static final double minIntakeCurrentAmps = 30; // ?
+    public static final double minShooterCurrent = 60; // ?
+
+
+
+
+  }
+
   public static final class ArmConstants {
     private static final PIDConstants simPID = new PIDConstants(2.2, 0, 0); // 10,0,0
     private static final PIDConstants realPID = new PIDConstants(0, 0, 0);
-    
+
     public static final PIDConstants PID = Robot.isReal() ? realPID : simPID;
 
     public static final int leftID = 0;
     public static final int rightID = 1;
     // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
-    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2; 
+    public static final double relativeEncoderVelocityConversionFactor = 1 / 150 * 1 / 60 * Math.PI * 2;
     public static final int encoderID = 2;
     public static final double encoderOffsetRad = 0;
 

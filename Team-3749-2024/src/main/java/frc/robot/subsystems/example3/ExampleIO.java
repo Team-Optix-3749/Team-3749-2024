@@ -1,4 +1,4 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.example3;
 
 // Copyright (c) 2023 FRC 6328
 // http://github.com/Mechanical-Advantage
@@ -14,24 +14,18 @@ package frc.robot.subsystems.arm;
  *         motors and their encoders for a subsytems and sets up for easy
  *         logging, easy simulation, and future advantage kit implementation
  */
-public interface ArmIO {
-    public static class ArmData {
+public interface ExampleIO {
+    public static class ExampleData {
         // each of these for each motor
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
-        public double accelerationRadPerSecSquared = 0.0;
-
         public double appliedVolts = 0.0;
-
-        public double leftCurrentAmps = 0.0;
-        public double leftTempCelcius = 0.0;
-        
-        public double rightCurrentAmps = 0.0;
-        public double rightTempCelcius = 0.0;
+        public double currentAmps = 0.0;
+        public double tempCelcius = 0.0;
         
     }
     /** Updates the set of loggable inputs. */
-    public default void updateData(ArmData data) {
+    public default void updateData(ExampleData data) {
 
     }
 
@@ -40,5 +34,8 @@ public interface ArmIO {
         
     }
 
+    /** Enable or disable brake mode on the drive motor. */
+    public default void setBrakeMode(boolean enable) {
+    }
 
 }

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.arm.ArmMoveToGoal;
 
 /**
  * Util class for button bindings
@@ -99,7 +98,6 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-      Robot.arm.setDefaultCommand(new ArmMoveToGoal());
     }
 
 }
