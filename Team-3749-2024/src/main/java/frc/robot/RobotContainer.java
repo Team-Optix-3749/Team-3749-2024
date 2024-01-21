@@ -38,7 +38,6 @@ public class RobotContainer {
 
   private void configureBindings() {
     joystickIO.getButtonBindings();
-
   }
 
   public Command getAutonomousCommand() {
