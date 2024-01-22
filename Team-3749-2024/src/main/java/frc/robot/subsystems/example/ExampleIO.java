@@ -20,8 +20,9 @@ public interface ExampleIO {
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
-        public double currentAmps = 0.0;
+        public double currentAmps = 240;
         public double tempCelcius = 0.0;
+        public int currentLimit = 0;
         
     }
     /** Updates the set of loggable inputs. */
@@ -32,6 +33,10 @@ public interface ExampleIO {
     /** Run the drive motor at the specified voltage. */
     public default void setVoltage(double volts) {
         
+    }
+
+    public default void setCurrentLimitReduction(int currentReduction){
+
     }
 
     /** Enable or disable brake mode on the drive motor. */

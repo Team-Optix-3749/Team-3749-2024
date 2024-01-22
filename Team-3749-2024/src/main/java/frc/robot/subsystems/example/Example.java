@@ -1,6 +1,7 @@
 package frc.robot.subsystems.example;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -16,7 +17,7 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
 
     // Constructor
     public Example() {
-        if (Robot.isReal()) {
+        if (Robot.isSimulation()) {
             exampleIO = new ExampleSim();
         }
     }
@@ -28,16 +29,22 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
     // runs every 0.02 sec
     @Override
     public void periodic() {
-
+        exampleIO.updateData(data);
+        currentSum = data.currentAmps;
+        System.out.println(currentSum);
+        // System.out.println(currentSum);
     }
 
     @Override
-    public void reduceCurrentSum(DoubleSupplier currentReductionSupplier) {
-        double currentReduction = currentReductionSupplier.getAsDouble();
-        if (currentReduction>0){
-            System.out.println("swerve");
+    public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
+        int currentReduction = currentReductionSupplier.getAsInt();
+        if (currentReduction > 0) {
+            // System.out.println(currentReduction);
+            // divide by 4 since this is supposed to kinda be like swerve 
+            exampleIO.setCurrentLimitReduction(currentReduction/4);
 
-            System.out.println(currentReduction);
-        }    }
+        }
+
+    }
 
 }

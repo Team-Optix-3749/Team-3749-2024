@@ -1,16 +1,14 @@
 package frc.robot.utils;
 
-import java.util.HashMap;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.Constants.CurrentConstants;
 
 public class CurrentBudgeteer extends SubsystemBase {
 
-    private double currentSum = 0;
+    private int currentSum = 0;
     private CurrentData[] currentDatas = new CurrentData[5];
-    private double[] currentReductions = { 0, 0, 0, 0, 0 };
+    private int[] currentReductions = { 0, 0, 0, 0, 0 };
 
     public CurrentBudgeteer() {
 
@@ -29,7 +27,7 @@ public class CurrentBudgeteer extends SubsystemBase {
 
     }
 
-    private double getCurrentReduction(int indexByPrioirty) {
+    private int getCurrentReduction(int indexByPrioirty) {
         return currentReductions[indexByPrioirty];
     }
 
@@ -44,13 +42,13 @@ public class CurrentBudgeteer extends SubsystemBase {
         }
     }
 
-    private double[] calcExcessCurrent() {
-        double currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
-        double[] currentReductions = { 0, 0, 0, 0, 0 };
+    private int[] calcExcessCurrent() {
+        int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
+        int[] currentReductions = { 0, 0, 0, 0, 0 };
         int priotiyIndex = 4;
         while (currentOverun > 0) {
-            double availibleCurrent = currentDatas[priotiyIndex].getCurrent()
-                    - currentDatas[priotiyIndex].getMinimumCurrent();
+            int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
+                    - currentDatas[priotiyIndex].getMinimumCurrent());
             if (currentOverun > availibleCurrent) {
                 currentReductions[priotiyIndex] = availibleCurrent;
                 currentOverun -= availibleCurrent;
@@ -65,7 +63,7 @@ public class CurrentBudgeteer extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+
         // swerve
         updateSubsystemCurrent(4, Robot.example.getCurrentSum());
         // shintake
@@ -80,8 +78,7 @@ public class CurrentBudgeteer extends SubsystemBase {
         updateCurrentSum();
 
         currentReductions = calcExcessCurrent();
-    
-        double indexByPrioirty = 4;
+
         for (CurrentData data : currentDatas) {
             data.reduceCurrentSum();
         }
@@ -92,18 +89,18 @@ public class CurrentBudgeteer extends SubsystemBase {
 
 class CurrentData {
     private Runnable reduceSubystemCurrentSumRunnable;
-    private double minimumCurrent;
+    private int minimumCurrent;
     private int priority;
     private double current = 0;
 
-    public CurrentData(double minimumCurrent, int priority, Runnable reduceSubystemCurrentSumRunnable) {
+    public CurrentData(int minimumCurrent, int priority, Runnable reduceSubystemCurrentSumRunnable) {
         this.minimumCurrent = minimumCurrent;
         this.priority = priority;
         this.reduceSubystemCurrentSumRunnable = reduceSubystemCurrentSumRunnable;
 
     }
 
-    public double getMinimumCurrent() {
+    public int getMinimumCurrent() {
         return minimumCurrent;
     }
 
@@ -118,7 +115,6 @@ class CurrentData {
     public void setCurrent(double amps) {
         current = amps;
     }
-
 
     public void reduceCurrentSum() {
         reduceSubystemCurrentSumRunnable.run();

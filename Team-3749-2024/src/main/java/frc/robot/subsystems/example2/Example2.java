@@ -1,6 +1,7 @@
 package frc.robot.subsystems.example2;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -32,12 +33,11 @@ public class Example2 extends SubsystemBase implements CurrentBudgettedSubsystem
     }
 
     @Override
-    public void reduceCurrentSum(DoubleSupplier currentReductionSupplier) {
-        double currentReduction = currentReductionSupplier.getAsDouble();
-        if (currentReduction>0){
-            System.out.println("arm");
+    public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
+        double currentReduction = currentReductionSupplier.getAsInt();
+        if (currentReduction > 0) {
 
-            System.out.println(currentReduction);
-        }    }
+        }
+    }
 
 }

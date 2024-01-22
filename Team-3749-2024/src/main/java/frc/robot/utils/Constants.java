@@ -40,15 +40,15 @@ public class Constants {
 
   public static final class CurrentConstants {
     // we need to experimentally find this for each battery
-    public static final double maxCurrentDrawAmps = 240;
+    public static final int maxCurrentDrawAmps = 240;
     // the current draw for each location of motor on the bot that is the minimum
     // the current budgeteer is allowed to reduce it to
-    public static final double minDriveCurrentAmps = 20; // four
-    public static final double minTurningCurrentAmps = 5; // four
-    public static final double minArmCurrentAmps = 20; // two
-    public static final double minShintakeCurrentAmps = 20; // one
-    public static final double minIntakeCurrentAmps = 30; // ?
-    public static final double minShooterCurrent = 60; // ?
+    public static final int minDriveCurrentAmps = 20; // four
+    public static final int minTurningCurrentAmps = 5; // four
+    public static final int minArmCurrentAmps = 20; // two
+    public static final int minShintakeCurrentAmps = 20; // one
+    public static final int minIntakeCurrentAmps = 30; // ?
+    public static final int minShooterCurrent = 60; // ?
 
 
 
@@ -94,6 +94,7 @@ public class Constants {
     public static final double wheelDiameterMeters = Units.inchesToMeters(3.5);
     public static final double driveMotorGearRatio = 1.0 / 6.75;
     public static final double turningMotorGearRatio = 1.0 / 12.8;
+
     public static final double kPTurningReal = 2.25;
     public static final double kPDrivingReal = 0.0;
     public static final double kVDrivingReal = 1.5;
@@ -103,6 +104,11 @@ public class Constants {
     public static final double kVDrivingSim = 3.19;
     public static final double kSDrivingSim = 0.0;
     public static final double kPDrivingSim = 0.0;
+
+
+    public static final int driveCurrentLimmit = 60;
+    public static final int turnCurrentLimit = 60;
+
 
   }
 

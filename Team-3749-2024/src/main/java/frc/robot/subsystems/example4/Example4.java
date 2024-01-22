@@ -1,6 +1,7 @@
 package frc.robot.subsystems.example4;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,11 +34,10 @@ public class Example4 extends SubsystemBase implements CurrentBudgettedSubsystem
     }
 
     @Override
-    public void reduceCurrentSum(DoubleSupplier currentReductionSupplier) {
-        double currentReduction = currentReductionSupplier.getAsDouble();
-        if (currentReduction>0){
-            System.out.println("shintake");
+    public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
+        double currentReduction = currentReductionSupplier.getAsInt();
+        if (currentReduction > 0) {
 
-            System.out.println(currentReduction);
-        }    }
+        }
+    }
 }
