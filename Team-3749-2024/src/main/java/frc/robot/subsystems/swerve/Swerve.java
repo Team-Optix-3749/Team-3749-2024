@@ -28,6 +28,7 @@ import frc.robot.subsystems.swerve.real.SwerveModuleSparkMax;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
+import org.littletonrobotics.junction.Logger;
 
 /***
  * @author Noah Simon
