@@ -44,21 +44,34 @@ public class CurrentBudgeteer extends SubsystemBase {
 
     private int[] calcExcessCurrent() {
         int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
-        int[] currentReductions = { 0, 0, 0, 0, 0 };
+        int[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
         int priotiyIndex = 4;
         while (currentOverun > 0) {
             int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
                     - currentDatas[priotiyIndex].getMinimumCurrent());
             if (currentOverun > availibleCurrent) {
-                currentReductions[priotiyIndex] = availibleCurrent;
+                tempCurrentReductions[priotiyIndex] = availibleCurrent;
                 currentOverun -= availibleCurrent;
             } else if (currentOverun < availibleCurrent) {
-                currentReductions[priotiyIndex] = currentOverun;
+                tempCurrentReductions[priotiyIndex] = currentOverun;
                 currentOverun = 0;
             }
             priotiyIndex -= 1;
         }
-        return currentReductions;
+        if (currentOverun <= 0) {
+            for (int i = 0; i <= 4; i++) {
+                if (currentOverun + currentReductions[i] <= 0) {
+                    currentOverun += currentReductions[i];
+                    // the reductions are already set to 0
+                } else {
+                    tempCurrentReductions[i] = currentOverun + currentReductions[i];
+                    currentOverun += currentReductions[i] - tempCurrentReductions[i];
+                }
+            }
+
+        }
+        System.out.println(tempCurrentReductions[4]);
+        return tempCurrentReductions;
     }
 
     @Override
@@ -78,10 +91,12 @@ public class CurrentBudgeteer extends SubsystemBase {
         updateCurrentSum();
 
         currentReductions = calcExcessCurrent();
-
         for (CurrentData data : currentDatas) {
             data.reduceCurrentSum();
         }
+        // System.out.println(currentSum);
+
+        // System.out.println(currentSum);
 
     }
 

@@ -31,7 +31,6 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
     public void periodic() {
         exampleIO.updateData(data);
         currentSum = data.currentAmps;
-        System.out.println(currentSum);
         // System.out.println(currentSum);
     }
 
@@ -39,9 +38,10 @@ public class Example extends SubsystemBase implements CurrentBudgettedSubsystem 
     public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
         int currentReduction = currentReductionSupplier.getAsInt();
         if (currentReduction > 0) {
+
             // System.out.println(currentReduction);
             // divide by 4 since this is supposed to kinda be like swerve 
-            exampleIO.setCurrentLimitReduction(currentReduction/4);
+            exampleIO.setCurrentLimitReduction((int)Math.ceil(currentReduction/4.0));
 
         }
 

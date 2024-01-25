@@ -24,6 +24,9 @@ public class ExampleSparkmax implements ExampleIO {
         motor.setSmartCurrentLimit(ModuleConstants.driveCurrentLimmit);
         encoder.setPositionConversionFactor(2 * Math.PI);
         encoder.setVelocityConversionFactor(1 / 60 * 2 * Math.PI);
+
+
+        motor.set(1);
     }
 
     @Override
