@@ -21,8 +21,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class Constants {
+  public static enum ROBOT_STATE {
+    REAL,
+    SIM,
+    REPLAY
+  }
 
-  public static final boolean ROBOT_IS_REAL = Robot.isReal();
+  public static final ROBOT_STATE robotState = ROBOT_STATE.REAL;
 
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;

@@ -28,6 +28,8 @@ import frc.robot.subsystems.swerve.real.SwerveModuleSparkMax;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.DriveConstants;
+
+import org.littletonrobotics.junction.LogDataReceiver;
 import org.littletonrobotics.junction.Logger;
 
 /***
@@ -48,14 +50,14 @@ public class Swerve extends SubsystemBase {
   // equivilant to a odometer, but also intakes vision
   private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
-  private ShuffleData<Double[]> odometryLog = new ShuffleData<Double[]>("swerve", "odometry",
-      new Double[] { 0.0, 0.0, 0.0, 0.0 });
-  private ShuffleData<Double[]> desiredOdometryLog = new ShuffleData<Double[]>("swerve", "desiredOdometry",
-      new Double[] { 0.0, 0.0, 0.0, 0.0 });
-  private ShuffleData<Double[]> realStatesLog = new ShuffleData<Double[]>("swerve", "real states",
-      new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-  private ShuffleData<Double[]> desiredStatesLog = new ShuffleData<Double[]>("swerve", "desired states",
-      new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<double[]> odometryLog = new ShuffleData<double[]>("swerve", "odometry",
+      new double[] { 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<double[]> desiredOdometryLog = new ShuffleData<double[]>("swerve", "desiredOdometry",
+      new double[] { 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<double[]> realStatesLog = new ShuffleData<double[]>("swerve", "real states",
+      new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+  private ShuffleData<double[]> desiredStatesLog = new ShuffleData<double[]>("swerve", "desired states",
+      new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
   private ShuffleData<Double> yawLog = new ShuffleData<Double>("swerve", "yaw", 0.0);
   private ShuffleData<Double> pitchLog = new ShuffleData<Double>("swerve", "pitch", 0.0);
   private ShuffleData<Double> rollLog = new ShuffleData<Double>("swerve", "roll", 0.0);
@@ -147,7 +149,7 @@ public class Swerve extends SubsystemBase {
         pose);
 
     desiredOdometryLog
-        .set(new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+        .set(new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
   public void updateOdometry() {
@@ -163,7 +165,7 @@ public class Swerve extends SubsystemBase {
   public void logDesiredOdometry(Pose2d desiredPose) {
     this.desiredPose = desiredPose;
     desiredOdometryLog
-        .set(new Double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
+        .set(new double[] { desiredPose.getX(), desiredPose.getY(), desiredPose.getRotation().getDegrees() });
   }
 
   public void stopModules() {
@@ -195,7 +197,7 @@ public class Swerve extends SubsystemBase {
       modules[i].periodic();
     }
 
-    Double[] realStates = {
+    double[] realStates = {
         modules[0].getState().angle.getDegrees(),
         modules[0].getState().speedMetersPerSecond,
         modules[1].getState().angle.getDegrees(),
@@ -206,7 +208,7 @@ public class Swerve extends SubsystemBase {
         modules[3].getState().speedMetersPerSecond
     };
 
-    Double[] desiredStates = {
+    double[] desiredStates = {
         modules[0].getDesiredState().angle.getDegrees(),
         modules[0].getDesiredState().speedMetersPerSecond,
         modules[1].getDesiredState().angle.getDegrees(),
@@ -217,16 +219,26 @@ public class Swerve extends SubsystemBase {
         modules[3].getDesiredState().speedMetersPerSecond
     };
 
+    double[] odometry = { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() };
+
     SmartDashboard.putNumber("rotation per s",
         Units.radiansPerSecondToRotationsPerMinute(getChassisSpeeds().omegaRadiansPerSecond));
 
     realStatesLog.set(realStates);
     desiredStatesLog.set(desiredStates);
-    odometryLog.set(
-        new Double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+    odometryLog.set(odometry);
     yawLog.set(gyroData.yawDeg);
     pitchLog.set(gyroData.pitchDeg);
     rollLog.set(gyroData.rollDeg);
     headingLog.set(getRotation2d().getDegrees());
+
+    Logger.recordOutput("realStates", realStates);
+    Logger.recordOutput("desiredStates", desiredStates);
+    Logger.recordOutput("odometryLog", odometry);
+    Logger.recordOutput("yawDeg", gyroData.yawDeg);
+    Logger.recordOutput("pitchDeg", gyroData.pitchDeg);
+    Logger.recordOutput("rollDeg", gyroData.rollDeg);
+    Logger.recordOutput("headingDeg", getRotation2d().getDegrees());
+    Logger.recordOutput("desiredOdometry", desiredOdometryLog.get());
   }
 }
