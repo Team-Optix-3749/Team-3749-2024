@@ -27,7 +27,7 @@ public class Constants {
     REPLAY
   }
 
-  public static final ROBOT_STATE robotState = ROBOT_STATE.REAL;
+  public static final ROBOT_STATE robotState = ROBOT_STATE.REPLAY;
 
   public static final class Sim {
     public static final double loopPeriodSec = 0.02;
