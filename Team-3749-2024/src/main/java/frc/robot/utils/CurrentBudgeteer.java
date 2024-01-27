@@ -9,6 +9,9 @@ public class CurrentBudgeteer extends SubsystemBase {
     private int currentSum = 0;
     private CurrentData[] currentDatas = new CurrentData[5];
     private int[] currentReductions = { 0, 0, 0, 0, 0 };
+    private final ShuffleData<Integer> currentSumLog = new ShuffleData("Current Budgetteer", "Current Sum",currentSum );
+    private final ShuffleData<int[]> currentReductionsLog = new ShuffleData("Current Budgetteer", "Current Reductions",currentReductions );
+
 
     public CurrentBudgeteer() {
 
@@ -45,22 +48,13 @@ public class CurrentBudgeteer extends SubsystemBase {
     private int[] calcExcessCurrent() {
         int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
         int[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
-        int priotiyIndex = 4;
-        while (currentOverun > 0) {
-            int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
-                    - currentDatas[priotiyIndex].getMinimumCurrent());
-            if (currentOverun > availibleCurrent) {
-                tempCurrentReductions[priotiyIndex] = availibleCurrent;
-                currentOverun -= availibleCurrent;
-            } else if (currentOverun < availibleCurrent) {
-                tempCurrentReductions[priotiyIndex] = currentOverun;
-                currentOverun = 0;
-            }
-            priotiyIndex -= 1;
-        }
+
+        System.out.println(currentOverun==0);
+
         if (currentOverun <= 0) {
-            for (int i = 0; i <= 4; i++) {
-                if (currentOverun + currentReductions[i] <= 0) {
+            for (int i = 4; i >= 0; i--) {
+                if (currentOverun + currentReductions[i] <= 0) { // if the currentoverrun+reduced current still leaves
+                                                                 // some availible
                     currentOverun += currentReductions[i];
                     // the reductions are already set to 0
                 } else {
@@ -68,9 +62,23 @@ public class CurrentBudgeteer extends SubsystemBase {
                     currentOverun += currentReductions[i] - tempCurrentReductions[i];
                 }
             }
+        } else {
+            int priotiyIndex = 4;
+            while (currentOverun > 0 &&  priotiyIndex >=0) {
+                int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
+                        - currentDatas[priotiyIndex].getMinimumCurrent());
 
+                if (currentOverun > availibleCurrent) {
+                    tempCurrentReductions[priotiyIndex] = availibleCurrent;
+                    currentOverun -= availibleCurrent;
+                } else if (currentOverun <= availibleCurrent) {
+                    tempCurrentReductions[priotiyIndex] = currentOverun;
+                    currentOverun = 0;
+                }
+                priotiyIndex -= 1;
+
+            }
         }
-        System.out.println(tempCurrentReductions[4]);
         return tempCurrentReductions;
     }
 
@@ -94,9 +102,13 @@ public class CurrentBudgeteer extends SubsystemBase {
         for (CurrentData data : currentDatas) {
             data.reduceCurrentSum();
         }
+        for (int current : currentReductions){
+        System.out.println(current);
+        }
         // System.out.println(currentSum);
 
-        // System.out.println(currentSum);
+        currentSumLog.set(currentSum);
+        currentReductionsLog.set(currentReductions);
 
     }
 

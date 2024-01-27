@@ -42,6 +42,7 @@ public class ExampleSim implements ExampleIO {
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
         flywheel.setInputVoltage(appliedVolts);
+        
     }
 
     @Override
@@ -49,4 +50,6 @@ public class ExampleSim implements ExampleIO {
         currentLimit=ModuleConstants.driveCurrentLimmit-currentReduction;
         
     }
+
+
 }

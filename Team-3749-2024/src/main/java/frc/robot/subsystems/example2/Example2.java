@@ -12,7 +12,7 @@ public class Example2 extends SubsystemBase implements CurrentBudgettedSubsystem
 
     private ExampleData data = new ExampleData();
     private ExampleIO exampleIO;
-    private double currentSum = 30;
+    private double currentSum = 20;
     // private Exampl
 
     // Constructor

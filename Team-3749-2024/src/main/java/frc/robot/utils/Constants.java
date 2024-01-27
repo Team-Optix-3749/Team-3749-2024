@@ -40,7 +40,7 @@ public class Constants {
 
   public static final class CurrentConstants {
     // we need to experimentally find this for each battery
-    public static final int maxCurrentDrawAmps = 240;
+    public static final int maxCurrentDrawAmps = 120;
     // the current draw for each location of motor on the bot that is the minimum
     // the current budgeteer is allowed to reduce it to
     public static final int minDriveCurrentAmps = 20; // four
@@ -106,8 +106,8 @@ public class Constants {
     public static final double kPDrivingSim = 0.0;
 
 
-    public static final int driveCurrentLimmit = 60;
-    public static final int turnCurrentLimit = 60;
+    public static final int driveCurrentLimmit = 30;
+    public static final int turnCurrentLimit = 30;
 
 
   }

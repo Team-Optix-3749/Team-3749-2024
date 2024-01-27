@@ -43,4 +43,8 @@ public interface ExampleIO {
     public default void setBrakeMode(boolean enable) {
     }
 
+    public default void setCurrent(int current){
+        
+    }
+
 }
