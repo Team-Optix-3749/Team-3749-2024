@@ -72,4 +72,4 @@ public class SwerveModuleSim implements SwerveModuleIO {
         turnAppliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
         turnSim.setInputVoltage(turnAppliedVolts);
     }
-}
+}   
