@@ -24,6 +24,7 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.RobotType;
+import frc.robot.utils.Constants.VisionConstants.Cam;
 
 /***
  * @author Noah Simon
@@ -115,9 +116,27 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
-            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2d, Robot.limelight.getTimeRunning());
+        /*
+         *   final Optional<EstimatedRobotPose> optionalEstimatedPoseRight = photonPoseEstimatorRight.update();
+  if (optionalEstimatedPoseRight.isPresent()) {
+    final EstimatedRobotPose estimatedPose = optionalEstimatedPoseRight.get();          
+    poseEstimator.updateVisionMeasurement(estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+  }
+
+  final Optional<EstimatedRobotPose> optionalEstimatedPoseLeft = photonPoseEstimatorLeft.update();
+  if (optionalEstimatedPoseLeft.isPresent()) {
+    final EstimatedRobotPose estimatedPose = optionalEstimatedPoseLeft.get();          
+    poseEstimator.updateVisionMeasurement(estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+  }
+         */
+
+        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.LEFT).isPresent()){
+            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2dLeft, Robot.limelight.getLatestResult(Cam.LEFT).getTimestampSeconds(), Robot.limelight.confidenceCalculator(Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.LEFT).get()));
         }
+        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.RIGHT).isPresent()){
+            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2dRight, Robot.limelight.getLatestResult(Cam.RIGHT).getTimestampSeconds(), Robot.limelight.confidenceCalculator(Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.Right).get()));
+        }
+        
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() });

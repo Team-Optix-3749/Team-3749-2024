@@ -14,10 +14,13 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -30,27 +33,44 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.RobotType;
+import frc.robot.utils.Constants.VisionConstants.Cam;
 import frc.robot.utils.Constants.VisionConstants.Node;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
  * 
  * @author Rohin Sood
+ * @author Jadon Lee
  */
 public class Limelight extends SubsystemBase {
     //Position
-    public Pose2d estimatedPose2d = new Pose2d(0,0,new Rotation2d());
+    public Pose2d estimatedPose2dLeft = new Pose2d(0,0,new Rotation2d());
+    public Pose2d estimatedPose2dRight = new Pose2d(0,0,new Rotation2d());
+
     public boolean targeting = false;
     // PhotonCamera instance
-    private final PhotonCamera camera = new PhotonCamera("limelight");
+    private final PhotonCamera cameraLeft = new PhotonCamera("limelightLeft");
+    private final PhotonCamera cameraRight = new PhotonCamera("limelightRight");
+    private final PhotonCamera cameraBack = new PhotonCamera("limelightBack");
+
+
     private AprilTagFieldLayout aprilTagFieldLayout;
-    private PhotonPoseEstimator photonPoseEstimator;
+    private PhotonPoseEstimator photonPoseEstimatorLeft;
+    private PhotonPoseEstimator photonPoseEstimatorRight;
 
     // NetworkTables entries for controlling LEDs
-    private final NetworkTable photonTable = NetworkTableInstance.getDefault().getTable("photonvision");
-    private final NetworkTableEntry ledMode = photonTable.getEntry("ledMode");
-    private final NetworkTableEntry ledModeState = photonTable.getEntry("ledModeState");
-    private final NetworkTableEntry ledModeRequest = photonTable.getEntry("ledModeRequest");
+    private final NetworkTable photonTableLeft = NetworkTableInstance.getDefault().getTable("photonvisionLeft");
+    private final NetworkTableEntry ledModeLeft = photonTableLeft.getEntry("ledMode");
+    private final NetworkTableEntry ledModeStateLeft = photonTableLeft.getEntry("ledModeState");
+    private final NetworkTableEntry ledModeRequestLeft = photonTableLeft.getEntry("ledModeRequest");
+    private final NetworkTable photonTableRight = NetworkTableInstance.getDefault().getTable("photonvisionRight");
+    private final NetworkTableEntry ledModeRight = photonTableRight.getEntry("ledMode");
+    private final NetworkTableEntry ledModeStateRight = photonTableRight.getEntry("ledModeState");
+    private final NetworkTableEntry ledModeRequestRight = photonTableRight.getEntry("ledModeRequest");
+    private final NetworkTable photonTableBack = NetworkTableInstance.getDefault().getTable("photonvisionRight");
+    private final NetworkTableEntry ledModeBack = photonTableBack.getEntry("ledMode");
+    private final NetworkTableEntry ledModeStateBack = photonTableBack.getEntry("ledModeState");
+    private final NetworkTableEntry ledModeRequestBack = photonTableBack.getEntry("ledModeRequest");
 
     // ShuffleData for logging pipeline index
     private final ShuffleData<Integer> pipeline = new ShuffleData<Integer>("Limelight",
@@ -67,13 +87,19 @@ public class Limelight extends SubsystemBase {
             
             // Initializing PhotonPoseEstimator based on robot type
             if (Constants.ROBOT_TYPE == RobotType.SIM){
-                photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    camera, Constants.VisionConstants.sim_robot_to_cam);
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraLeft, Constants.VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraRight, Constants.VisionConstants.SIM_RIGHT_ROBOT_TO_CAM);
             }
             else{
-                photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    camera, Constants.VisionConstants.robot_to_cam);
+                photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraLeft, Constants.VisionConstants.ROBOT_LEFT_TO_CAM);
+                photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    cameraRight, Constants.VisionConstants.ROBOT_RIGHT_TO_CAM);
             }
+            photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+            photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
             
         } catch (Exception e) {
             // Handling exceptions during initialization
@@ -81,14 +107,28 @@ public class Limelight extends SubsystemBase {
         }
 
         // Setting LED to Off and starting the timer
-        setLED(VisionLEDMode.kOff);
+        setLED(VisionLEDMode.kOff, Cam.LEFT);
+        setLED(VisionLEDMode.kOff, Cam.RIGHT);
+        setLED(VisionLEDMode.kOff, Cam.BACK);
+
         timer = new Timer();
         timer.start();
     }
 
     // Method to get the latest PhotonPipelineResult from the camera
-    public PhotonPipelineResult getLatestResult() {
-        return camera.getLatestResult();
+    public PhotonPipelineResult getLatestResult(Cam camPose) {
+        switch (camPose){
+            case LEFT:
+                return cameraLeft.getLatestResult();
+            case RIGHT:
+                return cameraRight.getLatestResult();
+            case BACK:
+                return cameraBack.getLatestResult();
+            default:
+                return null;
+
+        }
+        
     }
 
     // Method to check if a target is present in the latest result
@@ -107,7 +147,7 @@ public class Limelight extends SubsystemBase {
         return result.getBestTarget();
     }
     public PhotonPoseEstimator getPoseEstimator(){
-        return photonPoseEstimator;
+        return photonPoseEstimatorLeft;
     }
     // Method to get the yaw (rotation) of a tracked target
     public Rotation2d getYaw(PhotonTrackedTarget target) {
@@ -148,16 +188,16 @@ public class Limelight extends SubsystemBase {
     public double getDistance(PhotonTrackedTarget target, Node node) {
         if (Constants.ROBOT_TYPE == RobotType.SIM){
             return PhotonUtils.calculateDistanceToTargetMeters(
-                    Constants.VisionConstants.sim_camera_height,
+                    Constants.VisionConstants.SIM_CAM_HEIGHT,
                     node.height_meters,
-                    Constants.VisionConstants.camera_pitch,
+                    Constants.VisionConstants.CAM_PITCH,
                     Units.degreesToRadians(getPitch(target)));
         }
         else{
             return PhotonUtils.calculateDistanceToTargetMeters(
-                    Constants.VisionConstants.camera_height,
+                    Constants.VisionConstants.CAM_HEIGHT,
                     node.height_meters,
-                    Constants.VisionConstants.camera_pitch,
+                    Constants.VisionConstants.CAM_PITCH,
                     Units.degreesToRadians(getPitch(target)));
         }
     }
@@ -174,46 +214,123 @@ public class Limelight extends SubsystemBase {
     }
 
     // Getter for the current camera pipeline index
-    public int getPipeline() {
-        return camera.getPipelineIndex();
+    public int getPipeline(Cam camPose) {
+        switch (camPose){
+            case LEFT:
+                return cameraLeft.getPipelineIndex();
+            case RIGHT:
+                return cameraRight.getPipelineIndex();
+            case BACK:
+                return cameraBack.getPipelineIndex();
+        }
+        return 0;
+        
     }
 
     // Setter for the camera pipeline index
-    public void setPipeline(int index) {
-        camera.setPipelineIndex(index);
+    public void setPipeline(int index, Cam camPose) {
+        switch (camPose){
+            case LEFT:
+                cameraLeft.setPipelineIndex(index);
+            case RIGHT:
+                cameraRight.setPipelineIndex(index);
+            case BACK:
+                cameraBack.setPipelineIndex(index);
+        }
     }
 
     // Method to set the LED mode for the Limelight
-    public void setLED(VisionLEDMode ledMode) {
-        switch (ledMode) {
-            case kOn:
-                this.ledMode.setInteger(1);
-                ledModeState.setInteger(1);
-                ledModeRequest.setInteger(1);
-                break;
-            case kOff:
-                this.ledMode.setInteger(0);
-                ledModeState.setInteger(0);
-                ledModeRequest.setInteger(0);
-                break;
-            case kBlink:
-                this.ledMode.setInteger(2);
-                ledModeState.setInteger(2);
-                ledModeRequest.setInteger(2);
-                break;
-            default:
-                this.ledMode.setInteger(-1);
-                ledModeState.setInteger(-1);
-                ledModeRequest.setInteger(-1);
-                break;
+    public void setLED(VisionLEDMode ledMode, Cam camPose) {
+        switch (camPose){
+            case LEFT:
+                switch (ledMode) {
+                    case kOn:
+                        this.ledModeLeft.setInteger(1);
+                        ledModeStateLeft.setInteger(1);
+                        ledModeRequestLeft.setInteger(1);
+                        break;
+                    case kOff:
+                        this.ledModeLeft.setInteger(0);
+                        ledModeStateLeft.setInteger(0);
+                        ledModeRequestLeft.setInteger(0);
+                        break;
+                    case kBlink:
+                        this.ledModeLeft.setInteger(2);
+                        ledModeStateLeft.setInteger(2);
+                        ledModeRequestLeft.setInteger(2);
+                        break;
+                    default:
+                        this.ledModeLeft.setInteger(-1);
+                        ledModeStateLeft.setInteger(-1);
+                        ledModeRequestLeft.setInteger(-1);
+                        break;
+                }
+                cameraLeft.setLED(ledMode);
+            case RIGHT:
+                switch (ledMode) {
+                    case kOn:
+                        this.ledModeRight.setInteger(1);
+                        ledModeStateRight.setInteger(1);
+                        ledModeRequestRight.setInteger(1);
+                        break;
+                    case kOff:
+                        this.ledModeRight.setInteger(0);
+                        ledModeStateRight.setInteger(0);
+                        ledModeRequestRight.setInteger(0);
+                        break;
+                    case kBlink:
+                        this.ledModeRight.setInteger(2);
+                        ledModeStateRight.setInteger(2);
+                        ledModeRequestRight.setInteger(2);
+                        break;
+                    default:
+                        this.ledModeRight.setInteger(-1);
+                        ledModeStateRight.setInteger(-1);
+                        ledModeRequestRight.setInteger(-1);
+                        break;
+                }
+                cameraRight.setLED(ledMode);
+            case BACK:
+                switch (ledMode) {
+                    case kOn:
+                        this.ledModeBack.setInteger(1);
+                        ledModeStateBack.setInteger(1);
+                        ledModeRequestBack.setInteger(1);
+                        break;
+                    case kOff:
+                        this.ledModeBack.setInteger(0);
+                        ledModeStateBack.setInteger(0);
+                        ledModeRequestBack.setInteger(0);
+                        break;
+                    case kBlink:
+                        this.ledModeBack.setInteger(2);
+                        ledModeStateBack.setInteger(2);
+                        ledModeRequestBack.setInteger(2);
+                        break;
+                    default:
+                        this.ledModeBack.setInteger(-1);
+                        ledModeStateBack.setInteger(-1);
+                        ledModeRequestBack.setInteger(-1);
+                        break;
+                }
+                cameraBack.setLED(ledMode);
         }
-        camera.setLED(ledMode);
+
     }
 
     // Method to get the estimated global pose using the PhotonPoseEstimator
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-        return photonPoseEstimator.update();
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, Cam camNum) {
+        switch (camNum){
+            case LEFT:
+                photonPoseEstimatorLeft.setReferencePose(prevEstimatedRobotPose);
+                return photonPoseEstimatorLeft.update();
+            case RIGHT:
+                photonPoseEstimatorRight.setReferencePose(prevEstimatedRobotPose);
+                return photonPoseEstimatorRight.update();
+            default:
+                return null;
+        }
+
     }
 
     // Method to get the time the Limelight subsystem has been running
@@ -223,12 +340,40 @@ public class Limelight extends SubsystemBase {
 
     // Method for logging information
     public void logging() {
-        pipeline.set(getPipeline());
+        pipeline.set(getPipeline(Cam.LEFT));
     }
 
     // Overridden periodic method for logging during each robot loop iteration
     @Override
     public void periodic() {
         logging();
+    }
+    //Thanks to FRC Team 5712
+    public Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
+        double smallestDistance = Double.POSITIVE_INFINITY;
+        for (var target : estimation.targetsUsed) {
+            var t3d = target.getBestCameraToTarget();
+            var distance = Math.sqrt(Math.pow(t3d.getX(), 2) + Math.pow(t3d.getY(), 2) + Math.pow(t3d.getZ(), 2));
+            if (distance < smallestDistance)
+                smallestDistance = distance;
+        }
+        double poseAmbiguityFactor = estimation.targetsUsed.size() != 1
+            ? 1
+            : Math.max(
+                1,
+                (estimation.targetsUsed.get(0).getPoseAmbiguity()
+                    + Constants.VisionConstants.POSE_AMBIGUITY_SHIFTER)
+                    * Constants.VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
+        double confidenceMultiplier = Math.max(
+            1,
+            (Math.max(
+                1,
+                Math.max(0, smallestDistance - Constants.VisionConstants.NOISY_DISTANCE_METERS)
+                    * Constants.VisionConstants.DISTANCE_WEIGHT)
+                * poseAmbiguityFactor)
+                / (1
+                    + ((estimation.targetsUsed.size() - 1) * Constants.VisionConstants.TAG_PRESENCE_WEIGHT)));
+
+        return Constants.VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
     }
 }
