@@ -115,9 +115,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
-            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2d, Robot.limelight.getTimeRunning());
-        }
+        // if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition()).isPresent()){
+        //     swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2d, Robot.limelight.getTimeRunning());
+        // }
         swerveDrivePoseEstimator.update(getRotation2d(),
                 new SwerveModulePosition[] { modules[0].getPosition(), modules[1].getPosition(),
                         modules[2].getPosition(), modules[3].getPosition() });

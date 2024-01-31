@@ -151,7 +151,7 @@ public class Constants {
                 new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
 
         public static final Transform3d robot_to_cam = cam_to_robot.inverse();
-        public static final Transform3d sim_robot_to_cam = new Transform3d(1, 0, 0, new Rotation3d());
+        public static final Transform3d sim_robot_to_cam = new Transform3d(0, 0, 0, new Rotation3d());
 
         public static final int reflective_tape_pipeline_index = 0;
         public static final int apriltag_pipeline_index = 1;
@@ -171,16 +171,6 @@ public class Constants {
                 this.index = index;
             }
         }
-
-        public static enum Node {
-            CONE(0), CUBE(Units.inchesToMeters(14.25)), MID_CONE(24), TOP_CONE(43);
-
-            public double height_meters;
-
-            Node(double height_meters) {
-                this.height_meters = height_meters;
-            }
-        };
 
     }
 

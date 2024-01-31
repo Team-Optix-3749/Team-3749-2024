@@ -16,6 +16,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -225,7 +226,7 @@ public class Limelight extends SubsystemBase {
     public void logging() {
         pipeline.set(getPipeline());
     }
-
+    
     // Overridden periodic method for logging during each robot loop iteration
     @Override
     public void periodic() {
