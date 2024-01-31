@@ -5,11 +5,19 @@ import java.util.Map;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -136,31 +144,44 @@ public class Constants {
                 this.height_meters = height_meters;
             }
         };
+        public static enum Cam {
+            LEFT(0), RIGHT(1),BACK(2);
+            public int camNum;
+            Cam(int camNum){
+                this.camNum = camNum;
+            }
+        }
+        //REPLACE WITH THE ACTUAL VALUES THESE ARE PLACEHOLDER
+        public static final Transform3d CAM_LEFT_TO_ROBOT = new Transform3d(
+                new Translation3d(Units.inchesToMeters(11), 0, -Units.inchesToMeters(15.25)), new Rotation3d());
+        public static final Transform3d ROBOT_LEFT_TO_CAM = CAM_LEFT_TO_ROBOT.inverse();
+        public static final Transform3d SIM_LEFT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
+        public static final Transform2d STDV_LEFT = new Transform2d(0.5, 0.5, new Rotation2d(5));
+        //REPLACE WITH THE ACTUAL VALUES THESE ARE PLACEHOLDER
+        public static final Transform3d CAM_RIGHT_TO_ROBOT = new Transform3d(
+                new Translation3d(-Units.inchesToMeters(11), 0, -Units.inchesToMeters(15.25)), new Rotation3d());
+        public static final Transform3d ROBOT_RIGHT_TO_CAM = CAM_LEFT_TO_ROBOT.inverse();
+        public static final Transform3d SIM_RIGHT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
+        public static final Transform2d STDV_RIGHT = new Transform2d(0.5, 0.5, new Rotation2d(5));
 
-        // See
-        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
-        // page 208
-        public static final double targetWidth = Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
 
-        // See
-        // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
-        // page 197
-        public static final double targetHeight = Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
+        public static final int REFLECTIVE_PIPELINE_INDEX = 0;
+        public static final int APRILTAG_PIPELINE_INDEX = 1;
 
-        public static final Transform3d cam_to_robot = new Transform3d(
-                new Translation3d(0, 0, -Units.inchesToMeters(15.25)), new Rotation3d());
+        public static final double CAM_HEIGHT = Units.inchesToMeters(20); // meters
+        public static final double SIM_CAM_HEIGHT = 1;
+        public static final double CAM_YAW = 0;
+        public static final double CAM_PITCH = 0;
+        public static final double CAM_ROLL = 0;
 
-        public static final Transform3d robot_to_cam = cam_to_robot.inverse();
-        public static final Transform3d sim_robot_to_cam = new Transform3d(0, 0, 0, new Rotation3d());
+        public static final Matrix<N3, N1>   VISION_MEASUREMENT_STANDARD_DEVIATIONS = 
+            MatBuilder.fill(Nat.N3(), Nat.N1(), 1.0, 1.0, 1.0 * Math.PI);
+        public static final int DISTANCE_WEIGHT = 7;
+        public static final double POSE_AMBIGUITY_MULTIPLIER = 0.2;
+        public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
+        public static final double NOISY_DISTANCE_METERS = 2.5;
+        public static final int TAG_PRESENCE_WEIGHT = 10;
 
-        public static final int reflective_tape_pipeline_index = 0;
-        public static final int apriltag_pipeline_index = 1;
-
-        public static final double camera_height = Units.inchesToMeters(20); // meters
-        public static final double sim_camera_height = 1;
-        public static final double camera_yaw = 0;
-        public static final double camera_pitch = 0;
-        public static final double camera_roll = 0;
         public static enum Pipelines {
             APRILTAG(1),
             CUBE(0);
