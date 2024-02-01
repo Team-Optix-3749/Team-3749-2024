@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.example.ExampleIO.ExampleData;
@@ -38,6 +39,8 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
     @Override
     public void periodic() {
         exampleIO.setVoltage(volts);
+        SmartDashboard.putNumber("volt input", volts);
+
     }
 
     @Override

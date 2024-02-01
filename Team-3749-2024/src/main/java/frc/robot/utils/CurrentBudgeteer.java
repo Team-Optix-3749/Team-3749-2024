@@ -8,10 +8,11 @@ public class CurrentBudgeteer extends SubsystemBase {
 
     private int currentSum = 0;
     private CurrentData[] currentDatas = new CurrentData[5];
-    private int[] currentReductions = { 0, 0, 0, 0, 0 };
-    private final ShuffleData<Integer> currentSumLog = new ShuffleData("Current Budgetteer", "Current Sum", currentSum);
-    private final ShuffleData<int[]> currentReductionsLog = new ShuffleData("Current Budgetteer", "Current Reductions",
+    private Integer[] currentReductions = { 0, 0, 0, 0, 0 };
+    private final ShuffleData<Integer> currentSumLog = new ShuffleData<Integer>("Current Budgetteer", "Current Sum", currentSum);
+    private final ShuffleData<Integer[]> currentReductionsLog = new ShuffleData<Integer[]>("Current Budgetteer", "Current Reductions",
             currentReductions);
+            
 
     public CurrentBudgeteer() {
 
@@ -55,11 +56,11 @@ public class CurrentBudgeteer extends SubsystemBase {
         }
     }
 
-    private int[] calcExcessCurrent() {
+    private Integer[] calcExcessCurrent() {
         int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
-        int[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
+        Integer[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
 
-        System.out.println(currentOverun == 0);
+        // System.out.println(currentOverun == 0);
 
         if (currentOverun <= 0) {
             for (int i = 4; i >= 0; i--) {
@@ -112,9 +113,9 @@ public class CurrentBudgeteer extends SubsystemBase {
         for (CurrentData data : currentDatas) {
             data.reduceCurrentSum();
         }
-        for (int current : currentReductions) {
-            System.out.println(current);
-        }
+        // for (int current : currentReductions) {
+        //     System.out.println(current);
+        // }
         // System.out.println(currentSum);
 
         currentSumLog.set(currentSum);
