@@ -50,7 +50,7 @@ public class Constants {
     public static final int minIntakeCurrentAmps = 30; // ?
     public static final int minShooterCurrent = 60; // ?
 
-
+    public static final int example5CurrentLimit = 20;
 
 
   }

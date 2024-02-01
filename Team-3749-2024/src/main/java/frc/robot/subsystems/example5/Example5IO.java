@@ -38,4 +38,9 @@ public interface Example5IO {
     public default void setBrakeMode(boolean enable) {
     }
 
+    public default void setCurrentLimitReduction(int currentReduction){
+
+    }
+
+    
 }

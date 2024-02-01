@@ -14,12 +14,15 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
     private ExampleData data = new ExampleData();
     private Example5IO exampleIO;
     private double currentSum = 0;
+    private double volts = 0;
     // private Exampl
 
     // Constructor
     public Example5() {
-        if (Robot.isReal()) {
+        if (Robot.isSimulation()) {
             exampleIO = new Example5Sim();
+        } else {
+            exampleIO = new Example5Sparkmax();
         }
     }
 
@@ -27,17 +30,19 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
         return currentSum;
     }
 
+    public void increaseVoltage(double volts) {
+        this.volts += volts;
+    }
+
     // runs every 0.02 sec
     @Override
     public void periodic() {
-
+        exampleIO.setVoltage(volts);
     }
 
     @Override
     public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
-        double currentReduction = currentReductionSupplier.getAsInt();
-        if (currentReduction > 0) {
-
-        }
+        int currentReduction = currentReductionSupplier.getAsInt();
+        exampleIO.setCurrentLimitReduction(currentReduction);
     }
 }

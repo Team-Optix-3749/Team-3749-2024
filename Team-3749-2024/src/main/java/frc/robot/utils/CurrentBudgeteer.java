@@ -9,24 +9,34 @@ public class CurrentBudgeteer extends SubsystemBase {
     private int currentSum = 0;
     private CurrentData[] currentDatas = new CurrentData[5];
     private int[] currentReductions = { 0, 0, 0, 0, 0 };
-    private final ShuffleData<Integer> currentSumLog = new ShuffleData("Current Budgetteer", "Current Sum",currentSum );
-    private final ShuffleData<int[]> currentReductionsLog = new ShuffleData("Current Budgetteer", "Current Reductions",currentReductions );
-
+    private final ShuffleData<Integer> currentSumLog = new ShuffleData("Current Budgetteer", "Current Sum", currentSum);
+    private final ShuffleData<int[]> currentReductionsLog = new ShuffleData("Current Budgetteer", "Current Reductions",
+            currentReductions);
 
     public CurrentBudgeteer() {
 
-        currentDatas[0] = new CurrentData(CurrentConstants.minShooterCurrent, 0,
-                () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(0)));
+        // currentDatas[0] = new CurrentData(CurrentConstants.minShooterCurrent, 0,
+        // () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(0)));
 
-        currentDatas[1] = new CurrentData(CurrentConstants.minIntakeCurrentAmps, 1,
-                () -> Robot.example5.reduceCurrentSum(() -> getCurrentReduction(1)));
-        currentDatas[2] = new CurrentData(CurrentConstants.minArmCurrentAmps * 2, 2,
-                () -> Robot.example2.reduceCurrentSum(() -> getCurrentReduction(2)));
-        currentDatas[3] = new CurrentData(CurrentConstants.minShintakeCurrentAmps, 3,
-                () -> Robot.example4.reduceCurrentSum(() -> getCurrentReduction(3)));
-        currentDatas[4] = new CurrentData(
-                (CurrentConstants.minDriveCurrentAmps + CurrentConstants.minTurningCurrentAmps) * 4, 4,
-                () -> Robot.example.reduceCurrentSum(() -> currentReductions[4]));
+        currentDatas[1] = new CurrentData(0, 1, () -> {
+        });
+        currentDatas[2] = new CurrentData(0, 2, () -> {
+        });
+        currentDatas[3] = new CurrentData(0, 3, () -> {
+        });
+        currentDatas[0] = new CurrentData(0, 4, () -> {
+        });
+
+        currentDatas[4] = new CurrentData(CurrentConstants.example5CurrentLimit, 4,
+                () -> Robot.example5.reduceCurrentSum(() -> getCurrentReduction(4)));
+        // currentDatas[2] = new CurrentData(CurrentConstants.minArmCurrentAmps * 2, 2,
+        // () -> Robot.example2.reduceCurrentSum(() -> getCurrentReduction(2)));
+        // currentDatas[3] = new CurrentData(CurrentConstants.minShintakeCurrentAmps, 3,
+        // () -> Robot.example4.reduceCurrentSum(() -> getCurrentReduction(3)));
+        // currentDatas[4] = new CurrentData(
+        // (CurrentConstants.minDriveCurrentAmps +
+        // CurrentConstants.minTurningCurrentAmps) * 4, 4,
+        // () -> Robot.example.reduceCurrentSum(() -> currentReductions[4]));
 
     }
 
@@ -49,7 +59,7 @@ public class CurrentBudgeteer extends SubsystemBase {
         int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
         int[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
 
-        System.out.println(currentOverun==0);
+        System.out.println(currentOverun == 0);
 
         if (currentOverun <= 0) {
             for (int i = 4; i >= 0; i--) {
@@ -64,7 +74,7 @@ public class CurrentBudgeteer extends SubsystemBase {
             }
         } else {
             int priotiyIndex = 4;
-            while (currentOverun > 0 &&  priotiyIndex >=0) {
+            while (currentOverun > 0 && priotiyIndex >= 0) {
                 int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
                         - currentDatas[priotiyIndex].getMinimumCurrent());
 
@@ -86,15 +96,15 @@ public class CurrentBudgeteer extends SubsystemBase {
     public void periodic() {
 
         // swerve
-        updateSubsystemCurrent(4, Robot.example.getCurrentSum());
+        // updateSubsystemCurrent(4, Robot.example.getCurrentSum());
         // shintake
         updateSubsystemCurrent(3, 0);
         // arm
-        updateSubsystemCurrent(2, Robot.example2.getCurrentSum());
-        // intake
-        updateSubsystemCurrent(1, 0);
-        // shooter
-        updateSubsystemCurrent(0, Robot.example3.getCurrentSum());
+        // updateSubsystemCurrent(2, Robot.example2.getCurrentSum());
+        // // intake
+        // updateSubsystemCurrent(1, 0);
+        // // shooter
+        // updateSubsystemCurrent(0, Robot.example3.getCurrentSum());
 
         updateCurrentSum();
 
@@ -102,8 +112,8 @@ public class CurrentBudgeteer extends SubsystemBase {
         for (CurrentData data : currentDatas) {
             data.reduceCurrentSum();
         }
-        for (int current : currentReductions){
-        System.out.println(current);
+        for (int current : currentReductions) {
+            System.out.println(current);
         }
         // System.out.println(currentSum);
 

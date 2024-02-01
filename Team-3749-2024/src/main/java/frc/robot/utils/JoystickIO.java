@@ -76,6 +76,7 @@ public class JoystickIO {
      */
     public void pilotBindings() {
         
+        pilot.a().onTrue(Commands.runOnce(()-> Robot.example5.increaseVoltage(0.5), Robot.example5));
     }
 
     /**

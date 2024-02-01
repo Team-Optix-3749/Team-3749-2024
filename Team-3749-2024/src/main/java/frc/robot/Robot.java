@@ -18,10 +18,6 @@ public class Robot extends TimedRobot {
 
   public static CurrentBudgeteer currentBudgeteer = new CurrentBudgeteer();
 
-  public static Example example = new Example();
-  public static Example2 example2 = new Example2();
-  public static Example3 example3 = new Example3();
-  public static Example4 example4 = new Example4();
   public static Example5 example5 = new Example5();
 
 
