@@ -15,7 +15,7 @@ public class Example5Sim implements Example5IO {
     }
     
     @Override
-    public void updateData(ExampleData data){
+    public void updateData(Example5Data data){
 
         // update sim values every 0.02 sec
         flywheel.update(Sim.loopPeriodSec);

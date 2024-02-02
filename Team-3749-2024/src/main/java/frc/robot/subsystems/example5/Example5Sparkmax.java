@@ -27,7 +27,7 @@ public class Example5Sparkmax implements Example5IO {
     }
 
     @Override
-    public void updateData(ExampleData data) {
+    public void updateData(Example5Data data) {
 
         // update sim values every 0.02 sec
 
@@ -36,9 +36,9 @@ public class Example5Sparkmax implements Example5IO {
 
         data.velocityRadPerSec = encoder.getVelocity();
 
-        data.appliedVolts = appliedVolts;
-
-        data.currentAmps = Math.abs(motor.getOutputCurrent());
+        data.appliedVolts = motor.getAppliedOutput()*motor.getBusVoltage();
+        
+        data.currentAmps = motor.getOutputCurrent();
 
         data.tempCelcius = motor.getMotorTemperature();
 

@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.Constants.CurrentConstants;
@@ -120,6 +121,7 @@ public class CurrentBudgeteer extends SubsystemBase {
 
         currentSumLog.set(currentSum);
         currentReductionsLog.set(currentReductions);
+        SmartDashboard.putNumber("max current robot", CurrentConstants.maxCurrentDrawAmps);
 
     }
 

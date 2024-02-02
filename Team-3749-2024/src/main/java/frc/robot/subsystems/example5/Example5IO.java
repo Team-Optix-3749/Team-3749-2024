@@ -15,7 +15,7 @@ package frc.robot.subsystems.example5;
  *         logging, easy simulation, and future advantage kit implementation
  */
 public interface Example5IO {
-    public static class ExampleData {
+    public static class Example5Data {
         // each of these for each motor
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
@@ -25,7 +25,7 @@ public interface Example5IO {
         
     }
     /** Updates the set of loggable inputs. */
-    public default void updateData(ExampleData data) {
+    public default void updateData(Example5Data data) {
 
     }
 
