@@ -10,8 +10,12 @@ import frc.robot.subsystems.example.ExampleIO.ExampleData;
 public interface CurrentBudgettedSubsystem  {
 
     /** Updates the set of loggable inputs. */
-    public default void reduceCurrentSum(IntSupplier currentReductionSupplier) {
+    public default void reduceCurrentSum(double currentReduction ) {
 
+    }
+
+    public default double getEstimatedCurrentDraw(){
+        return 0;
     }
     
 }

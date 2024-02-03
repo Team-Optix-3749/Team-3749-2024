@@ -11,20 +11,24 @@ import frc.robot.subsystems.example.ExampleIO.ExampleData;
 import frc.robot.subsystems.example5.Example5IO.Example5Data;
 import frc.robot.utils.CurrentBudgettedSubsystem;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.Constants.ElectricalConstants;
 
 public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem {
 
     private Example5Data data = new Example5Data();
     private Example5IO exampleIO;
-    private double currentSum = 0;
+    private double estimatedCurrentDraw = 0;
+    private double maxOutput = 0;
     private double volts = 0;
 
     private ShuffleData<Double> voltageLog = new ShuffleData<Double>("ex 5", "voltage", 0.0);
     private ShuffleData<Double> currentLog = new ShuffleData<Double>("ex 5", "current", 0.0);
-       private ShuffleData<Double> tempLog = new ShuffleData<Double>("ex 5", "temp", 0.0);
+    private ShuffleData<Double> tempLog = new ShuffleData<Double>("ex 5", "temp", 0.0);
 
-    // private ShuffleData<Double> voltagelog = new ShuffleData<Double>("ex 5", "voltage", 0.0);
-    // private ShuffleData<Double> voltagelog = new ShuffleData<Double>("ex 5", "voltage", 0.0);
+    // private ShuffleData<Double> voltagelog = new ShuffleData<Double>("ex 5",
+    // "voltage", 0.0);
+    // private ShuffleData<Double> voltagelog = new ShuffleData<Double>("ex 5",
+    // "voltage", 0.0);
 
     // private Exampl
 
@@ -37,10 +41,6 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
         }
     }
 
-    public double getCurrentSum() {
-        return currentSum;
-    }
-
     public void increaseVoltage(double volts) {
         this.volts += volts;
     }
@@ -49,7 +49,9 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
     @Override
     public void periodic() {
         exampleIO.updateData(data);
+        exampleIO.setMaxOutput(maxOutput);
         exampleIO.setVoltage(volts);
+        
         SmartDashboard.putNumber("volt input", volts);
         currentLog.set(data.currentAmps);
         voltageLog.set(data.appliedVolts);
@@ -57,8 +59,12 @@ public class Example5 extends SubsystemBase implements CurrentBudgettedSubsystem
     }
 
     @Override
-    public void reduceCurrentSum(IntSupplier currentReductionSupplier) {
-        int currentReduction = currentReductionSupplier.getAsInt();
-        exampleIO.setCurrentLimitReduction(currentReduction);
+    public void reduceCurrentSum(double currentReduction) {
+        maxOutput = currentReduction/ElectricalConstants.example5CurrentLimit;
+    }
+
+    @Override
+    public double getEstimatedCurrentDraw() {
+        return estimatedCurrentDraw;
     }
 }

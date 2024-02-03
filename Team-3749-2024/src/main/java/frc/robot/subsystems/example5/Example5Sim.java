@@ -3,12 +3,15 @@ package frc.robot.subsystems.example5;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.utils.Constants.ElectricalConstants;
 import frc.robot.utils.Constants.Sim;
 
 public class Example5Sim implements Example5IO {
 
     private FlywheelSim flywheel = new FlywheelSim(DCMotor.getNEO(1),1, 0.01);
     private double appliedVolts = 0.0;
+    private double maxVolts = ElectricalConstants.example5VoltageLimit;
+    private double maxOutput = 0;
 
     public Example5Sim() {
         System.out.println("[Init] Creating ExampleIOSim");
@@ -34,8 +37,12 @@ public class Example5Sim implements Example5IO {
     }
     @Override
     public void setVoltage(double volts) {
-        appliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
+        appliedVolts = MathUtil.clamp(volts, -maxVolts * maxOutput, maxVolts*maxOutput);
         flywheel.setInputVoltage(appliedVolts);
     }
 
+    @Override
+    public void setMaxOutput(double maxOutput){
+        this.maxOutput = maxOutput;
+    }
 }

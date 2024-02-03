@@ -38,7 +38,7 @@ public class Constants {
     }
   }
 
-  public static final class CurrentConstants {
+  public static final class ElectricalConstants {
     // we need to experimentally find this for each battery
     public static final int maxCurrentDrawAmps = 120;
     // the current draw for each location of motor on the bot that is the minimum
@@ -51,6 +51,7 @@ public class Constants {
     public static final int minShooterCurrent = 60; // ?
 
     public static final int example5CurrentLimit = 20;
+    public static final int example5VoltageLimit = 12;
 
 
   }

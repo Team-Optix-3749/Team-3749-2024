@@ -3,65 +3,49 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.utils.Constants.CurrentConstants;
+import frc.robot.utils.Constants.ElectricalConstants;
 
 public class CurrentBudgeteer extends SubsystemBase {
 
-    private int currentSum = 0;
+    private double currentSum = 0;
     private CurrentData[] currentDatas = new CurrentData[5];
-    private Integer[] currentReductions = { 0, 0, 0, 0, 0 };
-    private final ShuffleData<Integer> currentSumLog = new ShuffleData<Integer>("Current Budgetteer", "Current Sum", currentSum);
-    private final ShuffleData<Integer[]> currentReductionsLog = new ShuffleData<Integer[]>("Current Budgetteer", "Current Reductions",
+    private Double[] currentReductions = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+    private final ShuffleData<Double> currentSumLog = new ShuffleData<Double>("Current Budgetteer", "Current Sum",
+            currentSum);
+    private final ShuffleData<Double[]> currentReductionsLog = new ShuffleData<Double[]>("Current Budgetteer",
+            "Current Reductions",
             currentReductions);
-            
 
     public CurrentBudgeteer() {
 
-        // currentDatas[0] = new CurrentData(CurrentConstants.minShooterCurrent, 0,
-        // () -> Robot.example3.reduceCurrentSum(() -> getCurrentReduction(0)));
 
-        currentDatas[1] = new CurrentData(0, 1, () -> {
-        });
-        currentDatas[2] = new CurrentData(0, 2, () -> {
-        });
-        currentDatas[3] = new CurrentData(0, 3, () -> {
-        });
-        currentDatas[0] = new CurrentData(0, 4, () -> {
-        });
+        currentDatas[0] = new CurrentData(ElectricalConstants.example5CurrentLimit, 0,
+                Robot.example1);
+        currentDatas[1] = new CurrentData(ElectricalConstants.example5CurrentLimit, 1,
+                Robot.example2);
+        currentDatas[2] = new CurrentData(ElectricalConstants.example5CurrentLimit, 2,
+                Robot.example3);
+        currentDatas[3] = new CurrentData(ElectricalConstants.example5CurrentLimit, 3,
+                Robot.example4);
 
-        currentDatas[4] = new CurrentData(CurrentConstants.example5CurrentLimit, 4,
-                () -> Robot.example5.reduceCurrentSum(() -> getCurrentReduction(4)));
-        // currentDatas[2] = new CurrentData(CurrentConstants.minArmCurrentAmps * 2, 2,
-        // () -> Robot.example2.reduceCurrentSum(() -> getCurrentReduction(2)));
-        // currentDatas[3] = new CurrentData(CurrentConstants.minShintakeCurrentAmps, 3,
-        // () -> Robot.example4.reduceCurrentSum(() -> getCurrentReduction(3)));
-        // currentDatas[4] = new CurrentData(
-        // (CurrentConstants.minDriveCurrentAmps +
-        // CurrentConstants.minTurningCurrentAmps) * 4, 4,
-        // () -> Robot.example.reduceCurrentSum(() -> currentReductions[4]));
-
+        currentDatas[4] = new CurrentData(ElectricalConstants.example5CurrentLimit, 4,
+                Robot.example5);
+ 
     }
 
-    private int getCurrentReduction(int indexByPrioirty) {
-        return currentReductions[indexByPrioirty];
-    }
-
-    private void updateSubsystemCurrent(int indexByPrioirty, double amps) {
-        currentDatas[indexByPrioirty].setCurrent(amps);
-    }
 
     private void updateCurrentSum() {
         currentSum = 0;
         for (CurrentData data : currentDatas) {
+            data.updateCurrent();
             currentSum += data.getCurrent();
         }
     }
 
-    private Integer[] calcExcessCurrent() {
-        int currentOverun = currentSum - CurrentConstants.maxCurrentDrawAmps;
-        Integer[] tempCurrentReductions = { 0, 0, 0, 0, 0 };
+    private Double[] calcExcessCurrent() {
+        double currentOverun = currentSum - ElectricalConstants.maxCurrentDrawAmps;
+        Double[] tempCurrentReductions = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-        // System.out.println(currentOverun == 0);
 
         if (currentOverun <= 0) {
             for (int i = 4; i >= 0; i--) {
@@ -77,8 +61,8 @@ public class CurrentBudgeteer extends SubsystemBase {
         } else {
             int priotiyIndex = 4;
             while (currentOverun > 0 && priotiyIndex >= 0) {
-                int availibleCurrent = (int) (currentDatas[priotiyIndex].getCurrent()
-                        - currentDatas[priotiyIndex].getMinimumCurrent());
+                double availibleCurrent = currentDatas[priotiyIndex].getCurrent()
+                        - currentDatas[priotiyIndex].getMinimumCurrent();
 
                 if (currentOverun > availibleCurrent) {
                     tempCurrentReductions[priotiyIndex] = availibleCurrent;
@@ -97,54 +81,40 @@ public class CurrentBudgeteer extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // swerve
-        // updateSubsystemCurrent(4, Robot.example.getCurrentSum());
-        // shintake
-        updateSubsystemCurrent(3, 0);
-        // arm
-        // updateSubsystemCurrent(2, Robot.example2.getCurrentSum());
-        // // intake
-        // updateSubsystemCurrent(1, 0);
-        // // shooter
-        // updateSubsystemCurrent(0, Robot.example3.getCurrentSum());
 
         updateCurrentSum();
 
         currentReductions = calcExcessCurrent();
-        for (CurrentData data : currentDatas) {
-            data.reduceCurrentSum();
+        for (int i = 0; i<=4; i++) {
+            currentDatas[i].reduceCurrentSum(currentReductions[i]);
         }
-        // for (int current : currentReductions) {
-        //     System.out.println(current);
-        // }
-        // System.out.println(currentSum);
 
         currentSumLog.set(currentSum);
         currentReductionsLog.set(currentReductions);
-        SmartDashboard.putNumber("max current robot", CurrentConstants.maxCurrentDrawAmps);
+        SmartDashboard.putNumber("max current robot", ElectricalConstants.maxCurrentDrawAmps);
 
     }
 
 }
 
 class CurrentData {
-    private Runnable reduceSubystemCurrentSumRunnable;
-    private int minimumCurrent;
+    private CurrentBudgettedSubsystem subsystem;
+    private double minimumCurrent;
     private int priority;
     private double current = 0;
 
-    public CurrentData(int minimumCurrent, int priority, Runnable reduceSubystemCurrentSumRunnable) {
+    public CurrentData(double minimumCurrent, int priority, CurrentBudgettedSubsystem subsystem) {
         this.minimumCurrent = minimumCurrent;
         this.priority = priority;
-        this.reduceSubystemCurrentSumRunnable = reduceSubystemCurrentSumRunnable;
+        this.subsystem = subsystem;
 
     }
 
-    public int getMinimumCurrent() {
+    public double getMinimumCurrent() {
         return minimumCurrent;
     }
 
-    public int getPriority() {
+    public double getPriority() {
         return priority;
     }
 
@@ -152,12 +122,14 @@ class CurrentData {
         return current;
     }
 
-    public void setCurrent(double amps) {
+    public void reduceCurrentSum(double currentReduction) {
+        subsystem.reduceCurrentSum(currentReduction);
+    }
+
+    public void updateCurrent(){
+        setCurrent(subsystem.getEstimatedCurrentDraw());
+    }
+        private void setCurrent(double amps) {
         current = amps;
     }
-
-    public void reduceCurrentSum() {
-        reduceSubystemCurrentSumRunnable.run();
-    }
-
 }

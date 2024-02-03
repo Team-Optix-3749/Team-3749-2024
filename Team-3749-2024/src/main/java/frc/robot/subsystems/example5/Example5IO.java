@@ -33,14 +33,15 @@ public interface Example5IO {
     public default void setVoltage(double volts) {
         
     }
+    public default void setMaxOutput(double maxOutputPercent){
+
+    }
 
     /** Enable or disable brake mode on the drive motor. */
     public default void setBrakeMode(boolean enable) {
     }
 
-    public default void setCurrentLimitReduction(int currentReduction){
 
-    }
 
     
 }

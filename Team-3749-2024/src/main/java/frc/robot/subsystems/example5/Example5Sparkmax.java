@@ -8,7 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants.CurrentConstants;
+import frc.robot.utils.Constants.ElectricalConstants;
 import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
@@ -23,7 +23,7 @@ public class Example5Sparkmax implements Example5IO {
     public Example5Sparkmax() {
         System.out.println("[Init] Creating ExampleIOSim");
 
-        motor.setSmartCurrentLimit(CurrentConstants.example5CurrentLimit);
+        motor.setSmartCurrentLimit(ElectricalConstants.example5CurrentLimit);
     }
 
     @Override
@@ -51,12 +51,5 @@ public class Example5Sparkmax implements Example5IO {
         motor.setVoltage(appliedVolts);
     }
 
-    @Override
-    public void setCurrentLimitReduction(int currentReduction){
-        currentLimit=ModuleConstants.driveCurrentLimmit-currentReduction;
-        motor.setSmartCurrentLimit(currentLimit);
 
-        SmartDashboard.putNumber("Ex 5 Current Limit", currentReduction);
-        
-    }
 }
