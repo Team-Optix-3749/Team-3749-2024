@@ -3,14 +3,12 @@ package frc.robot.subsystems.example;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
 
 public class ExampleSim implements ExampleIO {
 
     private FlywheelSim flywheel = new FlywheelSim(DCMotor.getNEO(1),1, 0.01);
     private double appliedVolts = 0.0;
-    private int currentLimit = ModuleConstants.driveCurrentLimmit;
 
     public ExampleSim() {
         System.out.println("[Init] Creating ExampleIOSim");
@@ -31,25 +29,13 @@ public class ExampleSim implements ExampleIO {
         data.appliedVolts = appliedVolts;
 
         data.currentAmps = Math.abs(flywheel.getCurrentDrawAmps());
-        
-        //test
-        data.currentAmps = currentLimit*4;
 
         data.tempCelcius = 0;
     }
-
     @Override
     public void setVoltage(double volts) {
         appliedVolts = MathUtil.clamp(volts, -8.0, 8.0);
         flywheel.setInputVoltage(appliedVolts);
-        
     }
-
-    @Override
-    public void setCurrentLimitReduction(int currentReduction){
-        currentLimit=ModuleConstants.driveCurrentLimmit-currentReduction;
-        
-    }
-
 
 }

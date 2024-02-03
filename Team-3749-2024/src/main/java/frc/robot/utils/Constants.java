@@ -53,6 +53,18 @@ public class Constants {
     public static final int example5CurrentLimit = 20;
     public static final int example5VoltageLimit = 12;
 
+    public static final int example4CurrentLimit = 20;
+    public static final int example4VoltageLimit = 12;
+
+    public static final int example3CurrentLimit = 20;
+    public static final int example3VoltageLimit = 12;
+
+    public static final int example2CurrentLimit = 20;
+    public static final int example2VoltageLimit = 12;
+  
+    public static final int example1CurrentLimit = 20;
+    public static final int example1VoltageLimit = 12;
+
 
   }
 

@@ -15,7 +15,7 @@ package frc.robot.subsystems.example4;
  *         logging, easy simulation, and future advantage kit implementation
  */
 public interface Example4IO {
-    public static class ExampleData {
+    public static class Example4Data {
         // each of these for each motor
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
@@ -25,7 +25,7 @@ public interface Example4IO {
         
     }
     /** Updates the set of loggable inputs. */
-    public default void updateData(ExampleData data) {
+    public default void updateData(Example4Data data) {
 
     }
 
@@ -33,9 +33,15 @@ public interface Example4IO {
     public default void setVoltage(double volts) {
         
     }
+    public default void setMaxOutput(double maxOutputPercent){
+
+    }
 
     /** Enable or disable brake mode on the drive motor. */
     public default void setBrakeMode(boolean enable) {
     }
 
+
+
+    
 }

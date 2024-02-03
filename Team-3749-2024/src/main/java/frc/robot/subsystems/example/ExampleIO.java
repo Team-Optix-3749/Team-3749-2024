@@ -20,9 +20,8 @@ public interface ExampleIO {
         public double positionRad = 0.0;
         public double velocityRadPerSec = 0.0;
         public double appliedVolts = 0.0;
-        public double currentAmps = 240;
+        public double currentAmps = 0.0;
         public double tempCelcius = 0.0;
-        public int currentLimit = 0;
         
     }
     /** Updates the set of loggable inputs. */
@@ -34,8 +33,7 @@ public interface ExampleIO {
     public default void setVoltage(double volts) {
         
     }
-
-    public default void setCurrentLimitReduction(int currentReduction){
+    public default void setMaxOutput(double maxOutputPercent){
 
     }
 
@@ -43,8 +41,7 @@ public interface ExampleIO {
     public default void setBrakeMode(boolean enable) {
     }
 
-    public default void setCurrent(int current){
-        
-    }
 
+
+    
 }

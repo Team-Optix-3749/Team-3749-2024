@@ -75,13 +75,14 @@ public class CurrentBudgeteer extends SubsystemBase {
     @Override
     public void periodic() {
 
-
-
+        for (int i = 0; i<=4; i++){
+            currentDatas[i].updateCurrent();
+        }
+            
         currentReductions = calcExcessCurrent();
         for (int i = 0; i<=4; i++) {
             currentDatas[i].reduceCurrentSum(currentReductions[i]);
         }
-
         currentSumLog.set(powerDistribution.getTotalCurrent() );
         currentReductionsLog.set(currentReductions);
         SmartDashboard.putNumber("max current robot", ElectricalConstants.maxCurrentDrawAmps);
