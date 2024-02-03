@@ -1,17 +1,18 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.utils.Constants.ElectricalConstants;
 
 public class CurrentBudgeteer extends SubsystemBase {
-
-    private double currentSum = 0;
+    private PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
     private CurrentData[] currentDatas = new CurrentData[5];
     private Double[] currentReductions = { 0.0, 0.0, 0.0, 0.0, 0.0 };
     private final ShuffleData<Double> currentSumLog = new ShuffleData<Double>("Current Budgetteer", "Current Sum",
-            currentSum);
+            0.0);
     private final ShuffleData<Double[]> currentReductionsLog = new ShuffleData<Double[]>("Current Budgetteer",
             "Current Reductions",
             currentReductions);
@@ -34,16 +35,9 @@ public class CurrentBudgeteer extends SubsystemBase {
     }
 
 
-    private void updateCurrentSum() {
-        currentSum = 0;
-        for (CurrentData data : currentDatas) {
-            data.updateCurrent();
-            currentSum += data.getCurrent();
-        }
-    }
 
     private Double[] calcExcessCurrent() {
-        double currentOverun = currentSum - ElectricalConstants.maxCurrentDrawAmps;
+        double currentOverun = powerDistribution.getTotalCurrent() - ElectricalConstants.maxCurrentDrawAmps;
         Double[] tempCurrentReductions = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 
 
@@ -82,14 +76,13 @@ public class CurrentBudgeteer extends SubsystemBase {
     public void periodic() {
 
 
-        updateCurrentSum();
 
         currentReductions = calcExcessCurrent();
         for (int i = 0; i<=4; i++) {
             currentDatas[i].reduceCurrentSum(currentReductions[i]);
         }
 
-        currentSumLog.set(currentSum);
+        currentSumLog.set(powerDistribution.getTotalCurrent() );
         currentReductionsLog.set(currentReductions);
         SmartDashboard.putNumber("max current robot", ElectricalConstants.maxCurrentDrawAmps);
 
