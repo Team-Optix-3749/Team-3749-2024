@@ -134,7 +134,7 @@ public class Swerve extends SubsystemBase {
             swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2dLeft, Robot.limelight.getLatestResult(Cam.LEFT).getTimestampSeconds(), Robot.limelight.confidenceCalculator(Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.LEFT).get()));
         }
         if (Robot.limelight.targeting && Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.RIGHT).isPresent()){
-            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2dRight, Robot.limelight.getLatestResult(Cam.RIGHT).getTimestampSeconds(), Robot.limelight.confidenceCalculator(Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.Right).get()));
+            swerveDrivePoseEstimator.addVisionMeasurement(Robot.limelight.estimatedPose2dRight, Robot.limelight.getLatestResult(Cam.RIGHT).getTimestampSeconds(), Robot.limelight.confidenceCalculator(Robot.limelight.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition(), Cam.RIGHT).get()));
         }
         
         swerveDrivePoseEstimator.update(getRotation2d(),
