@@ -37,6 +37,8 @@ public class Example2 extends SubsystemBase implements CurrentBudgettedSubsystem
         if (Robot.isSimulation()) {
             exampleIO = new ExampleSim();
         } else {
+            exampleIO = new ExampleSparkmax();
+       
         }
     }
 

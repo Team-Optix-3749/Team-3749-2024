@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.example.ExampleIO.ExampleData;
 import frc.robot.subsystems.example4.Example4IO.Example4Data;
+import frc.robot.subsystems.example5.Example5Sparkmax;
 import frc.robot.utils.CurrentBudgettedSubsystem;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ElectricalConstants;
@@ -38,6 +39,8 @@ public class Example4 extends SubsystemBase implements CurrentBudgettedSubsystem
         if (Robot.isSimulation()) {
             exampleIO = new Example4Sim();
         } else {
+                  exampleIO = new Example4Sparkmax();
+      
         }
     }
 

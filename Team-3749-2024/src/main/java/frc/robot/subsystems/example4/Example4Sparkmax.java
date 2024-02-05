@@ -1,4 +1,4 @@
-package frc.robot.subsystems.example5;
+package frc.robot.subsystems.example4;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -13,21 +13,21 @@ import frc.robot.utils.Constants.DriveConstants;
 import frc.robot.utils.Constants.ModuleConstants;
 import frc.robot.utils.Constants.Sim;
 
-public class Example5Sparkmax implements Example5IO {
+public class Example4Sparkmax implements Example4IO {
 
-    private CANSparkMax motor = new CANSparkMax(26, MotorType.kBrushless);
+    private CANSparkMax motor = new CANSparkMax(30, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
     private double appliedVolts = 0.0;
     private int currentLimit = 0;
 
-    public Example5Sparkmax() {
+    public Example4Sparkmax() {
         System.out.println("[Init] Creating ExampleIOSim");
 
-        motor.setSmartCurrentLimit(ElectricalConstants.example5CurrentLimit);
+        motor.setSmartCurrentLimit(ElectricalConstants.example4CurrentLimit);
     }
 
     @Override
-    public void updateData(Example5Data data) {
+    public void updateData(Example4Data data) {
 
         // update sim values every 0.02 sec
 

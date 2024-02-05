@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.example3.ExampleIO.ExampleData;
+import frc.robot.subsystems.example5.Example5Sparkmax;
 import frc.robot.utils.CurrentBudgettedSubsystem;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.Constants.ElectricalConstants;
@@ -37,6 +38,8 @@ public class Example3 extends SubsystemBase implements CurrentBudgettedSubsystem
         if (Robot.isSimulation()) {
             exampleIO = new ExampleSim();
         } else {
+            exampleIO = new ExampleSparkmax();
+
         }
     }
 
@@ -50,7 +53,7 @@ public class Example3 extends SubsystemBase implements CurrentBudgettedSubsystem
         exampleIO.updateData(data);
         exampleIO.setMaxOutput(maxOutput);
         exampleIO.setVoltage(volts);
-        
+
         SmartDashboard.putNumber("volt input", volts);
         currentLog.set(data.currentAmps);
         voltageLog.set(data.appliedVolts);
@@ -59,7 +62,7 @@ public class Example3 extends SubsystemBase implements CurrentBudgettedSubsystem
 
     @Override
     public void reduceCurrentSum(double currentReduction) {
-        maxOutput = currentReduction/ElectricalConstants.example3CurrentLimit;
+        maxOutput = currentReduction / ElectricalConstants.example3CurrentLimit;
     }
 
     @Override

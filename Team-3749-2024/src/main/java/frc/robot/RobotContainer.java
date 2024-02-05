@@ -44,6 +44,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return Commands.run(() -> Robot.arm.setVoltage(8-0.973));
-    return null;
+    return Commands.runOnce(()-> Robot.example5.increaseVoltage(9), Robot.example5);
   }
 }
