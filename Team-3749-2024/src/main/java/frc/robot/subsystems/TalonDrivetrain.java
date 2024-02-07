@@ -18,20 +18,25 @@ public class TalonDrivetrain extends SubsystemBase {
 
   public TalonDrivetrain() {
 
+    /* define motors */
     TalonSRX leftFront = new TalonSRX(kLeftFrontID);
     TalonSRX leftRear = new TalonSRX(kLeftRearID);
     TalonSRX rightFront = new TalonSRX(kRightFrontID);
     TalonSRX rightRear = new TalonSRX(kRightRearID);
 
+    /* rear motors follow the control mode and output value of front motors */
     leftRear.follow(leftFront);
     rightRear.follow(rightFront);
 
+    /* set current limits */
     leftFront.configPeakCurrentLimit(kCurrentLimit);
     rightFront.configPeakCurrentLimit(kCurrentLimit);
 
+    /* left motors are inverted, right motors are not */
     leftFront.setInverted(true);
     rightFront.setInverted(false);
 
+    /* lambdas to set motor speeds which are plugged into differential drive */
     DoubleConsumer setLeftSpeed = (double speed) -> {
       speed = MathUtil.clamp(speed, -12, 12);
       leftFront.set(TalonSRXControlMode.Current, kCurrentLimit);
