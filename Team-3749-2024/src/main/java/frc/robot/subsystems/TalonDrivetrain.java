@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class TalonDrivetrain extends SubsystemBase {
 
@@ -38,15 +39,13 @@ public class TalonDrivetrain extends SubsystemBase {
 
     /* lambdas to set motor speeds which are plugged into differential drive */
     DoubleConsumer setLeftSpeed = (double speed) -> {
-      speed = MathUtil.clamp(speed, -12, 12);
-      leftFront.set(TalonSRXControlMode.Current, speed);
+      leftFront.set(TalonSRXControlMode.PercentOutput, speed);
     };
 
     DoubleConsumer setRightSpeed = (double speed) -> {
-      speed = MathUtil.clamp(speed, -12, 12);
-      rightFront.set(TalonSRXControlMode.Current, speed);
+      rightFront.set(TalonSRXControlMode.PercentOutput, speed);
     };
- 
+
     m_drivetrain = new DifferentialDrive(setLeftSpeed, setRightSpeed);
   }
 
