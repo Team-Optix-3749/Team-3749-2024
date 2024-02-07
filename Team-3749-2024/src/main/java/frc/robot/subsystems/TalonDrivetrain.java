@@ -39,12 +39,12 @@ public class TalonDrivetrain extends SubsystemBase {
     /* lambdas to set motor speeds which are plugged into differential drive */
     DoubleConsumer setLeftSpeed = (double speed) -> {
       speed = MathUtil.clamp(speed, -12, 12);
-      leftFront.set(TalonSRXControlMode.Current, kCurrentLimit);
+      leftFront.set(TalonSRXControlMode.Current, speed);
     };
 
     DoubleConsumer setRightSpeed = (double speed) -> {
       speed = MathUtil.clamp(speed, -12, 12);
-      rightFront.set(TalonSRXControlMode.Current, kCurrentLimit);
+      rightFront.set(TalonSRXControlMode.Current, speed);
     };
  
     m_drivetrain = new DifferentialDrive(setLeftSpeed, setRightSpeed);
