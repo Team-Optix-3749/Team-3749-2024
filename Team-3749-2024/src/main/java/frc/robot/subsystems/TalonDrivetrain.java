@@ -12,11 +12,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class CANDrivetrain extends SubsystemBase {
+public class TalonDrivetrain extends SubsystemBase {
 
   DifferentialDrive m_drivetrain;
 
-  public CANDrivetrain() {
+  public TalonDrivetrain() {
 
     TalonSRX leftFront = new TalonSRX(kLeftFrontID);
     TalonSRX leftRear = new TalonSRX(kLeftRearID);
@@ -48,7 +48,7 @@ public class CANDrivetrain extends SubsystemBase {
   public void arcadeDrive(double speed, double rotation) {
     m_drivetrain.arcadeDrive(speed, rotation);
   }
-
+  
   @Override
   public void periodic() {
 
