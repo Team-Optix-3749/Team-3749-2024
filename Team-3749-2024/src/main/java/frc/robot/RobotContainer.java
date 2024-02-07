@@ -4,68 +4,82 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.swerve.AutoUtils;
-import frc.robot.commands.swerve.MoveToPose;
-import frc.robot.commands.swerve.TurnToAngle;
-import frc.robot.utils.Constants;
-import frc.robot.utils.JoystickIO;
-import frc.robot.utils.Xbox;
-import frc.robot.utils.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.LauncherConstants;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autos;
+import frc.robot.commands.LaunchNote;
+import frc.robot.commands.PrepareLaunch;
+import frc.robot.subsystems.PWMDrivetrain;
+import frc.robot.subsystems.PWMLauncher;
 
+// import frc.robot.subsystems.CANDrivetrain;
+// import frc.robot.subsystems.CANLauncher;
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
-  private Xbox pilot = new Xbox(0);
-  private Xbox operator = new Xbox(1);
-  private final JoystickIO joystickIO = new JoystickIO(pilot, operator);
+  // The robot's subsystems are defined here.
+  private final PWMDrivetrain m_drivetrain = new PWMDrivetrain();
+  // private final CANDrivetrain m_drivetrain = new CANDrivetrain();
+  private final PWMLauncher m_launcher = new PWMLauncher();
+  // private final CANLauncher m_launcher = new CANLauncher();
 
+  /*The gamepad provided in the KOP shows up like an XBox controller if the mode switch is set to X mode using the
+   * switch on the top.*/
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_operatorController =
+      new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    DriverStation.silenceJoystickConnectionWarning(true);
-    DriverStation.removeRefreshedDataEventHandle(44000);
-
-    initAuto();
+    // Configure the trigger bindings
     configureBindings();
-
-    RobotController.setBrownoutVoltage(7.0);
-    Robot.swerve.resetOdometry(DriveConstants.fieldStartingPose);
   }
 
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be accessed via the
+   * named factory methods in the Command* classes in edu.wpi.first.wpilibj2.command.button (shown
+   * below) or via the Trigger constructor for arbitary conditions
+   */
   private void configureBindings() {
-    joystickIO.getButtonBindings();
+    // Set the default command for the drivetrain to drive using the joysticks
+    m_drivetrain.setDefaultCommand(
+        new RunCommand(
+            () ->
+                m_drivetrain.arcadeDrive(
+                    -m_driverController.getLeftY(), -m_driverController.getRightX()),
+            m_drivetrain));
 
+    /*Create an inline sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
+     * command for 1 seconds and then run the LaunchNote command */
+    m_operatorController
+        .a()
+        .whileTrue(
+            new PrepareLaunch(m_launcher)
+                .withTimeout(LauncherConstants.kLauncherDelay)
+                .andThen(new LaunchNote(m_launcher))
+                .handleInterrupt(() -> m_launcher.stop()));
+
+    // Set up a binding to run the intake command while the operator is pressing and holding the
+    // left Bumper
+    m_operatorController.leftBumper().whileTrue(m_launcher.getIntakeCommand());
   }
 
-  public void initAuto() {
-    HashMap<String, Command> commandList = new HashMap<String, Command>();
-
-    commandList.put("PrintCMD-hello", new PrintCommand("hello"));
-    commandList.put("shoot", new PrintCommand("note goes wheee"));
-
-    AutoUtils.initPathCommands(commandList);
-    AutoUtils.initPPUtils();
-  }
-
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
-    Command command;
-
-    command = AutoUtils.getAutoPath("4 pt");
-    command = AutoUtils.timeCommand(command);
-    
-    return command;
+    // An example command will be run in autonomous
+    return Autos.exampleAuto(m_drivetrain);
   }
-
 }
