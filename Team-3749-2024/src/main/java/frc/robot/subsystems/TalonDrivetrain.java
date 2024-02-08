@@ -8,10 +8,8 @@ import static frc.robot.Constants.DrivetrainConstants.*;
 import java.util.function.DoubleConsumer;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class TalonDrivetrain extends SubsystemBase {
 
