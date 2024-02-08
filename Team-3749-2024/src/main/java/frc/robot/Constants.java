@@ -29,6 +29,7 @@ public final class Constants {
 
     // Current limit for drivetrain motors
     public static final int kCurrentLimit = 60;
+    public static final double maxMotorVolts = 12;
   }
 
   public static class LauncherConstants {
