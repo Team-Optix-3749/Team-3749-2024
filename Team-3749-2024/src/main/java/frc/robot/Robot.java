@@ -10,12 +10,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.vision.PhotonSim;
 // import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.example.Example;
+import frc.robot.subsystems.swerve.Swerve;
+
+
 
 public class Robot extends TimedRobot {
-
   // public static final Swerve swerve = new Swerve();
   public static final Limelight limelight = (new Limelight());
   public static final PhotonSim photonSim = new PhotonSim();
+  public static Arm arm = new Arm();
+  public static final Swerve swerve = new Swerve();
+  public static final Example example = new Example();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;

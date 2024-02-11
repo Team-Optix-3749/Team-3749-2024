@@ -13,8 +13,12 @@ public class Example extends SubsystemBase {
     // Constructor
     public Example(){
         if (Robot.isReal()){
-            exampleIO = new ExampleSim();
+            exampleIO = new ExampleSparkmax();
         }
+    }
+
+    public void setVoltage(double volts){
+        exampleIO.setVoltage(volts);
     }
 
     // runs every 0.02 sec
