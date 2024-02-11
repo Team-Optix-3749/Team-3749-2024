@@ -31,9 +31,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.utils.Constants;
 import frc.robot.utils.ShuffleData;
-import frc.robot.utils.Constants.RobotType;
 import frc.robot.utils.Constants.VisionConstants.Cam;
 import frc.robot.utils.Constants.VisionConstants.Node;
 
@@ -87,7 +87,7 @@ public class Limelight extends SubsystemBase {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
             
             // Initializing PhotonPoseEstimator based on robot type
-            if (Constants.ROBOT_TYPE == RobotType.SIM){
+            if (Robot.isSimulation()){
                 photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     cameraLeft, Constants.VisionConstants.SIM_LEFT_ROBOT_TO_CAM);
                 photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
@@ -187,7 +187,7 @@ public class Limelight extends SubsystemBase {
 
     // Method to calculate the distance to a target based on its pitch and camera parameters
     public double getDistance(PhotonTrackedTarget target, Node node) {
-        if (Constants.ROBOT_TYPE == RobotType.SIM){
+        if (Robot.isSimulation()){
             return PhotonUtils.calculateDistanceToTargetMeters(
                     Constants.VisionConstants.SIM_CAM_HEIGHT,
                     node.height_meters,
