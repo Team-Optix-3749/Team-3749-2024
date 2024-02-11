@@ -11,7 +11,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.swerve.Swerve;
+// import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.VisionConstants.Cam;
@@ -29,15 +29,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class PhotonSim extends Command {
 
     // Reference  Swerve subsystems
-    private Swerve swerve;
+    // private Swerve swerve;
 
     // Constructor for PhotonSim command
     public PhotonSim(){
         // Initializing Limelight and Swerve subsystem references from Robot class
-        this.swerve = Robot.swerve;
+        // this.swerve = Robot.swerve;
 
         // Setting Limelight pipeline to AprilTag for pose estimation
         Robot.limelight.setPipeline(Constants.VisionConstants.Pipelines.APRILTAG.index, Cam.LEFT);
+        // addRequirements(swerve);
     }
     @Override
     public void initialize(){
@@ -52,7 +53,8 @@ public class PhotonSim extends Command {
             // Logging information to SmartDashboard
             // Getting the estimated global pose using Limelight and SwerveDrive pose
             try{
-                Robot.limelight.estimatedPose2dLeft = Robot.limelight.getEstimatedGlobalPose(swerve.getPose(), Cam.LEFT).get().estimatedPose.toPose2d();
+                SmartDashboard.putNumber("Yaw",Robot.limelight.getLatestResult(Cam.LEFT).getBestTarget().getYaw());
+                // Robot.limelight.estimatedPose2dLeft = Robot.limelight.getEstimatedGlobalPose(swerve.getPose(), Cam.LEFT).get().estimatedPose.toPose2d();
                 // Logging Limelight odometry information to SmartDashboard
                 SmartDashboard.putNumberArray("Limelight Odometry", new double[] { Robot.limelight.estimatedPose2dLeft.getX(), Robot.limelight.estimatedPose2dLeft.getY(), Robot.limelight.estimatedPose2dLeft.getRotation().getRadians() });
             }

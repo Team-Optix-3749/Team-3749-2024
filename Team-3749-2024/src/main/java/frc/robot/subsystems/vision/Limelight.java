@@ -50,9 +50,9 @@ public class Limelight extends SubsystemBase {
 
     public boolean targeting = false;
     // PhotonCamera instance
-    private final PhotonCamera cameraLeft = new PhotonCamera("limelightLeft");
-    private final PhotonCamera cameraRight = new PhotonCamera("limelightRight");
-    private final PhotonCamera cameraBack = new PhotonCamera("limelightBack");
+    private final PhotonCamera cameraLeft = new PhotonCamera("limelight2");
+    private final PhotonCamera cameraRight = new PhotonCamera("limelight2");
+    private final PhotonCamera cameraBack = new PhotonCamera("limelight2");
 
 
     private AprilTagFieldLayout aprilTagFieldLayout;

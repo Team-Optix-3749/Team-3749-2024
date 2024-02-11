@@ -13,9 +13,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.swerve.SwerveTeleopCommand;
+// import frc.robot.commands.swerve.SwerveTeleopCommand;
 import frc.robot.commands.vision.PhotonSim;
-import frc.robot.subsystems.swerve.Swerve;
+// import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.vision.Limelight;
 
 /**
  * Util class for button bindings
@@ -28,12 +29,14 @@ public class JoystickIO {
     private Xbox pilot;
     private Xbox operator;
 
-    private Swerve swerve;
+    // private Swerve swerve;
+    private Limelight limelight;
 
     public JoystickIO(Xbox pilot, Xbox operator) {
         this.pilot = pilot;
         this.operator = operator;
-        this.swerve = Robot.swerve;
+        // this.swerve = Robot.swerve;
+        this.limelight = Robot.limelight;
     }
 
     public static boolean didJoysticksChange() {
@@ -103,11 +106,12 @@ public class JoystickIO {
      * Sets the default commands
      */
     public void setDefaultCommands() {
-        swerve.setDefaultCommand(new SwerveTeleopCommand(
+        // limelight.setDefaultCommand(new PhotonSim());
+        // swerve.setDefaultCommand(new SwerveTeleopCommand(
 
-                () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
-                () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
-                () -> -pilot.getRightX())); // Clockwise positive by default, so we invert here
+        //         () -> -pilot.getLeftY(), // - is up, + is down by default so we invert here
+        //         () -> -pilot.getLeftX(), // Positive is left, negative is right by default so we invert here
+        //         () -> -pilot.getRightX())); // Clockwise positive by default, so we invert here
 
     }
 }
