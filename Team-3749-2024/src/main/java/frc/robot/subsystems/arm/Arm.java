@@ -1,5 +1,8 @@
 package frc.robot.subsystems.arm;
 
+import java.io.File;
+import java.io.IOException;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -80,6 +83,13 @@ public class Arm extends SubsystemBase {
         } else {
             armIO = new ArmSparkMax();
         }
+        try {
+            ShootKinematics.loadDistCSV(new File("src/main/java/frc/robot/subsystems/arm/angles.csv"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         feedback.setGoal(ArmConstants.stowPositionRad);
 
     }

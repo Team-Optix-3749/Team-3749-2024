@@ -50,8 +50,8 @@ public class SwerveModuleSparkMax implements SwerveModuleIO {
         turnMotor.setSmartCurrentLimit(DriveConstants.turnMotorStallLimit,
                 DriveConstants.turnMotorFreeLimit);
 
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor.setIdleMode(IdleMode.kCoast);
+        turnMotor.setIdleMode(IdleMode.kCoast);
 
         this.index = index;
     };
