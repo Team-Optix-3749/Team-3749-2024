@@ -23,9 +23,6 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
     @Override
     public void execute() {
-        Robot.shooter.setState(ShooterStates.SPOOL);
-        Robot.arm.setGoal(ArmStates.SUBWOOFER);
-        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
             fullDeployedWrist = true;
@@ -42,6 +39,15 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         if (subwoofedArm && fullDeployedWrist){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
+    }
+
+    @Override
+    public void start(){
+        Robot.shooter.setState(ShooterStates.SPOOL);
+        Robot.intake.setState(IntakeStates.STOP);
+        Robot.arm.setGoal(ArmStates.SUBWOOFER);
+        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+
     }
 
     @Override

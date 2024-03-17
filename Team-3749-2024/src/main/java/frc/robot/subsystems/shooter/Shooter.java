@@ -1,13 +1,18 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.UtilityFunctions;
 
 public class Shooter extends SubsystemBase {
 
@@ -50,6 +55,8 @@ public class Shooter extends SubsystemBase {
       "bottom shooter current", 0.0);
   private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
       ShooterStates.STOP.name());
+
+  private Timer timer = new Timer();
 
   public Shooter() {
     shooterIO = new ShooterSparkMax();
@@ -122,14 +129,19 @@ public class Shooter extends SubsystemBase {
   private void intake() {
     // this is just for the setpoint checker below
     setVoltage(-0.2, -0.2);
-    if (getVelocityRadPerSec() > 50) {
+    if (UtilityFunctions.withinMargin(15, Robot.intake.getVelocityRadPerSec(), IntakeConstants.intakeVelocityRadPerSec)) {
       intakeSpedUp = true;
+      timer.start();
     }
-    if (getVelocityRadPerSec() < 0.2 && intakeSpedUp) {
+    if (getVelocityRadPerSec() > -0.05 && intakeSpedUp && timer.get()>0.5) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
+      intakeSpedUp = false;   
+      timer.stop();
+      timer.reset();
       // state
     }
+    SmartDashboard.putBoolean("intake sped up", intakeSpedUp);
 
   }
 
@@ -137,9 +149,8 @@ public class Shooter extends SubsystemBase {
     setVoltage(-1.2, -1.2);
 
     
-    if (Math.abs(getVelocityRadPerSec()) > 30) {
+    if (getVelocityRadPerSec() < -30) {
       state = ShooterStates.STOP;
-      System.out.println("STOP INDEX");
       Robot.intake.setIndexedPiece(true);
     }
 

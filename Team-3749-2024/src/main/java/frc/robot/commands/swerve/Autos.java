@@ -46,13 +46,13 @@ public class Autos {
 
                 new ParallelCommandGroup(
                         // AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
-                        AutoUtils.getintake(0.5)
-                        // AutoUtils.getSubwooferShot(2.5),
-                        // AutoUtils.getintake(3.3),
-                        // AutoUtils.getSubwooferShot(5.7),
-                        // AutoUtils.getintake(7.3),
-                        // AutoUtils.getSubwooferShot(9.7),
-                        // AutoUtils.getStow(12)
+                        AutoUtils.getintake(0.5),
+                        AutoUtils.getSubwooferShot(2),
+                        AutoUtils.getintake(3.3),
+                        AutoUtils.getSubwooferShot(5.3),
+                        AutoUtils.getintake(7.3),
+                        AutoUtils.getSubwooferShot(9.7),
+                        AutoUtils.getStow(12)
                 )
                  );
     }

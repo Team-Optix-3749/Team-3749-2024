@@ -17,9 +17,9 @@ public final class IntakeConstants {
     public static final PIDConstants intakePID = Robot.isReal()
             ? realIntakePID
             : simIntakePID;
-    public static final double kV = 0.102;
+    public static final double kV = 0.083;
 
-    public static final double intakeVelocityRadPerSec = 125;
+    public static final double intakeVelocityRadPerSec = 90;
     public static final double outtakeVelocityRadPerSec = -30;
 
     public enum IntakeStates {

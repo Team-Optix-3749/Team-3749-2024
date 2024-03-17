@@ -287,6 +287,9 @@ public class Arm extends SubsystemBase {
             isEnabled = driverStationStatus;
         }
 
+        SmartDashboard.putNumber("calced arm rad", ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose()));
+
     }
+
 
 }

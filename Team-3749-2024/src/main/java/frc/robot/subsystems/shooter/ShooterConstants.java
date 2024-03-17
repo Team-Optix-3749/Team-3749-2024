@@ -9,7 +9,7 @@ public final class ShooterConstants {
     public static final int shooterBottomId = 19;
     public static final int shooterTopId = 18;
 
-    public static final double shooterVelocityRadPerSec = 560;
+    public static final double shooterVelocityRadPerSec = 565;
 
     public static final double ampVelocityRadPerSec = 60;
     private static final PIDConstants simShooterTopPID = new PIDConstants(
@@ -18,7 +18,7 @@ public final class ShooterConstants {
             0,
             0);
     private static final PIDConstants realShooterTopPID = new PIDConstants(
-            0.004,
+            0.0015,
             0,
             0);
     public static final PIDConstants shooterTopPID = Robot.isReal()
@@ -30,7 +30,7 @@ public final class ShooterConstants {
             0,
             0);
     private static final PIDConstants realShooterBottomPID = new PIDConstants(
-            0.004,
+            0.0015,
             0,
             0);
     public static final PIDConstants shooterBottomPID = Robot.isReal()

@@ -109,6 +109,7 @@ public class JoystickIO {
                     Robot.intake.setState(IntakeStates.STOP);
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.intake));
+                
         Robot.pilot.leftTrigger().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)));
         // reset
         Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));

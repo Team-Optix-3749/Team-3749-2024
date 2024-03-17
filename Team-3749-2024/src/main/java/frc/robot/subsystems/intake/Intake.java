@@ -57,6 +57,10 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    public double getVelocityRadPerSec() {
+        return data.intakeVelocityRadPerSec;
+    }
+
     public void setHasPiece(boolean has) {
         hasPiece = has;
         if (has) {
@@ -130,25 +134,26 @@ public class Intake extends SubsystemBase {
                 outtake();
                 break;
             case AMP:
-                setVoltage(-8);
-                setHasPiece(false);
-                ;
-                setIndexedPiece(false);
-                ;
-                Robot.led.setLEDPattern(LEDPattern.WHITE);
+                amp();
 
         }
+    }
+
+    private void amp() {
+        setVoltage(-8);
+        setHasPiece(false);
+        setIndexedPiece(false);
+        Robot.led.setLEDPattern(LEDPattern.WHITE);
     }
 
     private void feed() {
         if (Robot.state == SuperStructureStates.AMP) {
             Robot.shooter.setState(ShooterStates.AMP);
             setState(IntakeStates.AMP);
+            amp();
+            return;
         }
         setVoltage(12);
-        if (Robot.shooter.getState() == ShooterStates.STOP) {
-            Robot.shooter.setState(ShooterStates.SPOOL);
-        }
         setHasPiece(false);
         setIndexedPiece(false);
         Robot.led.setLEDPattern(LEDPattern.WHITE);
@@ -168,9 +173,7 @@ public class Intake extends SubsystemBase {
             setIntakeVelocity(IntakeConstants.intakeVelocityRadPerSec);
         } else {
             state = IntakeStates.INDEX;
-
         }
-
     }
 
     private void index() {
@@ -199,6 +202,8 @@ public class Intake extends SubsystemBase {
 
         stateLog.set(state.name());
         SmartDashboard.putBoolean("has piece", hasPiece);
+        SmartDashboard.putBoolean("indexed piece", indexedPiece);
+
     }
 
 }

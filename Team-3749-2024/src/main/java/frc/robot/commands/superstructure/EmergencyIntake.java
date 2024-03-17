@@ -39,7 +39,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         if (Robot.arm.getState() == ArmStates.STOW) {
             stowedArm = true;
         }
-        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(15)){
+        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(15)) {
             uppedArm = true;
         }
 
@@ -49,17 +49,11 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
         if (!stowedArm) {
             Robot.arm.setGoal(ArmStates.STOW);
         }
-        if (stowedArm && !uppedArm){
+        if (stowedArm && !uppedArm) {
             Robot.arm.setGoal(Units.degreesToRadians(18.5));
             Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
         }
-        if (stowedWrist && uppedArm) {
-            if (!startedRollers) {
-                startedRollers = true;
-                Robot.intake.setState(IntakeStates.INTAKE);
-                Robot.shooter.setState(ShooterStates.INTAKE);
-            }
-        }
+
         if (deployedWrist) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
 
@@ -91,22 +85,22 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
     public void autoExecute() {
         // execute();
         Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
-        Robot.intake.setState(IntakeStates.INTAKE);
-        Robot.shooter.setState(ShooterStates.INTAKE);
-        // System.out.println(atShoot);
-
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
     }
+
     @Override
-    public void autoStart(){
-        start();
+    public void start() {
+        Robot.intake.setState(IntakeStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.INTAKE);
+
     }
+
     @Override
     public void autoReset() {
         reset();
         atShoot = false;
     }
-    
+
 }

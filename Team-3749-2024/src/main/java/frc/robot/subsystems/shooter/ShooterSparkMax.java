@@ -34,7 +34,9 @@ public class ShooterSparkMax implements ShooterIO {
         topEncoder.setPositionConversionFactor(2 * Math.PI);
 
         topShooter.setIdleMode(IdleMode.kCoast);
-        bottomShooter.setIdleMode(IdleMode.kCoast);     
+        bottomShooter.setIdleMode(IdleMode.kCoast); 
+        bottomShooter.setIdleMode(IdleMode.kBrake);
+        topShooter.setIdleMode(IdleMode.kBrake);
     }
 
 
