@@ -16,8 +16,8 @@
         "middle-wing-speaker-center": {
             "waypoints": [
                 {
-                    "x": 1.3909037113189697,
-                    "y": 5.543033123016357,
+                    "x": 1.3308793306350708,
+                    "y": 5.530029773712158,
                     "heading": -0.01066345159274054,
                     "isInitialGuess": false,
                     "translationConstrained": true,
@@ -55,6 +55,15 @@
                     "x": 3.4867947101593018,
                     "y": 6.196269989013672,
                     "heading": 0.24497800052986823,
+                    "isInitialGuess": false,
+                    "translationConstrained": true,
+                    "headingConstrained": true,
+                    "controlIntervalCount": 40
+                },
+                {
+                    "x": 3.0750582218170166,
+                    "y": 7.037709712982178,
+                    "heading": 0,
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,

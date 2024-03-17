@@ -67,7 +67,7 @@ public class SwerveConstants {
                 public static final int[] absoluteEncoderPorts = { 11, 12, 13, 14 };
 
                 public static final boolean[] driveMotorReversed = {
-                                false,
+                                true,
                                 false,
                                 false,
                                 false
@@ -85,7 +85,7 @@ public class SwerveConstants {
                                 false
                 };
                 public static final double[] absoluteEncoderOffsetDeg = {
-                                323.806,
+                                26.191,
                                 137.594,
                                 71.455,
                                 186.943

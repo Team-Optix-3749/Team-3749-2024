@@ -112,6 +112,8 @@ public class Swerve extends SubsystemBase {
     }
 
     resetGyro();
+    resetOdometry(new Pose2d(1.33, 5.53, new Rotation2d(0)));
+
   }
 
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {

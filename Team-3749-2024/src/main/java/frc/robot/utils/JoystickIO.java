@@ -93,17 +93,23 @@ public class JoystickIO {
         Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
                 .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
 
-        Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve.resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1,0, new Rotation2d())))));
-        // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new Transform2d(0.1,0, new Rotation2d())))));
+        // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve
+        //         .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new Rotation2d())))));
+        // Robot.pilot.povUp().onTrue(Commands.runOnce(() ->
+        // Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new
+        // Transform2d(0.1,0, new Rotation2d())))));
 
-
+        Robot.pilot.povRight().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
 
         // shoot
         Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
-                
+
         // amp
         Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
                 .onFalse(Commands.runOnce(() -> {
@@ -116,7 +122,6 @@ public class JoystickIO {
                     Robot.intake.setState(IntakeStates.STOP);
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.intake));
-                
 
         Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
         Robot.operator.povUp().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)))

@@ -84,7 +84,7 @@ public class Arm extends SubsystemBase {
             armIO = new ArmSparkMax();
         }
         try {
-            ShootKinematics.loadDistCSV(new File("src/main/java/frc/robot/subsystems/arm/angles.csv"));
+            ShootKinematics.loadDistCSV();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -120,6 +120,13 @@ public class Arm extends SubsystemBase {
         }
         if (state == ArmStates.PODIUM) {
             feedback.setGoal(ArmConstants.podiumPositionRad);
+        }
+        if (state == ArmStates.AIMBOT) {
+            double calcedArmAngle = ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose());
+            if (calcedArmAngle < 0) {
+                calcedArmAngle = Math.PI / 4;
+            }
+            Robot.arm.setGoal(calcedArmAngle);
         }
     }
 
@@ -227,8 +234,8 @@ public class Arm extends SubsystemBase {
         return feedback.calculate(currentPositionRad);
     }
 
-    private boolean atGoal() {
-        return (Math.abs(data.positionRad - getGoal()) < 0.15);
+    public boolean atGoal() {
+        return (Math.abs(data.positionRad - getGoal()) < 0.1);
     }
 
     public void updateState() {
@@ -300,6 +307,5 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("calced arm rad", ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose()));
 
     }
-
 
 }

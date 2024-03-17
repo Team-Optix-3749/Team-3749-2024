@@ -127,14 +127,15 @@ public class ShootKinematics {
     }
 
     private static double getAngle(double dist) {
-        int distNum = (int) (Math.round(dist * 100.0));
 
-        // we start at 0.9m away, though that should be lowed to like 0.8
-        if (distNum < 90 || distNum > 1090) {
+        // we start at 0.9m away, though that should be lowerd to like 0.8
+        int distNum = (int) (Math.round(dist * 100.0));
+        SmartDashboard.putNumber("arm calc index", distNum);
+        if (distNum < 0 || distNum > 1000) {
             return -1;
         }
-        SmartDashboard.putNumber("arm angle calced", distToAngle[distNum - 90]);
-        return distToAngle[distNum - 90];
+
+        return distToAngle[distNum];
     }
 
     private static Translation2d getSpeakerPosition() {
@@ -154,30 +155,54 @@ public class ShootKinematics {
     }
 
     public static void loadDistCSV() throws FileNotFoundException, IOException {
-        Path csvPath = Filesystem.getDeployDirectory().toPath().resolve("angles.csv");
-        loadDistCSV(csvPath.toFile());
+        new Thread(() -> {
+            try {
+                BufferedReader br = new BufferedReader(
+                        new FileReader(
+                                new File(
+                                        Filesystem.getDeployDirectory(), "angles.csv")));
+                String line;
+                while ((line = br.readLine()) != null) {
+
+                    // System.out.println("READ LINE");
+                    String[] values = line.split(",");
+                    double curDist = Double.parseDouble(values[0]);
+                    maxDist = Math.max(maxDist, curDist);
+                    distToAngle[(int) (Math.round(curDist * 100))] = Double.parseDouble(values[1]);
+                    // System.out.println(Double.toString(curDist) + " : " + Double.toString((int) (Math.round(curDist * 100))));
+                }
+
+                maxDist -= ArmConstants.distMargin;
+                System.out.println("done");
+                br.close();
+           
+            } catch (Exception e) {
+            }
+        }).start();
+
     }
 
-    public static void loadDistCSV(File file) throws FileNotFoundException, IOException {
-        BufferedReader br =
-        new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(), "angles.csv")));
-        String line;
-        while ((line = br.readLine()) != null) {
+    // public static void loadDistCSV(File file) throws FileNotFoundException,
+    // IOException {
+    // BufferedReader br =
+    // new BufferedReader(
+    // new FileReader(
+    // new File(
+    // Filesystem.getDeployDirectory(), "angles.csv")));
+    // String line;
+    // while ((line = br.readLine()) != null) {
 
-            System.out.println("READ LINE");
-            String[] values = line.split(",");
-            double curDist = Double.parseDouble(values[0]);
-            maxDist = Math.max(maxDist, curDist);
-            distToAngle[(int)(curDist * 100)] = Double.parseDouble(values[1]);
-        }
+    // System.out.println("READ LINE");
+    // String[] values = line.split(",");
+    // double curDist = Double.parseDouble(values[0]);
+    // maxDist = Math.max(maxDist, curDist);
+    // distToAngle[(int)(curDist * 100)] = Double.parseDouble(values[1]);
+    // }
 
-        maxDist -= ArmConstants.distMargin;
+    // maxDist -= ArmConstants.distMargin;
 
-        br.close();
-    }
+    // br.close();
+    // }
 
     public static double getArmAngleRadGivenPose(Pose2d currentPose2d) {
         double distance = currentPose2d.getTranslation().minus(getSpeakerPosition()).getNorm();

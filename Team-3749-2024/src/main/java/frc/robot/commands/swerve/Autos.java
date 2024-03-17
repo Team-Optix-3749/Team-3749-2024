@@ -42,10 +42,10 @@ public class Autos {
 
         return new SequentialCommandGroup(
                 // AutoUtils.getCycle(0),
-                AutoUtils.getSubwooferShot(0),
+                // AutoUtils.getSubwooferShot(0),
 
                 new ParallelCommandGroup(
-                        // AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
+                        AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
                         AutoUtils.getintake(0.5),
                         AutoUtils.getSubwooferShot(2),
                         AutoUtils.getintake(3.3),

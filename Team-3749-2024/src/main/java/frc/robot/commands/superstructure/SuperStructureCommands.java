@@ -19,6 +19,7 @@ public class SuperStructureCommands {
     private Reset reset = new Reset();
     private Climb climb = new Climb();
     private ClimbDown climbDown = new ClimbDown();
+    private Aimbot aimbot = new Aimbot();
 
     private SuperStructureCommandInterface currentCommand = stow;
 
@@ -45,7 +46,6 @@ public class SuperStructureCommands {
     public void execute() {
         SmartDashboard.putString("state", Robot.state.name());
         SmartDashboard.putString("current command", currentCommand.getClass().getName());
-        SuperStructureStates state = Robot.state;
 
         switch (Robot.state) {
             case STOW:
@@ -71,6 +71,9 @@ public class SuperStructureCommands {
                 break;
             case PODIUM:
                 switchCommands(podium);
+                break;
+            case AIMBOT:
+                switchCommands(aimbot);
                 break;
         }
         if (DriverStation.isAutonomous()) {
