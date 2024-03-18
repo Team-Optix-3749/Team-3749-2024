@@ -16,8 +16,8 @@
         "middle-wing-speaker-center": {
             "waypoints": [
                 {
-                    "x": 1.3308793306350708,
-                    "y": 5.530029773712158,
+                    "x": 1.3119004964828491,
+                    "y": 5.586045742034912,
                     "heading": -0.01066345159274054,
                     "isInitialGuess": false,
                     "translationConstrained": true,

@@ -99,7 +99,7 @@ public class JoystickIO {
         // Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new
         // Transform2d(0.1,0, new Rotation2d())))));
 
-        Robot.pilot.povRight().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
+        Robot.pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist, Robot.intake));
@@ -117,7 +117,7 @@ public class JoystickIO {
                 }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
 
         // feed
-        Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
+        Robot.pilot.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.intake.setState(IntakeStates.STOP);
                     Robot.shooter.setState(ShooterStates.STOP);

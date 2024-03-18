@@ -41,8 +41,7 @@ public class Autos {
                 Rotation2d.fromRadians(0));
 
         return new SequentialCommandGroup(
-                // AutoUtils.getCycle(0),
-                // AutoUtils.getSubwooferShot(0),
+                AutoUtils.getSubwooferShot(0),
 
                 new ParallelCommandGroup(
                         AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),

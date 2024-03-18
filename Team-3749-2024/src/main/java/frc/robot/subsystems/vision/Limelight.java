@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
@@ -31,6 +32,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.vision.VisionConstants.Cam;
 import frc.robot.utils.LimelightHelpers;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.LimelightHelpers.LimelightPose;
 
 /**
  * Encapsulated PhotonCamera object used in posed estimation and alignment
@@ -93,6 +95,7 @@ public class Limelight extends SubsystemBase {
                 photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout,
                         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                         cameraLeft, VisionConstants.ROBOT_TO_LEFT_CAM);
+
                 photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout,
                         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                         cameraRight, VisionConstants.ROBOT_TO_RIGHT_CAM);
@@ -317,6 +320,29 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         logging();
+        // manualPose();
+
+        Optional<EstimatedRobotPose> estimatedPoseLeft = photonPoseEstimatorLeft.update();
+        SmartDashboard.putBoolean("left photon present",
+                estimatedPoseLeft.isPresent());
+        if (estimatedPoseLeft.isPresent()) {
+
+            double timestamp = estimatedPoseLeft.get().timestampSeconds;
+            Pose2d pose = estimatedPoseLeft.get().estimatedPose.toPose2d();
+
+            Robot.swerve.visionUpdateOdometry(new LimelightPose(pose, timestamp));
+            SmartDashboard.putNumberArray("Left Limelight estimator Odometry",
+                    new double[] { estimatedPoseLeft.get().estimatedPose.getX(),
+                            estimatedPoseLeft.get().estimatedPose.getY(),
+                            estimatedPoseLeft.get().estimatedPose.toPose2d().getRotation().getDegrees()
+                    });
+        }
+
+        System.out.println("right detect");
+
+    }
+
+    public void manualPose() {
 
         PhotonPipelineResult latestResultLeft = getLatestResult(Cam.LEFT);
         SmartDashboard.putBoolean(" left present", latestResultLeft.hasTargets());
@@ -329,14 +355,10 @@ public class Limelight extends SubsystemBase {
                     SmartDashboard.putNumber("left ambiguity", multiResultLeft.estimatedPose.ambiguity);
 
                     if (multiResultLeft.estimatedPose.ambiguity <= 0.2) {
-                        estimatedPose2dLeft = new Pose2d(multiResultLeft.estimatedPose.best.getX(),
-                                multiResultLeft.estimatedPose.best.getY(),
-                                multiResultLeft.estimatedPose.best.getRotation().toRotation2d());
+                        // Pose3d estimatedPose = VisionConstants.LEFT_CAM_TO_ROBOT
+                        //         .transformBy(multiResultLeft.estimatedPose.best);
+                        // estimatedPose2dLeft = estimatedPose.toPose2d();
 
-                        estimatedPose2dLeft
-                                .transformBy(new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
-                                        VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
-                                        VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
                         // update swerve pose estimator
                         Robot.swerve.visionUpdateOdometry(
                                 new LimelightHelpers.LimelightPose(estimatedPose2dLeft,
@@ -358,20 +380,23 @@ public class Limelight extends SubsystemBase {
 
                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
 
-                    int targetID = bestTarget.getFiducialId();
-                    Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
-                    if (targetPoseOptional.isPresent()) {
-                        Pose3d targetPose = targetPoseOptional.get();
-                        Pose3d camPose = targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse());
-                        Pose2d robotPoseEstimate = camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT).toPose2d();
-                        Robot.swerve.visionUpdateOdometry(
-                                new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
-                        SmartDashboard.putNumberArray("Left Limelight Odometry",
-                                new double[] { robotPoseEstimate.getX(),
-                                        robotPoseEstimate.getY(),
-                                        robotPoseEstimate.getRotation().getRadians() });
+                    // int targetID = bestTarget.getFiducialId();
+                    // Optional<Pose3d> targetPoseOptional =
+                    // aprilTagFieldLayout.getTagPose(targetID);
+                    // if (targetPoseOptional.isPresent()) {
+                    // Pose3d targetPose = targetPoseOptional.get();
+                    // Pose3d camPose =
+                    // targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse());
+                    // Pose2d robotPoseEstimate =
+                    // camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT).toPose2d();
+                    // Robot.swerve.visionUpdateOdometry(
+                    // new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
+                    // SmartDashboard.putNumberArray("Left Limelight Odometry",
+                    // new double[] { robotPoseEstimate.getX(),
+                    // robotPoseEstimate.getY(),
+                    // robotPoseEstimate.getRotation().getRadians() });
 
-                    }
+                    // }
                 }
             }
         }
@@ -435,9 +460,6 @@ public class Limelight extends SubsystemBase {
                 }
             }
         }
-
-        // System.out.println("right detect");
-
     }
 
     // Thanks to FRC Team 5712

@@ -35,10 +35,10 @@ public class Robot extends TimedRobot {
   public static final Wrist wrist = new Wrist();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
-  public static final Limelight limelight = new Limelight();
+  public static Limelight limelight;
+
   public static SuperStructureStates state = SuperStructureStates.STOW;
   public static SuperStructureCommands centralCommand = new SuperStructureCommands();
-
 
   public static final Led led = new Led(0.05);
 
@@ -48,6 +48,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    if (Robot.isReal()) {
+      limelight = new Limelight();
+
+    } else {
+      limelight = null;
+    }
 
     DataLogManager.logNetworkTables(true);
     DataLogManager.start();
@@ -56,7 +62,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    if (DriverStation.isEnabled()){
+    if (DriverStation.isEnabled()) {
 
       centralCommand.execute();
     }
@@ -69,10 +75,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+  }
 
   @Override
   public void autonomousInit() {
@@ -84,10 +92,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
@@ -106,7 +116,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -114,8 +125,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 }

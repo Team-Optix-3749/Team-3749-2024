@@ -7,14 +7,14 @@ import java.io.*;
 // NOTE: all distances in output file are relative to center of robot, arm offset is accounted for
 public class ArmAngleCalculator {
     public static double y_speaker = ArmConstants.speakerHeight;
-    public static double x_arm = ArmConstants.armHeightOffset; // how far arm is from center of robot
+    public static double x_arm = ArmConstants.armLengthOffset; // how far arm is from center of robot
     public static double y_arm = ArmConstants.armHeightOffset; // how high up the arm is
     public static double v_initial = ArmConstants.shooterVelocity;
 
     public static double arm_length = ArmConstants.armLength;
 
     // Gravity
-    public static final double g = 9.8;
+    public static final double g = 9.81;
 
     // Range of Angles & Minimum Shooting Distance
     public static final double initial_angle = 90.0;
@@ -57,7 +57,7 @@ public class ArmAngleCalculator {
                double shoot_angle_rad = Math.toRadians(60-i);
                
                double vx = Math.cos(shoot_angle_rad) * v_initial;
-               double t = ( x_dist - x_arm + arm_length*Math.cos(initial_angle_rad) ) / vx;
+               double t = ( x_dist + x_arm + arm_length*Math.cos(initial_angle_rad) ) / vx;
                double y = ( Math.sin(shoot_angle_rad) * v_initial * t ) - ( g/2 * t*t ) + ( arm_length * Math.sin(initial_angle_rad) ) + y_arm;
 
                if (Math.abs(y_speaker - y) <= margin_of_error) {

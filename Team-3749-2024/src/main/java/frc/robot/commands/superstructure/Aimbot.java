@@ -29,7 +29,7 @@ public class Aimbot implements SuperStructureCommandInterface {
             fullDeployedWrist = true;
         }
         Robot.arm.setGoal(ArmStates.AIMBOT);
-        // Robot.wrist.moveWristToGoal();
+        Robot.wrist.moveWristToGoal();
 
         Robot.arm.moveToGoal();
 
@@ -40,10 +40,10 @@ public class Aimbot implements SuperStructureCommandInterface {
 
     @Override
     public void start(){
-        // Robot.shooter.setState(ShooterStates.SPOOL);
-        // Robot.intake.setState(IntakeStates.STOP);
+        Robot.shooter.setState(ShooterStates.SPOOL);
+        Robot.intake.setState(IntakeStates.STOP);
         Robot.arm.setGoal(ArmStates.SUBWOOFER);
-        // Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
     }
 

@@ -100,9 +100,9 @@ public final class ArmConstants {
 
         // Field Parameters
         public static final double armHeightOffset = 0.2159;
-        public static final double armLengthOffset = 0.2286;
-        public static final double armLength = 0.93;
-        public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as
+        public static final double armLengthOffset = -0.2286;
+        public static final double armLength = 0.61;
+        public static final double shooterVelocity = 12.5; // NOTE: likely will vary, might need to pass as
                                                            // parameter
 
         // Field Parameters
