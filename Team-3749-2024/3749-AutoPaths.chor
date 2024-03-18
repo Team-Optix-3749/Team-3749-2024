@@ -19523,7 +19523,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 16
+                    "controlIntervalCount": 12
                 },
                 {
                     "x": 2.436,
@@ -19532,7 +19532,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 14
+                    "controlIntervalCount": 11
                 },
                 {
                     "x": 1.5129694938659668,
@@ -19541,7 +19541,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 22
+                    "controlIntervalCount": 17
                 },
                 {
                     "x": 2.535048246383667,
@@ -19550,7 +19550,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 22
+                    "controlIntervalCount": 17
                 },
                 {
                     "x": 1.5188100337982178,
@@ -19559,7 +19559,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 23
+                    "controlIntervalCount": 18
                 },
                 {
                     "x": 2.5785439014434814,
@@ -19568,7 +19568,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 23
+                    "controlIntervalCount": 18
                 },
                 {
                     "x": 1.5246504545211792,
@@ -19577,7 +19577,7 @@
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
-                    "controlIntervalCount": 35
+                    "controlIntervalCount": 27
                 },
                 {
                     "x": 7.080338001251221,
@@ -21148,7 +21148,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": true
+            "isTrajectoryStale": false
         },
         "top-speaker-center": {
             "waypoints": [
