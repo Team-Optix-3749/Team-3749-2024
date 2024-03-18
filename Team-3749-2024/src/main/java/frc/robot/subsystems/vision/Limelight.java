@@ -320,23 +320,8 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         logging();
-        // manualPose();
+        manualPose();
 
-        Optional<EstimatedRobotPose> estimatedPoseLeft = photonPoseEstimatorLeft.update();
-        SmartDashboard.putBoolean("left photon present",
-                estimatedPoseLeft.isPresent());
-        if (estimatedPoseLeft.isPresent()) {
-
-            double timestamp = estimatedPoseLeft.get().timestampSeconds;
-            Pose2d pose = estimatedPoseLeft.get().estimatedPose.toPose2d();
-
-            Robot.swerve.visionUpdateOdometry(new LimelightPose(pose, timestamp));
-            SmartDashboard.putNumberArray("Left Limelight estimator Odometry",
-                    new double[] { pose.getX(),
-                            pose.getY(),
-                            pose.getRotation().getDegrees()
-                    });
-        }
 
         System.out.println("right detect");
 
@@ -356,7 +341,7 @@ public class Limelight extends SubsystemBase {
 
                     if (multiResultLeft.estimatedPose.ambiguity <= 0.2) {
                         // Pose3d estimatedPose = VisionConstants.LEFT_CAM_TO_ROBOT
-                        //         .transformBy(multiResultLeft.estimatedPose.best);
+                        // .transformBy(multiResultLeft.estimatedPose.best);
                         // estimatedPose2dLeft = estimatedPose.toPose2d();
 
                         // update swerve pose estimator
