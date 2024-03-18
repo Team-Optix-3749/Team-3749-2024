@@ -332,9 +332,9 @@ public class Limelight extends SubsystemBase {
 
             Robot.swerve.visionUpdateOdometry(new LimelightPose(pose, timestamp));
             SmartDashboard.putNumberArray("Left Limelight estimator Odometry",
-                    new double[] { estimatedPoseLeft.get().estimatedPose.getX(),
-                            estimatedPoseLeft.get().estimatedPose.getY(),
-                            estimatedPoseLeft.get().estimatedPose.toPose2d().getRotation().getDegrees()
+                    new double[] { pose.getX(),
+                            pose.getY(),
+                            pose.getRotation().getDegrees()
                     });
         }
 
