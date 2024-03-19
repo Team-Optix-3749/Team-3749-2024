@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -55,7 +56,6 @@ public class Limelight extends SubsystemBase {
     private PhotonPoseEstimator photonPoseEstimatorLeft;
     private PhotonPoseEstimator photonPoseEstimatorRight;
 
-  
     // Timer for tracking how long the Limelight subsystem has been running
     // Constructor
     public Limelight() {
@@ -93,26 +93,18 @@ public class Limelight extends SubsystemBase {
 
     }
 
-
-    // Method for logging information
-    public void logging() {
-        pipeline.set(getPipeline(Cam.LEFT));
-    }
-
     // Overridden periodic method for logging during each robot loop iteration
     @Override
     public void periodic() {
-        logging();
         manualPose();
 
-
-        System.out.println("right detect");
+        // System.out.println("right detect");
 
     }
 
     public void manualPose() {
 
-        PhotonPipelineResult latestResultLeft = getLatestResult(Cam.LEFT);
+        PhotonPipelineResult latestResultLeft = cameraLeft.getLatestResult();
         SmartDashboard.putBoolean(" left present", latestResultLeft.hasTargets());
 
         if (latestResultLeft.hasTargets()) {
@@ -124,11 +116,19 @@ public class Limelight extends SubsystemBase {
 
                     if (multiResultLeft.estimatedPose.ambiguity <= 0.2) {
                         Transform3d estimatedTransform = multiResultLeft.estimatedPose.best;
-                        estimatedPose2dLeft = new Pose2d(estimatedTransform.getX(), estimatedTransform.getY(), 
-                                                         estimatedTransform.getRotation().toRotation2d()).transformBy(
-                                        new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(), VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
-                                                        VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()
-                                                         );
+                        estimatedPose2dLeft = new Pose2d(estimatedTransform.getX(), estimatedTransform.getY(),
+                                estimatedTransform.getRotation().toRotation2d()).transformBy(
+                                        new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
+                                                VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
+                                                VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
+                                                
+                        estimatedPose2dLeft = applyTransformation(
+                                new Pose2d(estimatedTransform.getX(), estimatedTransform.getY(),
+                                        estimatedTransform.getRotation().toRotation2d()),
+                                new Transform2d(VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
+                                        VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
+                                        VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d()));
+
 
                         // update swerve pose estimator
                         Robot.swerve.visionUpdateOdometry(
@@ -151,54 +151,68 @@ public class Limelight extends SubsystemBase {
 
                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
 
-                    // int targetID = bestTarget.getFiducialId();
-                    // Optional<Pose3d> targetPoseOptional =
-                    // aprilTagFieldLayout.getTagPose(targetID);
-                    // if (targetPoseOptional.isPresent()) {
-                    // Pose3d targetPose = targetPoseOptional.get();
-                    // Pose3d camPose =
-                    // targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse());
-                    // Pose2d robotPoseEstimate =
-                    // camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT).toPose2d();
-                    // Robot.swerve.visionUpdateOdometry(
-                    // new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
-                    // SmartDashboard.putNumberArray("Left Limelight Odometry",
-                    // new double[] { robotPoseEstimate.getX(),
-                    // robotPoseEstimate.getY(),
-                    // robotPoseEstimate.getRotation().getRadians() });
+                    int targetID = bestTarget.getFiducialId();
+                    Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
 
-                    // }
+                    if (targetPoseOptional.isPresent()) {
+                        Pose3d targetPose = targetPoseOptional.get();
+                        SmartDashboard.putNumberArray("targetPose", new double[] { targetPose.getX(), targetPose.getY(),
+                                targetPose.getRotation().toRotation2d().getDegrees() });
+
+                        Pose2d camPose = targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse())
+                                .toPose2d();
+
+                        SmartDashboard.putNumberArray("camPose", new double[] { camPose.getX(), camPose.getY(),
+                                camPose.getRotation().getDegrees() });
+
+                        SmartDashboard.putNumberArray("origin", new double[] { 0, 0, 0 });
+                        SmartDashboard.putNumberArray("cam offset",
+                                new double[] { VisionConstants.LEFT_CAM_TO_ROBOT.getX(),
+                                        VisionConstants.LEFT_CAM_TO_ROBOT.getY(),
+                                        VisionConstants.LEFT_CAM_TO_ROBOT.getRotation().toRotation2d().getDegrees() });
+
+                        Pose2d robotPose = camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT2D);
+                        robotPose = applyTransformation(camPose, VisionConstants.LEFT_CAM_TO_ROBOT2D);
+
+                        // Robot.swerve.visionUpdateOdometry(
+                        // new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
+                        SmartDashboard.putNumberArray("Left Limelight Odometry",
+                                new double[] { robotPose.getX(),
+                                        robotPose.getY(),
+                                        robotPose.getRotation()
+                                                .getDegrees() });
+
+                        // SmartDashboard.putNumberArray("Left Limelight Odometry",
+                        // new double[] { robotPoseEstimate.getX(),
+                        // robotPoseEstimate.getY(),
+                        // robotPoseEstimate.getRotation().getDegrees() });
+
+                    }
                 }
             }
         }
-
-        PhotonPipelineResult latestResultRight = getLatestResult(Cam.RIGHT);
-        SmartDashboard.putBoolean(" right present", latestResultRight.hasTargets());
+        PhotonPipelineResult latestResultRight = cameraRight.getLatestResult();
+        SmartDashboard.putBoolean(" Right present", latestResultRight.hasTargets());
 
         if (latestResultRight.hasTargets()) {
-
             MultiTargetPNPResult multiResultRight = latestResultRight.getMultiTagResult();
+
             if (multiResultRight.estimatedPose.isPresent) {
-                // Logging information to SmartDashboard
-                // Getting the estimated global pose using Limelight and SwerveDrive pose
-                SmartDashboard.putBoolean("Running Limelight Right", true);
                 try {
-                    SmartDashboard.putNumber(" right ambiguity", multiResultRight.estimatedPose.ambiguity);
+                    SmartDashboard.putNumber("Right ambiguity", multiResultRight.estimatedPose.ambiguity);
 
                     if (multiResultRight.estimatedPose.ambiguity <= 0.2) {
+                        Transform3d estimatedTransform = multiResultRight.estimatedPose.best;
+                        estimatedPose2dRight = new Pose2d(estimatedTransform.getX(), estimatedTransform.getY(),
+                                estimatedTransform.getRotation().toRotation2d()).transformBy(
+                                        new Transform2d(VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
+                                                VisionConstants.RIGHT_CAM_TO_ROBOT.getY(),
+                                                VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
 
-                        estimatedPose2dRight = new Pose2d(multiResultRight.estimatedPose.best.getX(),
-                                multiResultRight.estimatedPose.best.getY(),
-                                multiResultRight.estimatedPose.best.getRotation().toRotation2d());
-                        estimatedPose2dRight
-                                .transformBy(new Transform2d(VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
-                                        VisionConstants.RIGHT_CAM_TO_ROBOT.getY(),
-                                        VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d()));
-                        // update swerve pose esimtator
+                        // update swerve pose estimator
                         Robot.swerve.visionUpdateOdometry(
                                 new LimelightHelpers.LimelightPose(estimatedPose2dRight,
                                         latestResultRight.getTimestampSeconds()));
-
                         // Logging Limelight odometry information to SmartDashboard
                         SmartDashboard.putNumberArray("Right Limelight Odometry",
                                 new double[] { estimatedPose2dRight.getX(),
@@ -210,27 +224,50 @@ public class Limelight extends SubsystemBase {
 
                 }
             } else {
+
                 double imageCaptureTime = latestResultRight.getTimestampSeconds();
                 PhotonTrackedTarget bestTarget = latestResultRight.getBestTarget();
+
                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
 
                     int targetID = bestTarget.getFiducialId();
                     Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
+
                     if (targetPoseOptional.isPresent()) {
                         Pose3d targetPose = targetPoseOptional.get();
-                        Pose3d camPose = targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse());
-                        Pose2d robotPoseEstimate = camPose.transformBy(VisionConstants.RIGHT_CAM_TO_ROBOT).toPose2d();
-                        Robot.swerve.visionUpdateOdometry(
-                                new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
-                        // Logging Limelight odometry information to SmartDashboard
-                        SmartDashboard.putNumberArray("Right Limelight Odometry",
-                                new double[] { robotPoseEstimate.getX(),
-                                        robotPoseEstimate.getY(),
-                                        robotPoseEstimate.getRotation().getRadians() });
+                        SmartDashboard.putNumberArray("targetPose", new double[] { targetPose.getX(), targetPose.getY(),
+                                targetPose.getRotation().toRotation2d().getDegrees() });
+
+                        Pose2d camPose = targetPose.transformBy(bestTarget.getBestCameraToTarget().inverse())
+                                .toPose2d();
+
+                        SmartDashboard.putNumberArray("camPose", new double[] { camPose.getX(), camPose.getY(),
+                                camPose.getRotation().getDegrees() });
+
+                        SmartDashboard.putNumberArray("origin", new double[] { 0, 0, 0 });
+                        SmartDashboard.putNumberArray("cam offset",
+                                new double[] { VisionConstants.RIGHT_CAM_TO_ROBOT.getX(),
+                                        VisionConstants.RIGHT_CAM_TO_ROBOT.getY(),
+                                        VisionConstants.RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d().getDegrees() });
+
+                        // Robot.swerve.visionUpdateOdometry(
+                        // new LimelightHelpers.LimelightPose(robotPoseEstimate, imageCaptureTime));
+                        SmartDashboard.putNumberArray("Left Limelight Odometry",
+                                new double[] { camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT2D).getX(),
+                                        camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT2D).getY(),
+                                        camPose.transformBy(VisionConstants.LEFT_CAM_TO_ROBOT2D).getRotation()
+                                                .getDegrees() });
+
+                        // SmartDashboard.putNumberArray("Left Limelight Odometry",
+                        // new double[] { robotPoseEstimate.getX(),
+                        // robotPoseEstimate.getY(),
+                        // robotPoseEstimate.getRotation().getDegrees() });
+
                     }
                 }
             }
         }
+
     }
 
     // Thanks to FRC Team 5712
@@ -261,5 +298,34 @@ public class Limelight extends SubsystemBase {
                                         * VisionConstants.TAG_PRESENCE_WEIGHT)));
 
         return VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
+    }
+
+    public static Pose2d applyTransformation(Pose2d startingPose,
+            Transform2d transformation) {
+        // Apply rotation to the translation
+
+        double newX = startingPose.getX() + -transformation.getX() * Math.cos(transformation.getRotation().getRadians())
+                + transformation.getY() * Math.sin(transformation.getRotation().getRadians());
+        double newY = startingPose.getY() - transformation.getX() * Math.sin(transformation.getRotation().getRadians())
+                - transformation.getY() * Math.cos(transformation.getRotation().getRadians());
+
+        // Apply rotation
+        double newTheta = startingPose.getRotation().getRadians() + transformation.getRotation().getRadians();
+
+        // Ensure theta remains within the range [0, 2π)
+        newTheta = normalizeAngle(newTheta);
+
+        return new Pose2d(newX, newY, new Rotation2d(newTheta));
+    }
+
+    /**
+     * Normalizes an angle to the range [0, 2π)
+     * 
+     * @param angle The angle in radians to normalize
+     * @return The normalized angle
+     */
+    private static double normalizeAngle(double angle) {
+        double twoPi = 2 * Math.PI;
+        return ((angle % twoPi) + twoPi) % twoPi;
     }
 }

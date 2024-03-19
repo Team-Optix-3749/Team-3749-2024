@@ -4,7 +4,9 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
@@ -27,13 +29,14 @@ public class VisionConstants {
     public static final Transform3d ROBOT_TO_LEFT_CAM = new Transform3d(
             new Translation3d(Units.inchesToMeters(-10.588), Units.inchesToMeters(10.161),
                     Units.inchesToMeters(10.605)),
-            new Rotation3d(0, Units.degreesToRadians(55), Units.degreesToRadians(158)));
+            new Rotation3d(0, Units.degreesToRadians(-55), Units.degreesToRadians(158)));
     
     public static final Transform3d LEFT_CAM_TO_ROBOT = new Transform3d(
-            new Translation3d(Units.inchesToMeters(10.588), Units.inchesToMeters(-10.161),
+            new Translation3d(Units.inchesToMeters(-10.588), Units.inchesToMeters(10.161),
                     Units.inchesToMeters(-10.605)),
             new Rotation3d(0, Units.degreesToRadians(-55), Units.degreesToRadians(-158)));
     
+    public static final Transform2d LEFT_CAM_TO_ROBOT2D = new Transform2d(LEFT_CAM_TO_ROBOT.getX(), LEFT_CAM_TO_ROBOT.getY(), LEFT_CAM_TO_ROBOT.getRotation().toRotation2d());
     
     // public static final Transform3d LEFT_CAM_TO_ROBOT = ROBOT_TO_LEFT_CAM.inverse();
 
@@ -41,7 +44,14 @@ public class VisionConstants {
             new Translation3d(Units.inchesToMeters(-10.510), Units.inchesToMeters(-10.182),
                     Units.inchesToMeters(10.598)),
             new Rotation3d(0, Units.degreesToRadians(55), Units.degreesToRadians(200)));
-    public static final Transform3d RIGHT_CAM_TO_ROBOT = ROBOT_TO_RIGHT_CAM.inverse();
+
+    public static final Transform3d RIGHT_CAM_TO_ROBOT = new Transform3d(
+            new Translation3d(Units.inchesToMeters(-10.588), Units.inchesToMeters(10.161),
+                    Units.inchesToMeters(-10.605)),
+            new Rotation3d(0, Units.degreesToRadians(-55), Units.degreesToRadians(-158)));
+    
+    public static final Transform2d RIGHT_CAM_TO_ROBOT2D = new Transform2d(RIGHT_CAM_TO_ROBOT.getX(), RIGHT_CAM_TO_ROBOT.getY(), RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d());
+
 
     public static final Transform3d SIM_LEFT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
     public static final Transform3d SIM_RIGHT_ROBOT_TO_CAM = new Transform3d(1, 0, 0, new Rotation3d());
