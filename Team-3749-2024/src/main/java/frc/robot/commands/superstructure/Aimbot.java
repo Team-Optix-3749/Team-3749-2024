@@ -33,7 +33,7 @@ public class Aimbot implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        if (Robot.arm.atGoal()){
+        if (Robot.arm.atGoal() && fullDeployedWrist){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
     }

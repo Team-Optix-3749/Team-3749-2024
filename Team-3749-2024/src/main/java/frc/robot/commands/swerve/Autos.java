@@ -41,19 +41,21 @@ public class Autos {
                 Rotation2d.fromRadians(0));
 
         return new SequentialCommandGroup(
-                AutoUtils.getSubwooferShot(0),
+                AutoUtils.getFirstShot(0),
 
                 new ParallelCommandGroup(
                         AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
                         AutoUtils.getintake(0.3),
-                        AutoUtils.getSubwooferShot(1.65),
-                        AutoUtils.getintake(2.85),
-                        AutoUtils.getSubwooferShot(4.9),
-                        AutoUtils.getintake(6.3),
-                        AutoUtils.getSubwooferShot(8.35),
-                        AutoUtils.getStow(9.6),
-                        AutoUtils.getintake(11),
-                        AutoUtils.getSubwooferShot(13.3)
+                        AutoUtils.getShoot(1.85),
+                        AutoUtils.getintake(3.2),
+                        AutoUtils.getShoot(4.87),
+                        AutoUtils.getintake(6.2),
+                        AutoUtils.getShoot(8.15),
+                        AutoUtils.getStow(9.4),
+                        AutoUtils.getintake(10.4),
+                        // AutoUtils.getStow(12.3),
+
+                        AutoUtils.getShoot(13)
 
 
 

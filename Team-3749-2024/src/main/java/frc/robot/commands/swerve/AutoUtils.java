@@ -168,12 +168,19 @@ public class AutoUtils {
             Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 
-  public static Command getSubwooferShot(double wait) {
+  public static Command getShoot(double wait) {
+    System.out.println("subwoofer");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT),
+        getFeed(0.85));
+  }
+    public static Command getFirstShot(double wait) {
     System.out.println("subwoofer");
     return new SequentialCommandGroup(
         new WaitCommand(wait),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        getFeed(1));
+        getFeed(1.1));
   }
 
   public static Command getPodiumShot(double wait) {
