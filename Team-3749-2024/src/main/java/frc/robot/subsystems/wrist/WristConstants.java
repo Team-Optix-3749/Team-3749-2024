@@ -26,7 +26,7 @@ public final class WristConstants {
     }   
 
 
-    public static final double wristOffsetRad = Units.degreesToRadians(128.885       );
+    public static final double wristOffsetRad = Units.degreesToRadians(73);
     public static final boolean wristReversed = true;
 
     private static final PIDConstants simPID = new PIDConstants(35, 0, 1);

@@ -46,9 +46,9 @@ public class VisionConstants {
             new Rotation3d(0, Units.degreesToRadians(55), Units.degreesToRadians(200)));
 
     public static final Transform3d RIGHT_CAM_TO_ROBOT = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-10.588), Units.inchesToMeters(10.161),
+            new Translation3d(Units.inchesToMeters(-10.51), Units.inchesToMeters(-10.182),
                     Units.inchesToMeters(-10.605)),
-            new Rotation3d(0, Units.degreesToRadians(-55), Units.degreesToRadians(-158)));
+            new Rotation3d(0, Units.degreesToRadians(-55), Units.degreesToRadians(-200)));
     
     public static final Transform2d RIGHT_CAM_TO_ROBOT2D = new Transform2d(RIGHT_CAM_TO_ROBOT.getX(), RIGHT_CAM_TO_ROBOT.getY(), RIGHT_CAM_TO_ROBOT.getRotation().toRotation2d());
 

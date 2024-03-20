@@ -45,13 +45,27 @@ public class Autos {
 
                 new ParallelCommandGroup(
                         AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
-                        AutoUtils.getintake(0.5),
-                        AutoUtils.getSubwooferShot(2),
-                        AutoUtils.getintake(3.3),
-                        AutoUtils.getSubwooferShot(5.3),
-                        AutoUtils.getintake(7.3),
-                        AutoUtils.getSubwooferShot(9.7),
-                        AutoUtils.getStow(12)
+                        AutoUtils.getintake(0.3),
+                        AutoUtils.getSubwooferShot(1.65),
+                        AutoUtils.getintake(2.85),
+                        AutoUtils.getSubwooferShot(4.9),
+                        AutoUtils.getintake(6.3),
+                        AutoUtils.getSubwooferShot(8.35),
+                        AutoUtils.getStow(9.6),
+                        AutoUtils.getintake(11),
+                        AutoUtils.getSubwooferShot(13.3)
+
+
+
+
+                        // AutoUtils.getChoreoAutoPath("4 piece", startingPos),
+                        // AutoUtils.getintake(0.3),
+                        // AutoUtils.getSubwooferShot(1.7),
+                        // AutoUtils.getintake(2.8),
+                        // AutoUtils.getSubwooferShot(3.6),
+                        // AutoUtils.getintake(4.6),
+                        // AutoUtils.getSubwooferShot(5.4),
+                        // AutoUtils.getStow(6.8)
                 )
                  );
     }
