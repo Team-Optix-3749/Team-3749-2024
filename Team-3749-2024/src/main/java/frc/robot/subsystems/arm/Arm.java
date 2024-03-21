@@ -300,7 +300,7 @@ public class Arm extends SubsystemBase {
             armIO.setBreakMode();
         }
         if (!driverStationStatus && isEnabled) {
-            armIO.setCoastMode();
+            armIO.setBreakMode();
             isEnabled = driverStationStatus;
         }
 

@@ -216,5 +216,14 @@ public class AutoUtils {
         Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake),
         Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter));
   }
+  public static Command getStopVision(double wait){
+    System.out.println("stop vision");
+    return Commands.run(() -> Robot.swerve.setUtilizeVision(false));
 
+  }
+    public static Command getStartVision(double wait){
+    System.out.println("start vision");
+    return Commands.run(() -> Robot.swerve.setUtilizeVision(true));
+
+  }
 }

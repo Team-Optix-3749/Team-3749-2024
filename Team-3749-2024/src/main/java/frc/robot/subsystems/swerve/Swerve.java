@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -77,8 +78,9 @@ public class Swerve extends SubsystemBase {
       "heading",
       0.0);
 
-  public Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-  public double prevVelocity = 0;
+  private Pose2d desiredPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+  private double prevVelocity = 0;
+  private boolean utilizeVision = true;
 
   public Swerve() {
     if (Robot.isSimulation()) {
@@ -104,7 +106,9 @@ public class Swerve extends SubsystemBase {
             modules[2].getPosition(),
             modules[3].getPosition()
         },
-        new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+        new Pose2d(new Translation2d(0, 0), new Rotation2d(0)),
+        VecBuilder.fill(0.04, 0.04, 0.01),
+        VecBuilder.fill(0.965, 0.965, 5));
 
     if (Robot.isSimulation()) {
       // resetOdometry(new Pose2d(new Translation2d(1, 1), new
@@ -136,6 +140,10 @@ public class Swerve extends SubsystemBase {
 
     setModuleStates(moduleStates);
 
+  }
+
+  public void setUtilizeVision(boolean utilize) {
+    utilizeVision = utilize;
   }
 
   public ChassisSpeeds getChassisSpeeds() {
@@ -211,8 +219,11 @@ public class Swerve extends SubsystemBase {
   }
 
   public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
-    // swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
-    //     visionPose.timestamp);
+    if (utilizeVision) {
+
+      swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
+          visionPose.timestamp);
+    }
   }
 
   public void logDesiredOdometry(Pose2d desiredPose) {
@@ -317,25 +328,25 @@ public class Swerve extends SubsystemBase {
     gyroCalibratingLog.set(gyroData.isCalibrating);
     headingLog.set(getRotation2d().getDegrees());
 
-    double robotVelocity =
-    Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
-    Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+    double robotVelocity = Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) +
+        Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
 
     SmartDashboard.putNumber("robot velocity", robotVelocity);
 
-    SmartDashboard.putNumber("robot acceleration", (robotVelocity-prevVelocity)/.02);
+    SmartDashboard.putNumber("robot acceleration", (robotVelocity - prevVelocity) / .02);
     prevVelocity = robotVelocity;
 
-    // boolean driverStationStatus = DriverStation.isEnabled();
-    // if (driverStationStatus && !isEnabled) {
-    // isEnabled = driverStationStatus;
-    // modules[0].setBreakMode(true);
-    // ;
-    // }
-    // if (!driverStationStatus && isEnabled) {
-    // modules[0].setBreakMode(false);;
-    // isEnabled = driverStationStatus;
-    // }
+    boolean driverStationStatus = DriverStation.isEnabled();
+    if (driverStationStatus && !isEnabled) {
+      isEnabled = driverStationStatus;
+      modules[0].setBreakMode(true);
+      ;
+    }
+    if (!driverStationStatus && isEnabled) {
+      modules[0].setBreakMode(false);
+      ;
+      isEnabled = driverStationStatus;
+    }
 
   }
 

@@ -97,104 +97,124 @@ public class Limelight extends SubsystemBase {
         // Overridden periodic method for logging during each robot loop iteration
         @Override
         public void periodic() {
-                manualPose();
+                // manualPose();
 
                 // System.out.println("right detect");
-
-        }
-
-        public void manualPose() {
-
-                PhotonPipelineResult latestResultLeft = cameraLeft.getLatestResult();
-                SmartDashboard.putBoolean(" left present", latestResultLeft.hasTargets());
-
-                if (latestResultLeft.hasTargets()) {
-                        MultiTargetPNPResult multiResultLeft = latestResultLeft.getMultiTagResult();
-
-                        double imageCaptureTime = latestResultLeft.getTimestampSeconds();
-                        PhotonTrackedTarget bestTarget = latestResultLeft.getBestTarget();
-
-                        if (bestTarget.getPoseAmbiguity() <= 0.2) {
-
-                                int targetID = bestTarget.getFiducialId();
-                                Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
-
-                                if (targetPoseOptional.isPresent()) {
-                                        Pose3d targetPose = targetPoseOptional.get();
-                                        SmartDashboard.putNumberArray("targetPose", new double[] {
-                                                        targetPose.getX(), targetPose.getY(),
-                                                        targetPose.getRotation().toRotation2d().getDegrees() });
-
-                                        Pose2d camPose = targetPose
-                                                        .transformBy(bestTarget.getBestCameraToTarget()
-                                                                        .inverse())
-                                                        .toPose2d();
-
-                                        SmartDashboard.putNumberArray("camPose",
-                                                        new double[] { camPose.getX(), camPose.getY(),
-                                                                        camPose.getRotation().getDegrees() });
-
-                                        Pose2d robotPose = applyTransformation(camPose,
-                                                        VisionConstants.LEFT_CAM_TO_ROBOT2D);
-
-                                        Robot.swerve.visionUpdateOdometry(
-                                                        new LimelightHelpers.LimelightPose(robotPose,
-                                                                        imageCaptureTime));
-                                        SmartDashboard.putNumberArray("Left Limelight Odometry",
-                                                        new double[] { robotPose.getX(),
-                                                                        robotPose.getY(),
-                                                                        robotPose.getRotation()
-                                                                                        .getDegrees() });
-
-                                }
-                        }
+                photonPoseEstimatorLeft.setReferencePose(estimatedPose2dLeft);
+                Optional<EstimatedRobotPose> estimateleft = photonPoseEstimatorLeft.update();
+                if (estimateleft.isPresent()) {
+                        Pose2d estimatedPose2dLeft = estimateleft.get().estimatedPose.toPose2d();
+                        SmartDashboard.putNumberArray("LEFT LL Odometry",
+                                        new double[] { estimatedPose2dLeft.getX(), estimatedPose2dLeft.getY(),
+                                                        estimatedPose2dLeft.getRotation().getDegrees() });
+                        Robot.swerve.visionUpdateOdometry(
+                                        new LimelightPose(estimatedPose2dLeft, estimateleft.get().timestampSeconds));
                 }
 
-                PhotonPipelineResult latestResultRight = cameraRight.getLatestResult();
-                SmartDashboard.putBoolean(" Right present", latestResultRight.hasTargets());
-
-                if (latestResultRight.hasTargets()) {
-                        MultiTargetPNPResult multiResultRight = latestResultRight.getMultiTagResult();
-
-                        double imageCaptureTime = latestResultRight.getTimestampSeconds();
-                        PhotonTrackedTarget bestTarget = latestResultRight.getBestTarget();
-
-                        if (bestTarget.getPoseAmbiguity() <= 0.2) {
-
-                                int targetID = bestTarget.getFiducialId();
-                                Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
-
-                                if (targetPoseOptional.isPresent()) {
-                                        Pose3d targetPose = targetPoseOptional.get();
-                                        SmartDashboard.putNumberArray("targetPose", new double[] {
-                                                        targetPose.getX(), targetPose.getY(),
-                                                        targetPose.getRotation().toRotation2d().getDegrees() });
-
-                                        Pose2d camPose = targetPose
-                                                        .transformBy(bestTarget.getBestCameraToTarget()
-                                                                        .inverse())
-                                                        .toPose2d();
-
-                                        SmartDashboard.putNumberArray("camPose",
-                                                        new double[] { camPose.getX(), camPose.getY(),
-                                                                        camPose.getRotation().getDegrees() });
-
-                                        Pose2d robotPose = applyTransformation(camPose,
-                                                        VisionConstants.RIGHT_CAM_TO_ROBOT2D);
-
-                                        Robot.swerve.visionUpdateOdometry(
-                                                        new LimelightHelpers.LimelightPose(robotPose,
-                                                                        imageCaptureTime));
-                                        SmartDashboard.putNumberArray("Right Limelight Odometry",
-                                                        new double[] { robotPose.getX(),
-                                                                        robotPose.getY(),
-                                                                        robotPose.getRotation()
-                                                                                        .getDegrees() });
-
-                                }
-                        }
+                photonPoseEstimatorRight.setReferencePose(estimatedPose2dRight);
+                 Optional<EstimatedRobotPose> estimateRight = photonPoseEstimatorRight.update();
+                if (estimateRight.isPresent()) {
+                        estimatedPose2dRight= estimateRight.get().estimatedPose.toPose2d();
+                        SmartDashboard.putNumberArray("RIGHT LL Odometry",
+                                        new double[] { estimatedPose2dRight.getX(), estimatedPose2dRight.getY(),
+                                                        estimatedPose2dRight.getRotation().getDegrees() });
+                        Robot.swerve.visionUpdateOdometry(
+                                        new LimelightPose(estimatedPose2dRight, estimateRight.get().timestampSeconds));
                 }
         }
+
+        // public void manualPose() {
+// 
+        //         PhotonPipelineResult latestResultLeft = cameraLeft.getLatestResult();
+        //         SmartDashboard.putBoolean(" left present", latestResultLeft.hasTargets());
+
+        //         if (latestResultLeft.hasTargets()) {
+        //                 MultiTargetPNPResult multiResultLeft = latestResultLeft.getMultiTagResult();
+
+        //                 double imageCaptureTime = latestResultLeft.getTimestampSeconds();
+        //                 PhotonTrackedTarget bestTarget = latestResultLeft.getBestTarget();
+
+        //                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
+
+        //                         int targetID = bestTarget.getFiducialId();
+        //                         Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
+
+        //                         if (targetPoseOptional.isPresent()) {
+        //                                 Pose3d targetPose = targetPoseOptional.get();
+        //                                 SmartDashboard.putNumberArray("targetPose", new double[] {
+        //                                                 targetPose.getX(), targetPose.getY(),
+        //                                                 targetPose.getRotation().toRotation2d().getDegrees() });
+
+        //                                 Pose2d camPose = targetPose
+        //                                                 .transformBy(bestTarget.getBestCameraToTarget()
+        //                                                                 .inverse())
+        //                                                 .toPose2d();
+
+        //                                 SmartDashboard.putNumberArray("camPose",
+        //                                                 new double[] { camPose.getX(), camPose.getY(),
+        //                                                                 camPose.getRotation().getDegrees() });
+
+        //                                 Pose2d robotPose = applyTransformation(camPose,
+        //                                                 VisionConstants.LEFT_CAM_TO_ROBOT2D);
+
+        //                                 Robot.swerve.visionUpdateOdometry(
+        //                                                 new LimelightHelpers.LimelightPose(robotPose,
+        //                                                                 imageCaptureTime));
+        //                                 SmartDashboard.putNumberArray("Left Limelight Odometry",
+        //                                                 new double[] { robotPose.getX(),
+        //                                                                 robotPose.getY(),
+        //                                                                 robotPose.getRotation()
+        //                                                                                 .getDegrees() });
+
+        //                         }
+        //                 }
+        //         }
+
+        //         PhotonPipelineResult latestResultRight = cameraRight.getLatestResult();
+        //         SmartDashboard.putBoolean(" Right present", latestResultRight.hasTargets());
+
+        //         if (latestResultRight.hasTargets()) {
+        //                 MultiTargetPNPResult multiResultRight = latestResultRight.getMultiTagResult();
+
+        //                 double imageCaptureTime = latestResultRight.getTimestampSeconds();
+        //                 PhotonTrackedTarget bestTarget = latestResultRight.getBestTarget();
+
+        //                 if (bestTarget.getPoseAmbiguity() <= 0.2) {
+
+        //                         int targetID = bestTarget.getFiducialId();
+        //                         Optional<Pose3d> targetPoseOptional = aprilTagFieldLayout.getTagPose(targetID);
+
+        //                         if (targetPoseOptional.isPresent()) {
+        //                                 Pose3d targetPose = targetPoseOptional.get();
+        //                                 SmartDashboard.putNumberArray("targetPose", new double[] {
+        //                                                 targetPose.getX(), targetPose.getY(),
+        //                                                 targetPose.getRotation().toRotation2d().getDegrees() });
+
+        //                                 Pose2d camPose = targetPose
+        //                                                 .transformBy(bestTarget.getBestCameraToTarget()
+        //                                                                 .inverse())
+        //                                                 .toPose2d();
+
+        //                                 SmartDashboard.putNumberArray("camPose",
+        //                                                 new double[] { camPose.getX(), camPose.getY(),
+        //                                                                 camPose.getRotation().getDegrees() });
+
+        //                                 Pose2d robotPose = applyTransformation(camPose,
+        //                                                 VisionConstants.RIGHT_CAM_TO_ROBOT2D);
+
+        //                                 Robot.swerve.visionUpdateOdometry(
+        //                                                 new LimelightHelpers.LimelightPose(robotPose,
+        //                                                                 imageCaptureTime));
+        //                                 SmartDashboard.putNumberArray("Right Limelight Odometry",
+        //                                                 new double[] { robotPose.getX(),
+        //                                                                 robotPose.getY(),
+        //                                                                 robotPose.getRotation()
+        //                                                                                 .getDegrees() });
+
+        //                         }
+        //                 }
+        //         }
+        // }
 
         // Thanks to FRC Team 5712
         public Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {

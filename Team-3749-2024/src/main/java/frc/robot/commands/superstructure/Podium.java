@@ -49,6 +49,8 @@ public class Podium implements SuperStructureCommandInterface {
     public void reset() {
         Robot.intake.setState(IntakeStates.STOP);
         Robot.shooter.setState(ShooterStates.STOP);
+        Robot.led.setLEDPattern(LEDPattern.WHITE);
+
         Robot.wrist.setVoltage(0);
 
         fullDeployedWrist = false;

@@ -45,6 +45,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
 
         if (!stowedWrist && !deployedWrist) {
             Robot.wrist.setGoal(WristStates.STOW);
+     
         }
         if (!stowedArm) {
             Robot.arm.setGoal(ArmStates.STOW);

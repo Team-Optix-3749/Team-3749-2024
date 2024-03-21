@@ -59,6 +59,7 @@ public class Wrist extends SubsystemBase {
             wristIO = new WristSim();
         }
         wristController.setGoal(WristConstants.stowGoalRad);
+        state = WristStates.STOW;
     }
 
     public void setGoal(WristStates state) {
