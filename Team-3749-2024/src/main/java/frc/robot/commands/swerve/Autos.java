@@ -47,15 +47,17 @@ public class Autos {
                         AutoUtils.getChoreoAutoPath("middle-speaker-3xwing_speaker", startingPos),
                         AutoUtils.getintake(0.3),
                         AutoUtils.getShoot(1.85),
+                        AutoUtils.getStopVision(1.9),
                         AutoUtils.getintake(3.2),
-                        AutoUtils.getShoot(4.87),
-                        AutoUtils.getintake(6.2),
-                        AutoUtils.getShoot(8.15),
-                        AutoUtils.getStow(9.4),
-                        AutoUtils.getintake(10.4),
+                        AutoUtils.getShoot(5.025),
+                        AutoUtils.getintake(6.25),
+                        AutoUtils.getShoot(8.3),
+                        AutoUtils.getStartVision(8.4),
+                        // AutoUtils.getStow(9.4),
+                        AutoUtils.getintake(10.3),
                         // AutoUtils.getStow(12.3),
 
-                        AutoUtils.getShoot(13)
+                        AutoUtils.getShoot(12.975)
 
 
 

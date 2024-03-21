@@ -99,10 +99,6 @@ public class JoystickIO {
         // Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new
         // Transform2d(0.1,0, new Rotation2d())))));
 
-        Robot.pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.state = SuperStructureStates.STOW;
-                }, Robot.wrist, Robot.intake));
 
         // shoot
         Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
@@ -118,21 +114,19 @@ public class JoystickIO {
 
                 
         // feed
-        Robot.pilot.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
+        Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.intake.setState(IntakeStates.STOP);
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.intake));
 
         Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
-        Robot.operator.povUp().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.INTAKE)))
-                .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP)));
 
-        Robot.operator.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.SPOOL)))
-                .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
+        // Robot.operator.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.SPOOL)))
+        //         .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
         Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
                 .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
-        Robot.operator.y().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.PODIUM))
+        Robot.operator.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
