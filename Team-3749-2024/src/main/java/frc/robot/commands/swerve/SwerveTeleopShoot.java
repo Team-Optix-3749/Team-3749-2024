@@ -47,7 +47,7 @@ public class SwerveTeleopShoot extends Command {
 
     addRequirements(swerve);
     turnPID.enableContinuousInput(0, 2 * Math.PI);
-    turnPID.setTolerance(Units.degreesToRadians(4.5));
+    turnPID.setTolerance(Units.degreesToRadians(3));
 
   }
 
@@ -95,11 +95,14 @@ public class SwerveTeleopShoot extends Command {
     while (currentRotationRad >= 2 * Math.PI){
         currentRotationRad-= 2 * Math.PI;
     }
+    
     double turningSpeed = turnPID.calculate(currentRotationRad, desiredRotationRad);
     SmartDashboard.putNumber("desired rot", desiredRotationRad);
         SmartDashboard.putNumber("turn sped", turningSpeed);
-
-
+    SmartDashboard.putNumber("error", turnPID.getPositionError());
+    if (turnPID.atSetpoint()){
+        turningSpeed = 0;
+    }
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
         ySpeed,
         xSpeed,
