@@ -18,109 +18,120 @@ import frc.robot.utils.SuperStructureStates;
 
 public class Autos {
 
-    public static Command getStraightLine() {
-        return AutoUtils.getAutoPath(
-                "straight line",
-                new Pose2d(4, 5, new Rotation2d()));
-    }
+        public static Command getStraightLine() {
+                return AutoUtils.getAutoPath(
+                                "straight line",
+                                new Pose2d(4, 5, new Rotation2d()));
+        }
 
-    public static Command getTaxi() {
-        return new SequentialCommandGroup(
-                NamedCommands.getCommand("shoot_subwoofer"),
-                AutoUtils.getChoreoAutoPath(
-                        "taxi",
-                        new Pose2d(
-                                0.7623372673988342,
-                                4.4742279052734375,
-                                Rotation2d.fromRadians(-1.0465789848978129))));
-    }
+        public static Command getTaxi() {
+                return new SequentialCommandGroup(
+                                NamedCommands.getCommand("shoot_subwoofer"),
+                                AutoUtils.getChoreoAutoPath(
+                                                "taxi",
+                                                new Pose2d(
+                                                                0.7623372673988342,
+                                                                4.4742279052734375,
+                                                                Rotation2d.fromRadians(-1.0465789848978129))));
+        }
 
-    public static Command get4Piece() {
-        Pose2d startingPos = new Pose2d(
-                new Translation2d(1.318, 5.436),
-                Rotation2d.fromRadians(0));
+        public static Command get4Piece() {
+                Pose2d startingPos = new Pose2d(
+                                new Translation2d(1.318, 5.436),
+                                Rotation2d.fromRadians(0));
 
-        return new SequentialCommandGroup(
-                AutoUtils.getFirstShot(0),
+                return new SequentialCommandGroup(
+                                AutoUtils.getFirstShot(0),
 
-                new ParallelCommandGroup(
-                        AutoUtils.getChoreoAutoPath("4 piece", startingPos),
-                        AutoUtils.getintake(0.3),
-                        AutoUtils.getShoot(1.85),
-                        AutoUtils.getStopVision(1.9),
-                        AutoUtils.getintake(3.5),
-                        AutoUtils.getShoot(5.5),
-                        AutoUtils.getintake(6.5),
-                        AutoUtils.getShoot(8.75),
-                        AutoUtils.getStartVision(9.7),
-                        // AutoUtils.getStow(9.4),
-                        AutoUtils.getintake(10.3),
-                        AutoUtils.getStow(12.3)
-
-                        // AutoUtils.getShoot(12.975)
-
+                                new ParallelCommandGroup(
+                                                AutoUtils.getChoreoAutoPath("4 piece", startingPos),
+                                                AutoUtils.getintake(0.3),
+                                                AutoUtils.getShoot(1.85),
+                                                AutoUtils.getStopVision(1.9),
+                                                AutoUtils.getintake(3.5),
+                                                AutoUtils.getShoot(5.35),
+                                                AutoUtils.getintake(6.5),
+                                                AutoUtils.getShoot(8.75),
+                                                AutoUtils.getStartVision(9.7),
+                                                // AutoUtils.getStow(9.4),
+                                                AutoUtils.getintake(10.3),
+                                                AutoUtils.getStow(12.75)));
+        }
 
 
+             public static Command get5Piece() {
+                Pose2d startingPos = new Pose2d(
+                                new Translation2d(1.318, 5.436),
+                                Rotation2d.fromRadians(0));
 
-                        // AutoUtils.getChoreoAutoPath("4 piece", startingPos),
-                        // AutoUtils.getintake(0.3),
-                        // AutoUtils.getSubwooferShot(1.7),
-                        // AutoUtils.getintake(2.8),
-                        // AutoUtils.getSubwooferShot(3.6),
-                        // AutoUtils.getintake(4.6),
-                        // AutoUtils.getSubwooferShot(5.4),
-                        // AutoUtils.getStow(6.8)
-                )
-                 );
-    }
+                return new SequentialCommandGroup(
+                                AutoUtils.getFirstShot(0),
 
-    public static Command get4PieceNoRotation() {
-        Pose2d startingPos = new Pose2d(
-                new Translation2d(1.318, 5.436),
-                Rotation2d.fromRadians(0));
+                                new ParallelCommandGroup(
+                                                AutoUtils.getChoreoAutoPath("5 piece", startingPos),
+                                                AutoUtils.getintake(0.3),
+                                                AutoUtils.getShoot(1.85),
+                                                AutoUtils.getStopVision(1.9),
+                                                AutoUtils.getintake(3.5),
+                                                AutoUtils.getShoot(5.35),
+                                                AutoUtils.getintake(6.5),
+                                                AutoUtils.getShoot(8.45),
+                                                AutoUtils.getStartVision(9.4),
+                                                // AutoUtils.getStow(9.4),
+                                                AutoUtils.getintake(10.3),
+                                                AutoUtils.getShoot(13.04)));
+        }
 
-        return new SequentialCommandGroup(
-                AutoUtils.getCycle(0),
-                new ParallelCommandGroup(
-                        AutoUtils.getChoreoAutoPath("no rotation", startingPos),
-                        AutoUtils.getCycle(3.5),
-                        AutoUtils.getCycle(10),
-                        AutoUtils.getCycle(15)));
-    }
 
-    public static Command get4PieceNoCommands() {
-        return AutoUtils.getChoreoAutoPath(
-                "no rotation",
-                new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0)));
-    }
 
-    public static Command getTroll() {
-        return new SequentialCommandGroup(
-                AutoUtils.getCycle(0),
-                Commands.run(() -> Robot.state = SuperStructureStates.STOW),
-                AutoUtils.getChoreoAutoPath(
-                        "top-speaker-troll",
-                        new Pose2d(
-                                0.7535725831985474,
-                                4.482047080993652,
-                                new Rotation2d(-1.0074806999559232))));
-    }
 
-    public static Command getBottomRun() {
-        return new SequentialCommandGroup(
-                AutoUtils.getCycle(0),
-                new WaitCommand(6),
-                AutoUtils.getChoreoAutoPath(
-                        "bottom-speaker",
-                        new Pose2d(
-                                0.7692505121231079,
-                                4.479482650756836,
-                                new Rotation2d(-1.0356489717435746))));
-    }
+        public static Command get4PieceNoRotation() {
+                Pose2d startingPos = new Pose2d(
+                                new Translation2d(1.318, 5.436),
+                                Rotation2d.fromRadians(0));
 
-    public static Command getTestPath() {
-        return AutoUtils.getChoreoAutoPath("testPath", new Pose2d());
-    }
+                return new SequentialCommandGroup(
+                                AutoUtils.getCycle(0),
+                                new ParallelCommandGroup(
+                                                AutoUtils.getChoreoAutoPath("no rotation", startingPos),
+                                                AutoUtils.getCycle(3.5),
+                                                AutoUtils.getCycle(10),
+                                                AutoUtils.getCycle(15)));
+        }
+
+        public static Command get4PieceNoCommands() {
+                return AutoUtils.getChoreoAutoPath(
+                                "no rotation",
+                                new Pose2d(new Translation2d(1.318, 5.436), Rotation2d.fromRadians(0)));
+        }
+
+        public static Command getTroll() {
+                return new SequentialCommandGroup(
+                                AutoUtils.getCycle(0),
+                                Commands.run(() -> Robot.state = SuperStructureStates.STOW),
+                                AutoUtils.getChoreoAutoPath(
+                                                "top-speaker-troll",
+                                                new Pose2d(
+                                                                0.7535725831985474,
+                                                                4.482047080993652,
+                                                                new Rotation2d(-1.0074806999559232))));
+        }
+
+        public static Command getBottomRun() {
+                return new SequentialCommandGroup(
+                                AutoUtils.getCycle(0),
+                                new WaitCommand(6),
+                                AutoUtils.getChoreoAutoPath(
+                                                "bottom-speaker",
+                                                new Pose2d(
+                                                                0.7692505121231079,
+                                                                4.479482650756836,
+                                                                new Rotation2d(-1.0356489717435746))));
+        }
+
+        public static Command getTestPath() {
+                return AutoUtils.getChoreoAutoPath("testPath", new Pose2d());
+        }
 }
 // public static Command getSide() {
 // // return AutoUtils.getCycle(0);
