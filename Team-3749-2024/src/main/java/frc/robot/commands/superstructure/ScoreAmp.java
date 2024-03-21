@@ -24,18 +24,9 @@ public class ScoreAmp implements SuperStructureCommandInterface {
 
     @Override
     public void execute() {
-
-
-
-        Robot.wrist.setGoal(WristStates.STOW);
-        Robot.arm.setGoal(ArmStates.AMP);
-        
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
-
-
-        
     }
 
     @Override
@@ -49,6 +40,13 @@ public class ScoreAmp implements SuperStructureCommandInterface {
         almostDeployedWrist = false;
         ampedArm = false;
         stowedArm = false;
+    }
+
+    @Override
+    public void start() {
+        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+        Robot.arm.setGoal(ArmStates.AMP);
+
     }
 
 }
