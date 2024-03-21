@@ -102,7 +102,15 @@ public class JoystickIO {
         // Transform2d(0.1,0, new Rotation2d())))));
 
         // shoot
-        Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
+        
+        Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist)).whileTrue(new SwerveTeleopShoot(() -> -Robot.pilot.getLeftX(),
+                        () -> -Robot.pilot.getLeftY(),
+                        () -> -Robot.pilot.getRightX()));
+
+        Robot.operator.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
@@ -127,13 +135,8 @@ public class JoystickIO {
         // .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
         Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
                 .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
-        Robot.operator.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.state = SuperStructureStates.STOW;
-                }, Robot.wrist));
-        Robot.operator.povLeft().whileTrue(new SwerveTeleopShoot(() -> -Robot.pilot.getLeftX(),
-                () -> -Robot.pilot.getLeftY(),
-                () -> -Robot.pilot.getRightX()));
+
+
     }
 
     public void pilotBindings() {
