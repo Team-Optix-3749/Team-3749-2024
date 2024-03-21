@@ -128,6 +128,9 @@ public class Arm extends SubsystemBase {
             }
             Robot.arm.setGoal(calcedArmAngle);
         }
+        if (state == ArmStates.SOURCE) {
+            feedback.setGoal(ArmConstants.sourcePositionRad);
+        }
     }
 
     public void setGoal(double goalRad) {
@@ -272,6 +275,9 @@ public class Arm extends SubsystemBase {
         if (getGoal() == ArmConstants.groundIntakepositionRad) {
             state = ArmStates.GROUND_INTAKE;
         }
+        if (getGoal() == ArmConstants.sourcePositionRad) {
+            state = ArmStates.SOURCE;
+        }
     }
 
     // runs every 0.02 sec
@@ -305,7 +311,7 @@ public class Arm extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("calced arm rad", ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose()));
-        ShootKinematics.getRobotRotation(Robot.swerve.getPose());   
+        ShootKinematics.getRobotRotation(Robot.swerve.getPose());
     }
 
 }

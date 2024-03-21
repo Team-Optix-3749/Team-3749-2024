@@ -85,6 +85,11 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist, Robot.intake));
+
+        Robot.pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SOURCE))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
         // outtake
         Robot.pilot.leftBumper()
                 .onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
@@ -135,7 +140,7 @@ public class JoystickIO {
         // .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
         Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
                 .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
-
+        
 
     }
 

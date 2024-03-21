@@ -13,7 +13,9 @@ public enum SuperStructureStates{
     SUBWOOFER(WristStates.FULL_DEPLOYED, ArmStates.SUBWOOFER),
     PODIUM(WristStates.FULL_DEPLOYED,ArmStates.PODIUM),
     AIMBOT(WristStates.STOW, ArmStates.AIMBOT),
+    SOURCE(WristStates.STOW, ArmStates.SOURCE),
     RESET(WristStates.STOW, ArmStates.STOW);
+
     
     public WristStates wristState;
     public ArmStates armState;
