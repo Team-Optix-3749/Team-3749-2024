@@ -7,19 +7,17 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
+import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.SuperStructureStates;
 import frc.robot.utils.UtilityFunctions;
 
-public class ScoreAmp implements SuperStructureCommandInterface {
-    private boolean fullDeployedWrist = false;
-    private boolean almostDeployedWrist = false;
-    private boolean ampedArm = false;
-    private boolean stowedArm = false;
-    private boolean staticWrist = false;
+public class IntakeSource implements SuperStructureCommandInterface {
 
-    public ScoreAmp() {
+
+    public IntakeSource() {
     }
 
     @Override
@@ -35,17 +33,14 @@ public class ScoreAmp implements SuperStructureCommandInterface {
         Robot.shooter.stop();
         Robot.wrist.setVoltage(0);
 
-        fullDeployedWrist = false;
-        staticWrist = false;
-        almostDeployedWrist = false;
-        ampedArm = false;
-        stowedArm = false;
     }
 
     @Override
     public void start() {
-        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-        Robot.arm.setGoal(ArmStates.AMP);
+        Robot.wrist.setGoal(WristStates.STOW);
+        Robot.arm.setGoal(ArmStates.SOURCE);
+        Robot.intake.setState(IntakeStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.INTAKE);
 
     }
 

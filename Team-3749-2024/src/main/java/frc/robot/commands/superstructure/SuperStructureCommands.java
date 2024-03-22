@@ -20,7 +20,7 @@ public class SuperStructureCommands {
     private Climb climb = new Climb();
     private ClimbDown climbDown = new ClimbDown();
     private Aimbot aimbot = new Aimbot();
-
+    private IntakeSource source = new IntakeSource();
     private SuperStructureCommandInterface currentCommand = stow;
 
 
@@ -74,6 +74,9 @@ public class SuperStructureCommands {
                 break;
             case AIMBOT:
                 switchCommands(aimbot);
+                break;
+            case SOURCE:
+                switchCommands(source);
                 break;
         }
         if (DriverStation.isAutonomous()) {

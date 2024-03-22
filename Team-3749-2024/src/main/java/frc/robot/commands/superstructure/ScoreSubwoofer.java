@@ -36,7 +36,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        if (subwoofedArm && fullDeployedWrist){
+        if (subwoofedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
     }

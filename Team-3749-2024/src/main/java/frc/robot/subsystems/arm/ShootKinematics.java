@@ -169,13 +169,14 @@ public class ShootKinematics {
                     double curDist = Double.parseDouble(values[0]);
                     maxDist = Math.max(maxDist, curDist);
                     distToAngle[(int) (Math.round(curDist * 100))] = Double.parseDouble(values[1]);
-                    // System.out.println(Double.toString(curDist) + " : " + Double.toString((int) (Math.round(curDist * 100))));
+                    // System.out.println(Double.toString(curDist) + " : " + Double.toString((int)
+                    // (Math.round(curDist * 100))));
                 }
 
                 maxDist -= ArmConstants.distMargin;
                 System.out.println("done");
                 br.close();
-           
+
             } catch (Exception e) {
             }
         }).start();
@@ -223,4 +224,14 @@ public class ShootKinematics {
 
     // returns -1 if out of range, returns 0 if too close
     // }
+
+    public static Rotation2d getRobotRotation(Pose2d currentPose2d) {
+
+        Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
+
+        Rotation2d rotation = new Rotation2d(Math.atan2(distanceVector.getY(), distanceVector.getX()));
+        SmartDashboard.putNumberArray("rotated robot",
+                new double[] { currentPose2d.getX(), currentPose2d.getY(), rotation.getDegrees() });
+        return rotation;
+    }
 }

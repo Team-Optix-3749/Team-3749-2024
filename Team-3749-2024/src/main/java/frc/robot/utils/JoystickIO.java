@@ -20,6 +20,7 @@ import frc.robot.commands.arm.MoveArmToGoal;
 import frc.robot.commands.superstructure.GroundIntake;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.SwerveTeleop;
+import frc.robot.commands.swerve.SwerveTeleopShoot;
 import frc.robot.commands.wrist.MoveWristToGoal;
 import frc.robot.commands.wrist.getRegressionData;
 import frc.robot.subsystems.arm.ArmSim;
@@ -84,6 +85,11 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist, Robot.intake));
+
+        Robot.pilot.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SOURCE))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
         // outtake
         Robot.pilot.leftBumper()
                 .onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
@@ -94,14 +100,22 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
 
         // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve
-        //         .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new Rotation2d())))));
+        // .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new
+        // Rotation2d())))));
         // Robot.pilot.povUp().onTrue(Commands.runOnce(() ->
         // Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new
         // Transform2d(0.1,0, new Rotation2d())))));
 
-
         // shoot
-        Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
+        
+        Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist)).whileTrue(new SwerveTeleopShoot(() -> -Robot.pilot.getLeftX(),
+                        () -> -Robot.pilot.getLeftY(),
+                        () -> -Robot.pilot.getRightX()));
+
+        Robot.operator.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
@@ -112,7 +126,6 @@ public class JoystickIO {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
 
-                
         // feed
         Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
                 .onFalse(Commands.runOnce(() -> {
@@ -122,14 +135,12 @@ public class JoystickIO {
 
         Robot.operator.povDown().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.RESET));
 
-        // Robot.operator.rightBumper().onTrue(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.SPOOL)))
-        //         .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
+        // Robot.operator.rightBumper().onTrue(Commands.runOnce(() ->
+        // Robot.shooter.setState(ShooterStates.SPOOL)))
+        // .onFalse(Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP)));
         Robot.operator.back().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMB))
                 .onFalse(Commands.runOnce(() -> Robot.state = SuperStructureStates.CLIMBDOWN));
-        Robot.operator.leftTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.state = SuperStructureStates.STOW;
-                }, Robot.wrist));
+        
 
     }
 
