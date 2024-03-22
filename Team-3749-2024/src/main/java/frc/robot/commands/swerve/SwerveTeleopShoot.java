@@ -47,7 +47,7 @@ public class SwerveTeleopShoot extends Command {
 
     addRequirements(swerve);
     turnPID.enableContinuousInput(0, 2 * Math.PI);
-    turnPID.setTolerance(Units.degreesToRadians(3));
+    turnPID.setTolerance(Units.degreesToRadians(1));
 
   }
 
