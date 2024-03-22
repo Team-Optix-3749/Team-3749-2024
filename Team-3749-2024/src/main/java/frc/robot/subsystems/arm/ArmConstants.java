@@ -14,9 +14,9 @@ public final class ArmConstants {
         // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
         public static final double gearRatio = 200.0;
 
-        public static final double sprocketRatio = 64.0 / 24.0;
+        public static final double sprocketRatio = 64.0 / 24.0; 
         public static final int encoderID = 7;
-        public static final double encoderOffsetRad = Units.degreesToRadians(77.07);
+        public static final double encoderOffsetRad = Units.degreesToRadians(122.62);
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(102.5);
