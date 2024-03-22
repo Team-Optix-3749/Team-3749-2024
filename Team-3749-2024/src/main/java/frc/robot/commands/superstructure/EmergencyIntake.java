@@ -29,33 +29,12 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
 
     @Override
     public void execute() {
-        if (Robot.wrist.getState() == WristStates.STOW) {
-            stowedWrist = true;
-        }
 
-        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
-            deployedWrist = true;
-        }
-        if (Robot.arm.getState() == ArmStates.STOW) {
-            stowedArm = true;
-        }
-        if (stowedArm && Robot.arm.getPositionRad() > Units.degreesToRadians(15)) {
-            uppedArm = true;
-        }
 
-        if (!stowedWrist && !deployedWrist) {
-            Robot.wrist.setGoal(WristStates.STOW);
-     
-        }
-        if (!stowedArm) {
-            Robot.arm.setGoal(ArmStates.STOW);
-        }
-        if (stowedArm && !uppedArm) {
-            Robot.arm.setGoal(Units.degreesToRadians(18.5));
-            Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-        }
 
-        if (deployedWrist) {
+        
+
+        if (Robot.wrist.getPositionRad() > WristConstants.almostDeployedRad) {
             Robot.arm.setGoal(ArmStates.GROUND_INTAKE);
 
         }
@@ -85,7 +64,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
     @Override
     public void autoExecute() {
         // execute();
-        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
+        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad - Units.degreesToRadians(1.5));
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
@@ -95,7 +74,15 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
     public void start() {
         Robot.intake.setState(IntakeStates.INTAKE);
         Robot.shooter.setState(ShooterStates.INTAKE);
+        Robot.arm.setGoal(Units.degreesToRadians(18.5));
+        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
+    }
+
+    @Override
+    public void autoStart() {
+        Robot.intake.setState(IntakeStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.INTAKE);
     }
 
     @Override

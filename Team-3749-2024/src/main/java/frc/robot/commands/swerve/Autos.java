@@ -78,12 +78,14 @@ public class Autos {
                                                 AutoUtils.getShoot(8.45),
                                                 AutoUtils.getStartVision(9.4),
                                                 // AutoUtils.getStow(9.4),
-                                                AutoUtils.getintake(10.3),
+                                                AutoUtils.getintake(9.6),
                                                 AutoUtils.getShoot(13.04)));
         }
 
 
+        // public static Command getSource(){
 
+        // }
 
         public static Command get4PieceNoRotation() {
                 Pose2d startingPos = new Pose2d(
