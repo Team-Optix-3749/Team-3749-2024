@@ -57,6 +57,7 @@ public class Autos {
                                                 AutoUtils.getintake(10.3),
                                                 AutoUtils.getStow(12.75)));
         }
+        
 
 
              public static Command get5Piece() {
@@ -79,13 +80,27 @@ public class Autos {
                                                 AutoUtils.getStartVision(9.4),
                                                 // AutoUtils.getStow(9.4),
                                                 AutoUtils.getintake(9.6),
-                                                AutoUtils.getShoot(13.04)));
+                                                AutoUtils.getShoot(12.92)));
         }
 
 
-        // public static Command getSource(){
+        public static Command getSource(){
+                Pose2d startingPos = new Pose2d(
+                                new Translation2d(0.762, 4.484),
+                                Rotation2d.fromRadians(-0.991));
 
-        // }
+                return new SequentialCommandGroup(
+                                AutoUtils.getFirstShot(0),
+
+                                new ParallelCommandGroup(
+                                                AutoUtils.getChoreoAutoPath("Source", startingPos),
+                                                AutoUtils.getintake(2),
+                                                AutoUtils.getShoot(5.7),
+                                                AutoUtils.getintake(8),
+                                                AutoUtils.getShoot(12.15),
+                                                AutoUtils.getStow(13.6)
+                                              ));
+        }
 
         public static Command get4PieceNoRotation() {
                 Pose2d startingPos = new Pose2d(

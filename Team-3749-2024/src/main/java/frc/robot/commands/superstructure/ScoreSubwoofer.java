@@ -3,6 +3,7 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmSim;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
@@ -67,36 +68,31 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
     @Override
     public void autoExecute() {
-        // Robot.shooter.setState(ShooterStates.SPOOL);
-        // Robot.arm.setGoal(ArmStates.SUBWOOFER);
-        // Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
-
-        // if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
-        //     fullDeployedWrist = true;
-        // }
+    
+        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
+            fullDeployedWrist = true;
+        }
       
-        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-        //     subwoofedArm = true;
-        // }
+        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+            subwoofedArm = true;
+        }
 
+        Robot.wrist.moveWristToGoal();
 
-        // if (subwoofedArm && fullDeployedWrist){
-        //     Robot.led.setLEDPattern(LEDPattern.BLUE);
-        //     Robot.intake.setState(IntakeStates.FEED);
-        // }
-        // Robot.wrist.moveWristToGoal();
-        // // }
+        Robot.arm.moveToGoal();
 
-        // Robot.arm.moveToGoal();
-        execute();
-
-        // SmartDashboard.putBoolean("full dep", f  ullDeployedWrist);
+        if (subwoofedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
+            Robot.led.setLEDPattern(LEDPattern.BLUE);
+        }
     }
 
     @Override
     public void autoStart(){
-        start();
-    }
+        Robot.shooter.setState(ShooterStates.SPOOL);
+        Robot.intake.setState(IntakeStates.STOP);
+        Robot.arm.setGoal(Units.degreesToRadians(9.5));
+        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);    }
+
     @Override
     public void autoReset() {
         reset();
