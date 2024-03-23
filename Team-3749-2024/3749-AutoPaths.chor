@@ -22104,7 +22104,7 @@
                 {
                     "x": 7.863107204437256,
                     "y": 0.7649683952331543,
-                    "heading": 0,
+                    "heading": -1.6171089079462089,
                     "isInitialGuess": false,
                     "translationConstrained": true,
                     "headingConstrained": true,
@@ -24373,7 +24373,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "5 piece": {
             "waypoints": [
