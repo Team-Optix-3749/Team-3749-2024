@@ -230,6 +230,10 @@ public class ShootKinematics {
         Translation2d distanceVector = currentPose2d.getTranslation().minus(getSpeakerPosition());
 
         Rotation2d rotation = new Rotation2d(Math.atan2(distanceVector.getY(), distanceVector.getX()));
+        
+        if (!MiscConstants.isRedAlliance()){
+            rotation.plus(new Rotation2d(Math.PI));
+        }
         SmartDashboard.putNumberArray("rotated robot",
                 new double[] { currentPose2d.getX(), currentPose2d.getY(), rotation.getDegrees() });
         return rotation;
