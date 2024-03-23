@@ -77,7 +77,7 @@ public class JoystickIO {
      * If both controllers are plugged in (pi and op)
      */
     public void pilotAndOperatorBindings() {
-        Robot.pilot.povLeft().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
+        // Robot.pilot.povLeft().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
         // gyro
         Robot.pilot.start().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
