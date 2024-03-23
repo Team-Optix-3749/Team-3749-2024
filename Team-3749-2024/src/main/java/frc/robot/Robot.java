@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.commands.superstructure.SuperStructureCommands;
+import frc.robot.commands.swerve.AutoUtils;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -105,7 +106,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     wrist.setBrakeMode();
-
+  AutoUtils.getStartVision(0);
     state = SuperStructureStates.STOW;
 
 

@@ -74,13 +74,15 @@ public class Autos {
                                                 AutoUtils.getShoot(1.85),
                                                 AutoUtils.getStopVision(1.9),
                                                 AutoUtils.getintake(3.5),
-                                                AutoUtils.getShoot(5.35),
+                                                AutoUtils.getShoot(5.42),
                                                 AutoUtils.getintake(6.5),
                                                 AutoUtils.getShoot(8.45),
                                                 // AutoUtils.getStartVision(9.4),
                                                 // AutoUtils.getStow(9.4),
                                                 AutoUtils.getintake(9.6),
-                                                AutoUtils.getShoot(13.05)));
+                                                
+                                                AutoUtils.getShoot(13.05),
+                                                AutoUtils.getStartVision(12)));
         }
 
 
