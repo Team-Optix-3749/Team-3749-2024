@@ -89,7 +89,7 @@ public class AutoUtils {
       SmartDashboard.putNumber("pose theta after", fieldStartingPose.getRotation().getDegrees());
 
     }
-
+    // Robot.swerve.resetGyro();;
     Robot.swerve.resetOdometry(fieldStartingPose);
     PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(autoPathName);
     Command cmd = AutoBuilder.followPath(path);
@@ -180,7 +180,7 @@ public class AutoUtils {
     return new SequentialCommandGroup(
         new WaitCommand(wait),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        getFeed(1.05));
+        getFeed(1.1));
   }
 
   public static Command getPodiumShot(double wait) {
