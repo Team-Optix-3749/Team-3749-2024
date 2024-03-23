@@ -45,10 +45,7 @@ public class AlignToAmp extends Command {
     private final PIDController turnController = new PIDController(5, 0, 0.15);
 
 
-    public AlignToAmp(
-            Supplier<Double> xSpdFunction,
-            Supplier<Double> ySpdFunction,
-            Supplier<Double> xTurningSpdFunction) {
+    public AlignToAmp() {
         this.swerve = Robot.swerve;
 
         addRequirements(swerve);

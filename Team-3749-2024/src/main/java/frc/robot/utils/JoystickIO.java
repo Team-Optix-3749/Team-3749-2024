@@ -18,6 +18,7 @@ import frc.robot.commands.arm.Climb;
 import frc.robot.commands.arm.GetConstraints;
 import frc.robot.commands.arm.MoveArmToGoal;
 import frc.robot.commands.superstructure.GroundIntake;
+import frc.robot.commands.swerve.AlignToAmp;
 // import frc.robot.commands.arm.ArmMoveToGoal;
 import frc.robot.commands.swerve.SwerveTeleop;
 import frc.robot.commands.swerve.SwerveTeleopShoot;
@@ -124,7 +125,7 @@ public class JoystickIO {
         Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
-                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
+                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter)).whileFalse(new AlignToAmp());
 
         // feed
         Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
