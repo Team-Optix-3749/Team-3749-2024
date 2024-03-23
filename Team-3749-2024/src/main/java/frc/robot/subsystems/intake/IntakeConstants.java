@@ -20,7 +20,7 @@ public final class IntakeConstants {
     public static final double kV = 0.083;
 
     public static final double intakeVelocityRadPerSec = 120;
-    public static final double outtakeVelocityRadPerSec = -30;
+    public static final double outtakeVelocityRadPerSec = -15;
 
     public enum IntakeStates {
         STOP,

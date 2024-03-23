@@ -40,8 +40,8 @@ public class AlignToAmp extends Command {
 
     private final Swerve swerve;
 
-    private final PIDController xController = new PIDController(2, 0, 0);
-    private final PIDController yController = new PIDController(2, 0, 0);
+    private final PIDController xController = new PIDController(2.5, 0, 0);
+    private final PIDController yController = new PIDController(2.5, 0, 0);
     private final PIDController turnController = new PIDController(5, 0, 0.15);
 
 
@@ -50,7 +50,7 @@ public class AlignToAmp extends Command {
 
         addRequirements(swerve);
         turnController.enableContinuousInput(0, 2 * Math.PI);
-        turnController.setTolerance((Units.degreesToRadians(1.5)));
+        turnController.setTolerance((Units.degreesToRadians(2.5)));
         xController.setTolerance(0.05);
         yController.setTolerance(0.05);
 
@@ -68,7 +68,7 @@ public class AlignToAmp extends Command {
         Pose2d currentPose = Robot.swerve.getPose();
         
         double currentRotationRad = currentPose.getRotation().getRadians();
-        double desiredRotationRad = -Math.PI/2;
+        double desiredRotationRad = Math.PI/2;
         while (desiredRotationRad < 0) {
             desiredRotationRad += 2 * Math.PI;
         }

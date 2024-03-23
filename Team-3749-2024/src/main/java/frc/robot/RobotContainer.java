@@ -66,7 +66,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.getSource();
+    return Autos.get5Piece();
 
   }
 }

@@ -161,7 +161,7 @@ public class Intake extends SubsystemBase {
     }
 
     private void outtake() {
-        setVoltage(-12);
+        setVoltage(-9);
         setHasPiece(false);
         setIndexedPiece(false);
         Robot.led.setLEDPattern(LEDPattern.WHITE);

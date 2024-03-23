@@ -122,12 +122,12 @@ public class JoystickIO {
                 }, Robot.wrist));
 
         // amp
-        Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.state = SuperStructureStates.STOW;
-                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter)).whileTrue(new AlignToAmp());
+        // Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
+        //         .onFalse(Commands.runOnce(() -> {
+        //             Robot.state = SuperStructureStates.STOW;
+        //         }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter)).whileTrue(new AlignToAmp());
 
-        Robot.operator.povUp().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
+        Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
