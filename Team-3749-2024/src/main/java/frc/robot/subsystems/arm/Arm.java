@@ -309,7 +309,8 @@ public class Arm extends SubsystemBase {
             armIO.setBreakMode();
             isEnabled = driverStationStatus;
         }
-
+        
+        // armIO.setCoastMode();
         SmartDashboard.putNumber("calced arm rad", ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose()));
         ShootKinematics.getRobotRotation(Robot.swerve.getPose());
     }
