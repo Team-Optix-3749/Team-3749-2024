@@ -125,7 +125,13 @@ public class JoystickIO {
         Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
-                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter)).whileFalse(new AlignToAmp());
+                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter)).whileTrue(new AlignToAmp());
+
+        Robot.operator.povUp().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.arm, Robot.wrist, Robot.intake, Robot.shooter));
+
 
         // feed
         Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
