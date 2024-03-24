@@ -69,6 +69,13 @@ public class Shooter extends SubsystemBase {
     return (data.topShooterVelocityRadPerSec + data.bottomShooterVelocityRadPerSec) / 2;
   }
 
+  public double getTopVelocityRadPerSec(){
+    return data.topShooterVelocityRadPerSec;
+  }
+    public double getBottomVelocityRadPerSec(){
+    return data.bottomShooterVelocityRadPerSec;
+  }
+
   public ShooterStates getState() {
     return state;
   }
@@ -129,8 +136,9 @@ public class Shooter extends SubsystemBase {
   }
 
   private void intake() {
+    
     // this is just for the setpoint checker below
-    setVoltage(-0.5, -0.5);
+    setVoltage(-0.75, -0.75);
     if (!intakeSpedUp && UtilityFunctions.withinMargin(15, Robot.intake.getVelocityRadPerSec(), IntakeConstants.intakeVelocityRadPerSec)) {
       intakeSpedUp = true;     
        timer.stop();
@@ -138,7 +146,7 @@ public class Shooter extends SubsystemBase {
       timer.start();
     }
     SmartDashboard.putNumber("Index Timer", timer.get());
-    if (getVelocityRadPerSec() > -0.05 && intakeSpedUp && timer.get()>0.45) {
+    if ((getBottomVelocityRadPerSec() > -15 || getTopVelocityRadPerSec() > -15) && intakeSpedUp && timer.get()>0.4) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
       timer.stop();
@@ -153,7 +161,7 @@ public class Shooter extends SubsystemBase {
     setVoltage(-1.2, -1.2);
 
     
-    if (getVelocityRadPerSec() < -30) {
+    if ((getBottomVelocityRadPerSec() < -30 && getTopVelocityRadPerSec() < -30)) {
       state = ShooterStates.STOP;
       Robot.intake.setIndexedPiece(true);
     }

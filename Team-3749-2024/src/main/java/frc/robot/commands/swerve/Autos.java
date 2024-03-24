@@ -75,7 +75,7 @@ public class Autos {
                                                 AutoUtils.getStopVision(1.9),
                                                 AutoUtils.getintake(3.5),
                                                 AutoUtils.getShoot(5.47),
-                                                AutoUtils.getintake(6.5),
+                                                AutoUtils.getintake(6.65),
                                                 AutoUtils.getShoot(8.45),
                                                 // AutoUtils.getStartVision(9.4),
                                                 // AutoUtils.getStow(9.4),
@@ -96,7 +96,9 @@ public class Autos {
 
                                 new ParallelCommandGroup(
                                                 AutoUtils.getChoreoAutoPath("Source", startingPos),
+                                                
                                                 AutoUtils.getintake(2),
+                                                AutoUtils.getStartVision(0),
                                                 AutoUtils.getShoot(5.7),
                                                 AutoUtils.getintake(8),
                                                 AutoUtils.getShoot(12.15),

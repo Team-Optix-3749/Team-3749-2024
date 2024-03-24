@@ -1,6 +1,7 @@
 package frc.robot.subsystems.wrist;
 
 import java.util.HashMap;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
@@ -16,6 +17,7 @@ import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.subsystems.wrist.WristIO.WristData;
 import frc.robot.utils.ShuffleData;
 import frc.robot.utils.UtilityFunctions;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Wrist extends SubsystemBase {
     // hello test
@@ -98,6 +100,8 @@ public class Wrist extends SubsystemBase {
         return (data.velocityRadPerSec);
     }
 
+    private Timer timer = new Timer();
+
     public void moveWristToGoal() {
 
         double pidGain = wristController.calculate(data.positionRad);
@@ -129,9 +133,19 @@ public class Wrist extends SubsystemBase {
         }
         if (state == WristStates.FULL_DEPLOYED && getWristGoal().position == WristConstants.fullDeployedRad
                 && voltage < 1.5) {
-            voltage = 1.5;
-        }
+            if (timer.get() == 0 ){
+                timer.start();
+            }
+            if (timer.get() < 0.25){
 
+                voltage = 1.5;
+            }
+        }
+        else {
+
+            timer.stop();
+            timer.reset();
+        }
         setVoltage(voltage);
         // double volts = 0;
         // volts += calculateGravityFeedForward(data.positionRad,

@@ -90,7 +90,7 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
     public void autoStart(){
         Robot.shooter.setState(ShooterStates.SPOOL);
         Robot.intake.setState(IntakeStates.STOP);
-        Robot.arm.setGoal(Units.degreesToRadians(10));
+        Robot.arm.setGoal(Units.degreesToRadians(13));
         Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);    }
 
     @Override

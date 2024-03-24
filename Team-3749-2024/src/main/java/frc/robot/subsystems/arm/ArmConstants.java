@@ -23,7 +23,7 @@ public final class ArmConstants {
         public static final double subwooferPositionRad = Units.degreesToRadians(12);
         public static final double ampPositionRad = Units.degreesToRadians(52);
         public static final double podiumPositionRad = Units.degreesToRadians(35);
-        public static final double groundIntakepositionRad = Units.degreesToRadians(6.25);
+        public static final double groundIntakepositionRad = Units.degreesToRadians(4.5);
         public static final double sourcePositionRad = Units.degreesToRadians(110);
 
         public enum ArmStates {
