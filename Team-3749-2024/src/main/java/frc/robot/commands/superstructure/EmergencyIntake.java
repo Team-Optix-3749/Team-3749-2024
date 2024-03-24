@@ -64,7 +64,7 @@ public class EmergencyIntake implements SuperStructureCommandInterface {
     @Override
     public void autoExecute() {
         // execute();
-        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad - Units.degreesToRadians(1.5));
+        Robot.arm.setGoal(ArmConstants.groundIntakepositionRad);
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 

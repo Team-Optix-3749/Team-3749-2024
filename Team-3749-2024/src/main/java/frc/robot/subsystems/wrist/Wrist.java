@@ -127,6 +127,10 @@ public class Wrist extends SubsystemBase {
                     : velocityRadPerSec * WristConstants.realkVBackward;
             voltage += calculateGravityFeedForward(data.positionRad, Robot.arm.getPositionRad());
         }
+        if (state == WristStates.FULL_DEPLOYED && getWristGoal().position == WristConstants.fullDeployedRad
+                && voltage < 1.5) {
+            voltage = 1.5;
+        }
 
         setVoltage(voltage);
         // double volts = 0;
