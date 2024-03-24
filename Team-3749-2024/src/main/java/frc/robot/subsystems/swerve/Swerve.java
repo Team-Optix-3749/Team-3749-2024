@@ -220,7 +220,7 @@ public class Swerve extends SubsystemBase {
 
   public void visionUpdateOdometry(LimelightHelpers.LimelightPose visionPose) {
     if (utilizeVision) {
-
+      SmartDashboard.putBoolean("use vision", utilizeVision);
       swerveDrivePoseEstimator.addVisionMeasurement(visionPose.pose,
           visionPose.timestamp);
     }

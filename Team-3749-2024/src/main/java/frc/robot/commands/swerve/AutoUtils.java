@@ -175,12 +175,13 @@ public class AutoUtils {
         Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT),
         getFeed(0.85));
   }
-    public static Command getFirstShot(double wait) {
+
+  public static Command getFirstShot(double wait) {
     System.out.println("subwoofer");
     return new SequentialCommandGroup(
         new WaitCommand(wait),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        getFeed(1.1));
+        getFeed(1.5));
   }
 
   public static Command getPodiumShot(double wait) {
@@ -216,14 +217,16 @@ public class AutoUtils {
         Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake),
         Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter));
   }
-  public static Command getStopVision(double wait){
+
+  public static Command getStopVision(double wait) {
     System.out.println("stop vision");
-    return Commands.run(() -> Robot.swerve.setUtilizeVision(false));
+    return Commands.runOnce(() -> Robot.swerve.setUtilizeVision(false));
 
   }
-    public static Command getStartVision(double wait){
+
+  public static Command getStartVision(double wait) {
     System.out.println("start vision");
-    return Commands.run(() -> Robot.swerve.setUtilizeVision(true));
+    return new SequentialCommandGroup(new WaitCommand(wait), Commands.runOnce(() -> Robot.swerve.setUtilizeVision(true)));
 
   }
 }
