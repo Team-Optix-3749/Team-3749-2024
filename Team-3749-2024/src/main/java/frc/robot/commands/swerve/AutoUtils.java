@@ -181,7 +181,7 @@ public class AutoUtils {
     return new SequentialCommandGroup(
         new WaitCommand(wait),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        getFeed(1.5));
+        getFeed(2));
   }
 
   public static Command getPodiumShot(double wait) {
