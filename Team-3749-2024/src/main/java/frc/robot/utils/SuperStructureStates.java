@@ -14,7 +14,8 @@ public enum SuperStructureStates{
     PODIUM(WristStates.FULL_DEPLOYED,ArmStates.PODIUM),
     AIMBOT(WristStates.STOW, ArmStates.AIMBOT),
     SOURCE(WristStates.STOW, ArmStates.SOURCE),
-    RESET(WristStates.STOW, ArmStates.STOW);
+    RESET(WristStates.STOW, ArmStates.STOW),
+    PASS(WristStates.PASS, ArmStates.STOW);
 
     
     public WristStates wristState;

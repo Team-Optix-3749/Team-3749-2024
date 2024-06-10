@@ -77,6 +77,33 @@ public class JoystickIO {
      * If both controllers are plugged in (pi and op)
      */
     public void pilotAndOperatorBindings() {
+        /**
+         * Pilot:
+         * L2: Intake
+         * L1: Outtake
+         * R2: Source Intake
+         * R1: 
+         * X: Outtake
+         * Y:
+         * A:
+         * B: 
+         * Start: Reset Gyro
+         * 
+         * Operator:
+         * L2: Subwoofer
+         * L1: Amp
+         * R2: Aimbot
+         * R1:
+         * X:
+         * Y: Pass
+         * A:
+         * B: Shoot
+         * Start:
+         * Back?: Climb
+         * DPadDown: Reset
+         */
+
+
         // Robot.pilot.povLeft().onTrue(Commands.runOnce(() -> Robot.swerve.resetGyro()));
 
         // gyro
@@ -99,6 +126,11 @@ public class JoystickIO {
         // outtake
         Robot.pilot.x().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.OUTTAKE), Robot.intake))
                 .onFalse(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.STOP), Robot.intake));
+
+        Robot.pilot.y().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.PASS))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.state = SuperStructureStates.STOW;
+                }, Robot.wrist, Robot.intake));
 
         // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve
         // .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new

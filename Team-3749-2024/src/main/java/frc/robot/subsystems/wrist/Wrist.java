@@ -65,17 +65,23 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setGoal(WristStates state) {
-        if (state == WristStates.ALMOST_DEPLOYED) {
-            wristController.setGoal(WristConstants.almostDeployedRad);
-        }
-        if (state == WristStates.STOW) {
-            wristController.setGoal(WristConstants.stowGoalRad);
-        }
-        if (state == WristStates.FULL_DEPLOYED) {
-            wristController.setGoal(WristConstants.fullDeployedRad);
-        }
-        if (state == WristStates.SUBWOOFER) {
-            wristController.setGoal(WristConstants.subwooferRad);
+        switch (state) {
+            case ALMOST_DEPLOYED:
+                wristController.setGoal(WristConstants.almostDeployedRad);
+                break;
+            case PASS:
+                wristController.setGoal(WristConstants.passingRad);
+                break;
+            case FULL_DEPLOYED:
+                wristController.setGoal(WristConstants.fullDeployedRad);
+                break;
+            case SUBWOOFER:
+                wristController.setGoal(WristConstants.subwooferRad);
+                break;
+
+            default: // STOW condition + something went horribly wrong :)
+                wristController.setGoal(WristConstants.stowGoalRad);
+                break;
         }
 
     }
@@ -133,15 +139,14 @@ public class Wrist extends SubsystemBase {
         }
         if (state == WristStates.FULL_DEPLOYED && getWristGoal().position == WristConstants.fullDeployedRad
                 && voltage < 1.5) {
-            if (timer.get() == 0 ){
+            if (timer.get() == 0) {
                 timer.start();
             }
-            if (timer.get() < 0.25){
+            if (timer.get() < 0.25) {
 
                 voltage = 1.5;
             }
-        }
-        else {
+        } else {
 
             timer.stop();
             timer.reset();

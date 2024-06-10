@@ -21,8 +21,8 @@ public class SuperStructureCommands {
     private ClimbDown climbDown = new ClimbDown();
     private Aimbot aimbot = new Aimbot();
     private IntakeSource source = new IntakeSource();
+    private Pass pass = new Pass();
     private SuperStructureCommandInterface currentCommand = stow;
-
 
     public SuperStructureCommands() {
     }
@@ -48,9 +48,6 @@ public class SuperStructureCommands {
         SmartDashboard.putString("current command", currentCommand.getClass().getName());
 
         switch (Robot.state) {
-            case STOW:
-                switchCommands(stow);
-                break;
             case GROUND_INTAKE:
                 switchCommands(groundIntake);
                 break;
@@ -77,6 +74,12 @@ public class SuperStructureCommands {
                 break;
             case SOURCE:
                 switchCommands(source);
+                break;
+            case PASS:
+                switchCommands(pass);
+                break;
+            default:
+                switchCommands(stow);
                 break;
         }
         if (DriverStation.isAutonomous()) {
