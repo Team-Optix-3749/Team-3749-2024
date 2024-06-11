@@ -80,7 +80,7 @@ public class Autos {
                                                 // AutoUtils.getStartVision(9.4),
                                                 // AutoUtils.getStow(9.4),
                                                 AutoUtils.getintake(9.6),
-                                                
+                                                AutoUtils.getStow(12.4),
                                 
                                                 AutoUtils.getStartVision(10)));
         }
