@@ -22,14 +22,11 @@ public class Pass implements SuperStructureCommandInterface {
 
     @Override
     public void execute() {
-        Robot.wrist.setGoal(WristStates.PASS);
-        Robot.arm.setGoal(ArmStates.STOW);
 
         Robot.arm.moveToGoal();
         Robot.wrist.moveWristToGoal();
 
-        Robot.intake.setState(IntakeStates.INTAKE);
-        Robot.shooter.setState(ShooterStates.INTAKE);
+        Robot.shooter.setState(ShooterStates.SPOOL);
     }
 
     @Override
@@ -38,11 +35,12 @@ public class Pass implements SuperStructureCommandInterface {
 
     @Override
     public void start() {
-        if (!Robot.intake.getHasPiece()) {
-        }
 
         Robot.intake.setState(IntakeStates.STOP);
-        Robot.shooter.setState(ShooterStates.STOP);
+        Robot.wrist.setGoal(WristStates.PASS);
+        Robot.arm.setGoal(ArmStates.STOW);
+        Robot.shooter.setState(ShooterStates.SPOOL);
+
     }
 
 }
