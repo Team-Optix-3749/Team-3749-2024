@@ -1,5 +1,8 @@
 package frc.robot.subsystems.arm;
 
+import java.io.File;
+import java.io.IOException;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -80,6 +83,13 @@ public class Arm extends SubsystemBase {
         } else {
             armIO = new ArmSparkMax();
         }
+        try {
+            ShootKinematics.loadDistCSV();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         feedback.setGoal(ArmConstants.stowPositionRad);
 
     }
@@ -110,6 +120,16 @@ public class Arm extends SubsystemBase {
         }
         if (state == ArmStates.PODIUM) {
             feedback.setGoal(ArmConstants.podiumPositionRad);
+        }
+        if (state == ArmStates.AIMBOT) {
+            double calcedArmAngle = ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose());
+            if (calcedArmAngle < 0) {
+                calcedArmAngle = Math.PI / 4;
+            }
+            Robot.arm.setGoal(calcedArmAngle);
+        }
+        if (state == ArmStates.SOURCE) {
+            feedback.setGoal(ArmConstants.sourcePositionRad);
         }
     }
 
@@ -217,8 +237,8 @@ public class Arm extends SubsystemBase {
         return feedback.calculate(currentPositionRad);
     }
 
-    private boolean atGoal() {
-        return (Math.abs(data.positionRad - getGoal()) < 0.15);
+    public boolean atGoal() {
+        return (Math.abs(data.positionRad - getGoal()) < 0.1);
     }
 
     public void updateState() {
@@ -255,6 +275,9 @@ public class Arm extends SubsystemBase {
         if (getGoal() == ArmConstants.groundIntakepositionRad) {
             state = ArmStates.GROUND_INTAKE;
         }
+        if (getGoal() == ArmConstants.sourcePositionRad) {
+            state = ArmStates.SOURCE;
+        }
     }
 
     // runs every 0.02 sec
@@ -283,10 +306,13 @@ public class Arm extends SubsystemBase {
             armIO.setBreakMode();
         }
         if (!driverStationStatus && isEnabled) {
-            armIO.setCoastMode();
+            armIO.setBreakMode();
             isEnabled = driverStationStatus;
         }
-
+        
+        // armIO.setCoastMode();
+        SmartDashboard.putNumber("calced arm rad", ShootKinematics.getArmAngleRadGivenPose(Robot.swerve.getPose()));
+        ShootKinematics.getRobotRotation(Robot.swerve.getPose());
     }
 
 }

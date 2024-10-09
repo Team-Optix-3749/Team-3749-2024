@@ -3,8 +3,8 @@ package frc.robot.commands.superstructure;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmSim;
+import frc.robot.subsystems.arm.ShootKinematics;
 import frc.robot.subsystems.arm.ArmConstants.ArmStates;
 import frc.robot.subsystems.intake.IntakeConstants.IntakeStates;
 import frc.robot.subsystems.led.LEDConstants.LEDPattern;
@@ -13,13 +13,13 @@ import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.UtilityFunctions;
 
-public class ScoreSubwoofer implements SuperStructureCommandInterface {
+public class Aimbot implements SuperStructureCommandInterface {
     private boolean fullDeployedWrist = false;
     private boolean almostDeployedWrist = false;
     private boolean subwoofedArm = false;
     private boolean staticWrist = false;
 
-    public ScoreSubwoofer() {
+    public Aimbot() {
     }
 
     @Override
@@ -28,16 +28,12 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
         if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
             fullDeployedWrist = true;
         }
-      
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            subwoofedArm = true;
-        }
-
+        Robot.arm.setGoal(ArmStates.AIMBOT);
         Robot.wrist.moveWristToGoal();
 
         Robot.arm.moveToGoal();
 
-        if (subwoofedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
+        if (Robot.arm.atGoal() && fullDeployedWrist && Robot.shooter.getVelocityRadPerSec()>540){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
     }
@@ -68,31 +64,36 @@ public class ScoreSubwoofer implements SuperStructureCommandInterface {
 
     @Override
     public void autoExecute() {
-    
-        if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
-            fullDeployedWrist = true;
-        }
+        // Robot.shooter.setState(ShooterStates.SPOOL);
+        // Robot.arm.setGoal(ArmStates.SUBWOOFER);
+        // Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
+
+        // if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
+        //     fullDeployedWrist = true;
+        // }
       
-        if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-            subwoofedArm = true;
-        }
+        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+        //     subwoofedArm = true;
+        // }
 
-        Robot.wrist.moveWristToGoal();
 
-        Robot.arm.moveToGoal();
+        // if (subwoofedArm && fullDeployedWrist){
+        //     Robot.led.setLEDPattern(LEDPattern.BLUE);
+        //     Robot.intake.setState(IntakeStates.FEED);
+        // }
+        // Robot.wrist.moveWristToGoal();
+        // // }
 
-        if (subwoofedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
-            Robot.led.setLEDPattern(LEDPattern.BLUE);
-        }
+        // Robot.arm.moveToGoal();
+        execute();
+
+        // SmartDashboard.putBoolean("full dep", f  ullDeployedWrist);
     }
 
     @Override
     public void autoStart(){
-        Robot.shooter.setState(ShooterStates.SPOOL);
-        Robot.intake.setState(IntakeStates.STOP);
-        Robot.arm.setGoal(Units.degreesToRadians(11.5));
-        Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);    }
-
+        start();
+    }
     @Override
     public void autoReset() {
         reset();

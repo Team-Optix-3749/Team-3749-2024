@@ -49,7 +49,6 @@ public class RobotContainer {
 
 
     RobotController.setBrownoutVoltage(7.0);
-    Robot.swerve.resetOdometry(new Pose2d(14.6, 5.1, new Rotation2d(Math.PI)));
     // Robot.swerve.setDefaultCommand(new Teleop(pilot::getLeftX, pilot::getLeftY,
     // pilot::getRightX, pilot::getRightY));
   }
@@ -67,7 +66,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.get4Piece();
+    return Autos.get5Piece();
 
   }
 }

@@ -39,7 +39,7 @@ public class Podium implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        if (podiumedArm && fullDeployedWrist){
+        if (podiumedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
 
@@ -49,6 +49,8 @@ public class Podium implements SuperStructureCommandInterface {
     public void reset() {
         Robot.intake.setState(IntakeStates.STOP);
         Robot.shooter.setState(ShooterStates.STOP);
+        Robot.led.setLEDPattern(LEDPattern.WHITE);
+
         Robot.wrist.setVoltage(0);
 
         fullDeployedWrist = false;
@@ -75,7 +77,7 @@ public class Podium implements SuperStructureCommandInterface {
         }
 
 
-        if (podiumedArm && fullDeployedWrist){
+        if (podiumedArm && fullDeployedWrist&& Robot.shooter.getVelocityRadPerSec()>540){
             Robot.led.setLEDPattern(LEDPattern.BLUE);
             Robot.intake.setState(IntakeStates.FEED);
         }

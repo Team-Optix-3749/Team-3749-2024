@@ -14,16 +14,17 @@ public final class ArmConstants {
         // inverse gear ratio * 1min/60sec * 2PI to get rad/sec
         public static final double gearRatio = 200.0;
 
-        public static final double sprocketRatio = 64.0 / 24.0;
+        public static final double sprocketRatio = 64.0 / 24.0; 
         public static final int encoderID = 7;
-        public static final double encoderOffsetRad = Units.degreesToRadians(76.67);
+        public static final double encoderOffsetRad = Units.degreesToRadians(124.45);
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(102.5);
-        public static final double subwooferPositionRad = Units.degreesToRadians(18);
-        public static final double ampPositionRad = Units.degreesToRadians(114);
+        public static final double subwooferPositionRad = Units.degreesToRadians(12);
+        public static final double ampPositionRad = Units.degreesToRadians(52);
         public static final double podiumPositionRad = Units.degreesToRadians(35);
-        public static final double groundIntakepositionRad = Units.degreesToRadians(4);
+        public static final double groundIntakepositionRad = Units.degreesToRadians(4.5);
+        public static final double sourcePositionRad = Units.degreesToRadians(110);
 
         public enum ArmStates {
                 
@@ -34,6 +35,8 @@ public final class ArmConstants {
                 SUBWOOFER,
                 PODIUM,
                 GROUND_INTAKE,
+                AIMBOT,
+                SOURCE,
                 IN_TRANIST;
         }
 
@@ -98,16 +101,15 @@ public final class ArmConstants {
 
 
         // Field Parameters
-        public static final double armHeightOffset = 0.2159;
-        public static final double armLengthOffset = 0.2286;
-        public static final double armLength = 0.93;
-        public static final double shooterVelocity = 20.0; // NOTE: likely will vary, might need to pass as
+        public static final double armHeightOffset = Units.inchesToMeters(12.75);
+        public static final double armLengthOffset = -0.2286;
+        public static final double armLength = 0.61;
+        public static final double shooterVelocity = 12.5; // NOTE: likely will vary, might need to pass as
                                                            // parameter
 
         // Field Parameters
-        public static final double speakerHeight = Units.inchesToMeters(78.13); // likely thing you'll need to tune
-        // public static final double speakerLength = Units.inchesToMeters(18.11/4); // likely thing you'll need to tune
 
+        public static final double speakerHeight = Units.inchesToMeters(78.35);; // likely thing you'll need to tune
         public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
         // Calcuation stuff

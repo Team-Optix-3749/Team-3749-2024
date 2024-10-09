@@ -34,7 +34,9 @@ public class ShooterSparkMax implements ShooterIO {
         topEncoder.setPositionConversionFactor(2 * Math.PI);
 
         topShooter.setIdleMode(IdleMode.kCoast);
-        bottomShooter.setIdleMode(IdleMode.kCoast);     
+        bottomShooter.setIdleMode(IdleMode.kCoast); 
+        bottomShooter.setIdleMode(IdleMode.kBrake);
+        topShooter.setIdleMode(IdleMode.kBrake);
     }
 
 
@@ -42,6 +44,7 @@ public class ShooterSparkMax implements ShooterIO {
     public void updateData(ShooterData data) {
         data.topShooterVolts = topShooter.getBusVoltage() * topShooter.getAppliedOutput();
         data.topShooterVelocityRadPerSec = topEncoder.getVelocity();
+        
         data.topShooterTempCelcius = topShooter.getMotorTemperature();
         data.topShooterPositionRad = topEncoder.getPosition();
         data.topShooterCurrentAmps = topShooter.getOutputCurrent();

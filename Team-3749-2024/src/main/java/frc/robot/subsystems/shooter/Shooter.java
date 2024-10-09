@@ -1,13 +1,18 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants.ShooterStates;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterData;
 import frc.robot.subsystems.wrist.WristConstants.WristStates;
 import frc.robot.utils.ShuffleData;
+import frc.robot.utils.UtilityFunctions;
 
 public class Shooter extends SubsystemBase {
 
@@ -51,6 +56,8 @@ public class Shooter extends SubsystemBase {
   private ShuffleData<String> stateLog = new ShuffleData<String>(this.getName(), "state",
       ShooterStates.STOP.name());
 
+  private Timer timer = new Timer();
+
   public Shooter() {
     shooterIO = new ShooterSparkMax();
     if (Robot.isSimulation()) {
@@ -60,6 +67,13 @@ public class Shooter extends SubsystemBase {
 
   public double getVelocityRadPerSec() {
     return (data.topShooterVelocityRadPerSec + data.bottomShooterVelocityRadPerSec) / 2;
+  }
+
+  public double getTopVelocityRadPerSec(){
+    return data.topShooterVelocityRadPerSec;
+  }
+    public double getBottomVelocityRadPerSec(){
+    return data.bottomShooterVelocityRadPerSec;
   }
 
   public ShooterStates getState() {
@@ -100,6 +114,7 @@ public class Shooter extends SubsystemBase {
         stop();
         break;
       case INTAKE:
+
         intake();
         break;
       case INDEX:
@@ -116,20 +131,29 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setState(ShooterStates state) {
+    intakeSpedUp = false;   
     this.state = state;
   }
 
   private void intake() {
+    
     // this is just for the setpoint checker below
-    setVoltage(-0.2, -0.2);
-    if (getVelocityRadPerSec() > 50) {
-      intakeSpedUp = true;
+    setVoltage(-0.75, -0.75);
+    if (!intakeSpedUp && UtilityFunctions.withinMargin(15, Robot.intake.getVelocityRadPerSec(), IntakeConstants.intakeVelocityRadPerSec)) {
+      intakeSpedUp = true;     
+       timer.stop();
+      timer.reset();
+      timer.start();
     }
-    if (getVelocityRadPerSec() < 0.2 && intakeSpedUp) {
+    SmartDashboard.putNumber("Index Timer", timer.get());
+    if ((getBottomVelocityRadPerSec() > -15 || getTopVelocityRadPerSec() > -15) && intakeSpedUp && timer.get()>0.48) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
+      timer.stop();
+      timer.reset();
       // state
     }
+    SmartDashboard.putBoolean("intake sped up", intakeSpedUp);
 
   }
 
@@ -137,9 +161,8 @@ public class Shooter extends SubsystemBase {
     setVoltage(-1.2, -1.2);
 
     
-    if (Math.abs(getVelocityRadPerSec()) > 30) {
+    if ((getBottomVelocityRadPerSec() < -30 && getTopVelocityRadPerSec() < -30)) {
       state = ShooterStates.STOP;
-      System.out.println("STOP INDEX");
       Robot.intake.setIndexedPiece(true);
     }
 

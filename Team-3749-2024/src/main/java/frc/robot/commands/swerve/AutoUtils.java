@@ -89,7 +89,7 @@ public class AutoUtils {
       SmartDashboard.putNumber("pose theta after", fieldStartingPose.getRotation().getDegrees());
 
     }
-
+    // Robot.swerve.resetGyro();;
     Robot.swerve.resetOdometry(fieldStartingPose);
     PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(autoPathName);
     Command cmd = AutoBuilder.followPath(path);
@@ -168,12 +168,20 @@ public class AutoUtils {
             Commands.runOnce(() -> Robot.state = SuperStructureStates.GROUND_INTAKE)));
   }
 
-  public static Command getSubwooferShot(double wait) {
+  public static Command getShoot(double wait) {
+    System.out.println("subwoofer");
+    return new SequentialCommandGroup(
+        new WaitCommand(wait),
+        Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT),
+        getFeed(0.85));
+  }
+
+  public static Command getFirstShot(double wait) {
     System.out.println("subwoofer");
     return new SequentialCommandGroup(
         new WaitCommand(wait),
         Commands.runOnce(() -> Robot.state = SuperStructureStates.SUBWOOFER),
-        getFeed(1.7));
+        getFeed(2));
   }
 
   public static Command getPodiumShot(double wait) {
@@ -210,4 +218,15 @@ public class AutoUtils {
         Commands.runOnce(() -> Robot.shooter.setState(ShooterStates.STOP), Robot.shooter));
   }
 
+  public static Command getStopVision(double wait) {
+    System.out.println("stop vision");
+    return Commands.runOnce(() -> Robot.swerve.setUtilizeVision(false));
+
+  }
+
+  public static Command getStartVision(double wait) {
+    System.out.println("start vision");
+    return new SequentialCommandGroup(new WaitCommand(wait), Commands.runOnce(() -> Robot.swerve.setUtilizeVision(true)));
+
+  }
 }

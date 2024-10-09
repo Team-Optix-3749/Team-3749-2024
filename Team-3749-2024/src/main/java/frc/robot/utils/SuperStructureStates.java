@@ -12,7 +12,11 @@ public enum SuperStructureStates{
     CLIMBDOWN(WristStates.STOW, ArmStates.STOW),
     SUBWOOFER(WristStates.FULL_DEPLOYED, ArmStates.SUBWOOFER),
     PODIUM(WristStates.FULL_DEPLOYED,ArmStates.PODIUM),
-    RESET(WristStates.STOW, ArmStates.STOW);
+    AIMBOT(WristStates.STOW, ArmStates.AIMBOT),
+    SOURCE(WristStates.STOW, ArmStates.SOURCE),
+    RESET(WristStates.STOW, ArmStates.STOW),
+    PASS(WristStates.PASS, ArmStates.STOW);
+
     
     public WristStates wristState;
     public ArmStates armState;
