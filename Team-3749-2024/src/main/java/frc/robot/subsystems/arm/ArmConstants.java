@@ -101,15 +101,16 @@ public final class ArmConstants {
 
 
         // Field Parameters
-        public static final double armHeightOffset = Units.inchesToMeters(12.75);
-        public static final double armLengthOffset = -0.2286;
-        public static final double armLength = 0.61;
-        public static final double shooterVelocity = 12.5; // NOTE: likely will vary, might need to pass as
+        // public static final double armHeightOffset = Units.inchesToMeters(12.75); // MOVED TO ARM ANGLE CALCULATOR
+        // public static final double armLengthOffset = -0.2286; //MOVED TO ARM ANGLE CALCULATOR
+        // public static final double armLength = 0.61; // MOVED TO ARM ANGLE CALCULATOR
+        // public static final double shooterVelocity = 12.5; // NOTE: likely will vary, might need to pass as
                                                            // parameter
 
         // Field Parameters
 
-        public static final double speakerHeight = Units.inchesToMeters(78.35);; // likely thing you'll need to tune
+        //MOVED TO ARM ANGLE CALCULATOR
+        // public static final double speakerHeight = Units.inchesToMeters(78.35);; // likely thing you'll need to tune
         public static final double minDistance = 0.9; // / NOTE: Not percise, please check
 
         // Calcuation stuff
