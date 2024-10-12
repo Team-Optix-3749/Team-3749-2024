@@ -79,14 +79,14 @@ public class JoystickIO {
     public void pilotAndOperatorBindings() {
         /**
          * Pilot:
-         * L2: Intake
-         * L1: Outtake
-         * R2: Source Intake
-         * R1: 
+         * LT: Ground Intake
+         * LB: Outtake
+         * RT: Source Intake
+         * RB: N/A
          * X: Outtake
-         * Y:Pass
-         * A:
-         * B: 
+         * Y: Pass
+         * A: N/A
+         * B: N/A
          * Start: Reset Gyro
          * 
          * Operator:
@@ -132,13 +132,6 @@ public class JoystickIO {
                     Robot.state = SuperStructureStates.STOW;
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.wrist, Robot.intake));
-        // feed
-        Robot.pilot.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
-                .onFalse(Commands.runOnce(() -> {
-                    Robot.intake.setState(IntakeStates.STOP);
-                    Robot.shooter.setState(ShooterStates.STOP);
-                }, Robot.intake));
-
 
         // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve
         // .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new
