@@ -132,7 +132,12 @@ public class JoystickIO {
                     Robot.state = SuperStructureStates.STOW;
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.wrist, Robot.intake));
-
+        // feed
+        Robot.pilot.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.intake.setState(IntakeStates.STOP);
+                    Robot.shooter.setState(ShooterStates.STOP);
+                }, Robot.intake));
         
         // OPERATOR
         Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
@@ -146,6 +151,13 @@ public class JoystickIO {
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
                 }, Robot.wrist));
+
+                // feed
+        Robot.operator.b().onTrue(Commands.runOnce(() -> Robot.intake.setState(IntakeStates.FEED)))
+                .onFalse(Commands.runOnce(() -> {
+                    Robot.intake.setState(IntakeStates.STOP);
+                    Robot.shooter.setState(ShooterStates.STOP);
+                }, Robot.intake));
 
         // amp
         // Robot.operator.leftBumper().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AMP))
