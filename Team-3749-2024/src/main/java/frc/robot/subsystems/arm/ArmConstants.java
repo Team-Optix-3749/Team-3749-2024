@@ -20,7 +20,7 @@ public final class ArmConstants {
 
         public static final double stowPositionRad = Units.degreesToRadians(1);
         public static final double climbPositionRad = Units.degreesToRadians(102.5);
-        public static final double subwooferPositionRad = Units.degreesToRadians(15);
+        public static final double subwooferPositionRad = Units.degreesToRadians(18.5);
         public static final double ampPositionRad = Units.degreesToRadians(55);
         public static final double podiumPositionRad = Units.degreesToRadians(35);
         public static final double groundIntakepositionRad = Units.degreesToRadians(4.5);
