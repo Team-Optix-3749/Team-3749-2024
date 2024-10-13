@@ -105,8 +105,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
     wrist.setBrakeMode();
-  AutoUtils.getStartVision(0);
+    AutoUtils.getStartVision(0);
     state = SuperStructureStates.STOW;
 
 

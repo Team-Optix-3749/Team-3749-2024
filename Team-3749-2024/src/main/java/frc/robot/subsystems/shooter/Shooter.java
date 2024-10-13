@@ -146,12 +146,12 @@ public class Shooter extends SubsystemBase {
       timer.start();
     }
     SmartDashboard.putNumber("Index Timer", timer.get());
-    if ((getBottomVelocityRadPerSec() > -15 || getTopVelocityRadPerSec() > -15) && intakeSpedUp && timer.get()>0.48) {
+    if ((getBottomVelocityRadPerSec() > -8 || getTopVelocityRadPerSec() > -8) && intakeSpedUp && timer.get()>0.48) {
       Robot.intake.setHasPiece(true);
       state = ShooterStates.INDEX;
       timer.stop();
       timer.reset();
-      // state
+      // stateP
     }
     SmartDashboard.putBoolean("intake sped up", intakeSpedUp);
 
