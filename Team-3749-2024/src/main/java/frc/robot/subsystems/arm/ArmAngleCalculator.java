@@ -6,7 +6,7 @@ import edu.wpi.first.math.util.Units;
 
 // NOTE: all distances in output file are relative to center of robot, arm offset is accounted for
 public class ArmAngleCalculator {
-    public static double y_speaker = Units.inchesToMeters(84); //MOVED FROM ARM CONSTANTS
+    public static double y_speaker = Units.inchesToMeters(80.5); //MOVED FROM ARM CONSTANTS
     public static double x_arm = -0.2286; // how far arm is from center of robot // MOVED FROM ARM CONSTANTS
     public static double y_arm = Units.inchesToMeters(12.75); // how high up the arm is //MOVED FROM ARM CONSTANTS
     public static double v_initial = 12.5; // MOVED FROM ARM CONSTANTS
