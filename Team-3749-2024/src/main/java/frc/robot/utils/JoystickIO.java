@@ -90,16 +90,16 @@ public class JoystickIO {
          * Start: Reset Gyro
          * 
          * Operator:
-         * L2: Subwoofer
-         * L1: Amp
-         * R2: Aimbot
-         * R1:
-         * X:
-         * Y: 
-         * A:
+         * LT: Subwoofer
+         * LB: Amp
+         * RT: Aimbot
+         * RB: N/A
+         * X: N/A
+         * Y: N/A
+         * A: N/A
          * B: Shoot
          * Start:
-         * Back?: Climb
+         * Back: Climb
          * DPadDown: Reset
          */
 
@@ -133,15 +133,8 @@ public class JoystickIO {
                     Robot.shooter.setState(ShooterStates.STOP);
                 }, Robot.wrist, Robot.intake));
 
-        // Robot.pilot.povUp().onTrue(Commands.runOnce(() -> Robot.swerve
-        // .resetOdometry(Robot.swerve.getPose().plus(new Transform2d(0.1, 0, new
-        // Rotation2d())))));
-        // Robot.pilot.povUp().onTrue(Commands.runOnce(() ->
-        // Robot.swerve.resetOdometry(Robot.swerve.getPose().minus(new
-        // Transform2d(0.1,0, new Rotation2d())))));
-
-        // shoot
         
+        // OPERATOR
         Robot.operator.rightTrigger().onTrue(Commands.runOnce(() -> Robot.state = SuperStructureStates.AIMBOT))
                 .onFalse(Commands.runOnce(() -> {
                     Robot.state = SuperStructureStates.STOW;
