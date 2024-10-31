@@ -1,7 +1,7 @@
 # Team-3749-2024
 Team Optix 3749's robot code for the 2024 FIRST® Robotics Competition Challenge: Crescendo!
 
-Code Highlights:
+## Code Highlights
 4 Bar Mechanism mounted on a single-jointed arm
 - Multivarable Regression Feedforward Model
 
