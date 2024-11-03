@@ -16,8 +16,8 @@ Very closely inspired by 6328's Swerve Sim code,
 public class SwerveModuleSim implements SwerveModuleIO {
     private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), ModuleConstants.driveMotorGearRatio,
             0.02931);
-    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), ModuleConstants.turnMotorGearRatio,
-            0.04);
+    private FlywheelSim turnSim = new FlywheelSim(DCMotor.getNEO(1), 
+        ModuleConstants.turnMotorGearRatio, 0.04);
 
     private double turnPositionRad = 0;
     private double driveAppliedVolts = 0.0;
