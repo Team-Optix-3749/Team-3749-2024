@@ -28,9 +28,8 @@ import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.led.Led;
 
 public class Robot extends TimedRobot {
-  public static final Xbox pilot = new Xbox(0);
+  public static final Xbox pilot = new Xbox(0); // tbh should be declared in joystick.io
   public static final Xbox operator = new Xbox(1);
-
   public static final Swerve swerve = new Swerve();
   public static final Arm arm = new Arm();
   public static final Wrist wrist = new Wrist();
@@ -105,8 +104,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
     wrist.setBrakeMode();
-  AutoUtils.getStartVision(0);
+    AutoUtils.getStartVision(0);
     state = SuperStructureStates.STOW;
 
 

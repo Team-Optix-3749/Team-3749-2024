@@ -33,13 +33,14 @@ public class Aimbot implements SuperStructureCommandInterface {
 
         Robot.arm.moveToGoal();
 
-        if (Robot.arm.atGoal() && fullDeployedWrist && Robot.shooter.getVelocityRadPerSec()>540){
+        if (Robot.arm.atGoal() && fullDeployedWrist && 
+            Robot.shooter.getVelocityRadPerSec() > 540) {
             Robot.led.setLEDPattern(LEDPattern.BLUE);
         }
     }
 
     @Override
-    public void start(){
+    public void start() {
         Robot.shooter.setState(ShooterStates.SPOOL);
         Robot.intake.setState(IntakeStates.STOP);
         Robot.arm.setGoal(ArmStates.SUBWOOFER);
@@ -69,17 +70,16 @@ public class Aimbot implements SuperStructureCommandInterface {
         // Robot.wrist.setGoal(WristStates.FULL_DEPLOYED);
 
         // if (Robot.wrist.getState() == WristStates.FULL_DEPLOYED) {
-        //     fullDeployedWrist = true;
-        // }
-      
-        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
-        //     subwoofedArm = true;
+        // fullDeployedWrist = true;
         // }
 
+        // if (Robot.arm.getState() == ArmStates.SUBWOOFER) {
+        // subwoofedArm = true;
+        // }
 
         // if (subwoofedArm && fullDeployedWrist){
-        //     Robot.led.setLEDPattern(LEDPattern.BLUE);
-        //     Robot.intake.setState(IntakeStates.FEED);
+        // Robot.led.setLEDPattern(LEDPattern.BLUE);
+        // Robot.intake.setState(IntakeStates.FEED);
         // }
         // Robot.wrist.moveWristToGoal();
         // // }
@@ -87,13 +87,14 @@ public class Aimbot implements SuperStructureCommandInterface {
         // Robot.arm.moveToGoal();
         execute();
 
-        // SmartDashboard.putBoolean("full dep", f  ullDeployedWrist);
+        // SmartDashboard.putBoolean("full dep", f ullDeployedWrist);
     }
 
     @Override
-    public void autoStart(){
+    public void autoStart() {
         start();
     }
+
     @Override
     public void autoReset() {
         reset();
